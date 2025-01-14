@@ -4,7 +4,7 @@ struct Player {
 	Vector3 up;
 	float height;
 	Camera* camera;
-	Gun gun;
+	Weapon weapon;
 	float last_shot;
 	Ray ray;
 	char camera_mode = 0;
@@ -49,7 +49,6 @@ struct Player {
 		this->position.y += forward * f.y + right * r.y;
 		this->target.y += forward * f.y + right * r.y;
 	}
-
 	void PlayerYaw(float angle, bool rotateAroundTarget) {
 		Vector3 up = getUp();
 

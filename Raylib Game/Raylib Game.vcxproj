@@ -143,7 +143,7 @@
   <ItemGroup>
     <ClInclude Include="bullet.h" />
     <ClInclude Include="enemy.h" />
-    <ClInclude Include="gun.h" />
+    <ClInclude Include="weapon.h" />
     <ClInclude Include="player.h" />
   </ItemGroup>
   <ItemGroup>

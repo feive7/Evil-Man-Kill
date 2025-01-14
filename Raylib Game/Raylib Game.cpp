@@ -4,7 +4,7 @@
 #include "raylib.h"
 #include "raymath.h"
 #include "rcamera.h"
-#include "gun.h"
+#include "weapon.h"
 #include "player.h"
 #include "enemy.h"
 #include "bullet.h"
@@ -25,43 +25,97 @@ Texture2D QuickLoadTexture(const char* filename, int width, int height) {
 Player player;
 Camera camera;
 Enemy enemy;
-Gun pipe;
-Texture2D TXT_GUN;
-Texture2D TXT_GUNSHOOT;
+Weapon cowbell;
+Weapon drumstick;
+Weapon spinner;
+
+Texture2D HANDFRNT;
+Texture2D HANDBACK;
+
+Texture2D TXT_COWBELL;
+Texture2D TXT_COWBELLSHOOT;
+
+Texture2D TXT_DRUMSTICK;
+Texture2D TXT_DRUMSTICKSWING;
+
+Texture2D TXT_SPINNER;
+Texture2D TXT_SPINNERUSE;
+
 Texture2D TXT_ENEMY;
 Texture2D TXT_ENEMYHURT;
 Texture2D TXT_CROSSHAIR;
 Texture2D TXT_DEAD;
 
 void Init() {
-    TXT_GUN = QuickLoadTexture("gun.png", WINDOW_HEIGHT / 2, WINDOW_HEIGHT / 2);
-    TXT_GUNSHOOT = QuickLoadTexture("gun_shoot.png", WINDOW_HEIGHT / 2, WINDOW_HEIGHT / 2);
+    HANDFRNT = QuickLoadTexture("hand_front.png", WINDOW_WIDTH, WINDOW_HEIGHT);
+    HANDBACK = QuickLoadTexture("hand_back.png", WINDOW_WIDTH, WINDOW_HEIGHT);
+
+    TXT_COWBELL = QuickLoadTexture("cowbell.png", WINDOW_WIDTH, WINDOW_HEIGHT);
+    TXT_COWBELLSHOOT = QuickLoadTexture("cowbell_shoot.png", WINDOW_WIDTH, WINDOW_HEIGHT);
+    
+    TXT_DRUMSTICK = QuickLoadTexture("drumstick.png", WINDOW_WIDTH, WINDOW_HEIGHT);
+    TXT_DRUMSTICKSWING = QuickLoadTexture("drumstick_swing.png", WINDOW_WIDTH, WINDOW_HEIGHT);
+
+    TXT_SPINNER = QuickLoadTexture("spinner.png", WINDOW_WIDTH, WINDOW_HEIGHT);
+    TXT_SPINNERUSE = QuickLoadTexture("spinner_use.png", WINDOW_WIDTH, WINDOW_HEIGHT);
+
     TXT_ENEMY = QuickLoadTexture("enemy.png", 400, 600);
     TXT_ENEMYHURT = QuickLoadTexture("enemy_hurt.png", 400, 600);
-    TXT_CROSSHAIR = QuickLoadTexture("crosshair.png", 50, 50);
     TXT_DEAD = QuickLoadTexture("death.png", 200, 800);
 
-    pipe.name = "Pipe Gun";
-    pipe.cooldown = .5;
+    TXT_CROSSHAIR = QuickLoadTexture("crosshair.png", 50, 50);
+
+    cowbell.name = "Cowbell";
+    cowbell.cooldown = .5;
+    cowbell.animation_length = .25;
+    cowbell.damage = 10;
+    cowbell.texture_idle = TXT_COWBELL;
+    cowbell.texture_use = TXT_COWBELLSHOOT;
+
+    drumstick.name = "Drumstick";
+    drumstick.cooldown = .5;
+    drumstick.animation_length = .25;
+    drumstick.damage = 1;
+    drumstick.texture_idle = TXT_DRUMSTICK;
+    drumstick.texture_use = TXT_DRUMSTICKSWING;
+
+    drumstick.name = "Drumstick";
+    drumstick.cooldown = .5;
+    drumstick.animation_length = .25;
+    drumstick.damage = 1;
+    drumstick.texture_idle = TXT_DRUMSTICK;
+    drumstick.texture_use = TXT_DRUMSTICKSWING;
 
     player.position = { 0,0,0 };
     player.target = { 0,0,1 };
     player.up = { 0,1,0 };
     player.height = 2;
-    player.gun = pipe;
+    player.weapon = cowbell;
     player.attachCamera(&camera);
-
-    
 
     enemy.pos = { 0,1,6 };
     enemy.hitbox = { .5,2,.5 };
     enemy.size = 2;
-    enemy.health = 10;
+    enemy.health = 100;
 }
 
 void GameLoop() {
     float time = GetTime();
     player.tick();
+    if (IsKeyPressed(KEY_LEFT)) {
+        player.weapon = cowbell;
+    }
+    else if (IsKeyPressed(KEY_RIGHT)) {
+        player.weapon = drumstick;
+    }
+    if (IsMouseButtonDown(0) && time > player.last_shot + player.weapon.cooldown) {
+        player.last_shot = time;
+        player.ray = GetMouseRay(WINDOW_CENTER, camera);
+        RayCollision collision = GetRayCollisionBox(player.ray, enemy.boundingBox());
+        if (collision.hit) {
+            enemy.hurt(player.weapon.damage);
+        }
+    }
     enemy.tick();
     BeginDrawing();
     ClearBackground(RAYWHITE);
@@ -91,21 +145,14 @@ void GameLoop() {
     }
     EndMode3D();
     DrawTexture(TXT_CROSSHAIR, WINDOW_WIDTH / 2 - 25, WINDOW_HEIGHT / 2 - 25, PURPLE);
-    if (IsMouseButtonDown(0) && time > player.last_shot + player.gun.cooldown) {
-        player.last_shot = time;
-        player.ray = GetMouseRay(WINDOW_CENTER, camera);
-        RayCollision collision = GetRayCollisionBox(player.ray, enemy.boundingBox());
-        if (collision.hit) {
-            enemy.hurt(1);
-        }
-    }
 
-    if (time < player.last_shot + player.gun.cooldown / 4) {
-        DrawTexture(TXT_GUNSHOOT, WINDOW_WIDTH - WINDOW_HEIGHT / 2, WINDOW_HEIGHT / 2, WHITE);
+    if (time > player.last_shot + player.weapon.animation_length) {
+        DrawTexture(player.weapon.texture_idle, 0, 0, WHITE);
     }
     else {
-        DrawTexture(TXT_GUN, WINDOW_WIDTH - WINDOW_HEIGHT / 2, WINDOW_HEIGHT / 2, WHITE);
+        DrawTexture(player.weapon.texture_use, rand() % 10, rand() % 10, WHITE);
     }
+
 
     std::string fps = std::to_string(GetFPS());
     std::string debugline1 = std::to_string(enemy.health);

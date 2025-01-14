@@ -32,7 +32,7 @@
     <ClInclude Include="bullet.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="gun.h">
+    <ClInclude Include="weapon.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
