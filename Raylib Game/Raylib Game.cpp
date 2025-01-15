@@ -73,24 +73,28 @@ void Init() {
     cowbell.texture_use = TXT_COWBELLSHOOT;
 
     drumstick.name = "Drumstick";
+    drumstick.range = .5;
     drumstick.cooldown = .5;
     drumstick.animation_length = .25;
     drumstick.damage = 1;
     drumstick.texture_idle = TXT_DRUMSTICK;
     drumstick.texture_use = TXT_DRUMSTICKSWING;
 
-    drumstick.name = "Drumstick";
-    drumstick.cooldown = .5;
-    drumstick.animation_length = .25;
-    drumstick.damage = 1;
-    drumstick.texture_idle = TXT_DRUMSTICK;
-    drumstick.texture_use = TXT_DRUMSTICKSWING;
+    spinner.name = "Spinner";
+    spinner.range = .01;
+    spinner.cooldown = .25;
+    spinner.animation_length = .125;
+    spinner.damage = 1;
+    spinner.texture_idle = TXT_SPINNER;
+    spinner.texture_use = TXT_SPINNERUSE;
 
     player.position = { 0,0,0 };
     player.target = { 0,0,1 };
     player.up = { 0,1,0 };
     player.height = 2;
-    player.weapon = cowbell;
+    player.selected = 0;
+    player.inventory[0] = drumstick;
+    player.inventory[1] = cowbell;
     player.attachCamera(&camera);
 
     enemy.pos = { 0,1,6 };
@@ -103,18 +107,26 @@ void GameLoop() {
     float time = GetTime();
     player.tick();
     if (IsKeyPressed(KEY_LEFT)) {
-        player.weapon = cowbell;
+        player.selected--;
+        if (player.selected < 0) {
+            player.selected = 0;
+        }
     }
     else if (IsKeyPressed(KEY_RIGHT)) {
-        player.weapon = drumstick;
+        player.selected++;
+        if (player.selected > 10) {
+            player.selected = 10;
+        }
     }
-    if (IsMouseButtonDown(0) && time > player.last_shot + player.weapon.cooldown) {
+    if (IsMouseButtonDown(0) && time > player.last_shot + player.equipped().cooldown) {
         player.last_shot = time;
         player.ray = GetMouseRay(WINDOW_CENTER, camera);
         RayCollision collision = GetRayCollisionBox(player.ray, enemy.boundingBox());
         if (collision.hit) {
-            enemy.hurt(player.weapon.damage);
-        }
+            if (collision.distance <= player.equipped().range) {
+                enemy.hurt(player.equipped().damage);
+            }
+        } 
     }
     enemy.tick();
     BeginDrawing();
@@ -146,11 +158,11 @@ void GameLoop() {
     EndMode3D();
     DrawTexture(TXT_CROSSHAIR, WINDOW_WIDTH / 2 - 25, WINDOW_HEIGHT / 2 - 25, PURPLE);
 
-    if (time > player.last_shot + player.weapon.animation_length) {
-        DrawTexture(player.weapon.texture_idle, 0, 0, WHITE);
+    if (time > player.last_shot + player.equipped().animation_length) {
+        DrawTexture(player.equipped().texture_idle, 0, 0, WHITE);
     }
     else {
-        DrawTexture(player.weapon.texture_use, rand() % 10, rand() % 10, WHITE);
+        DrawTexture(player.equipped().texture_use, 0, 0, WHITE);
     }
 
 

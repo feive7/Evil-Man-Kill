@@ -71,8 +71,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Users\rolan\OneDrive\Documents\Roland C++\extra libraries\Raylib\include;C:\Users\rolan\OneDrive\Documents\Roland C++\Raylib Game\Raylib Game;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\rolan\OneDrive\Documents\Roland C++\extra libraries\Raylib\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>include;$(IncludePath)</IncludePath>
+    <LibraryPath>lib</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>C:\Users\rolan\OneDrive\Documents\Roland C++\extra libraries\Raylib\include;C:\Users\rolan\OneDrive\Documents\Roland C++\Raylib Game\Raylib Game;$(IncludePath)</IncludePath>

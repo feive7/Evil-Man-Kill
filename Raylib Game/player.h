@@ -4,11 +4,15 @@ struct Player {
 	Vector3 up;
 	float height;
 	Camera* camera;
-	Weapon weapon;
+	int selected;
+	Weapon inventory[10];
 	float last_shot;
 	Ray ray;
 	char camera_mode = 0;
 
+	Weapon equipped() {
+		return inventory[selected];
+	}
 	void attachCamera(Camera* cam) {
 		cam->position = position;
 		cam->target = target;
