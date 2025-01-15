@@ -72,7 +72,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>include;$(IncludePath)</IncludePath>
-    <LibraryPath>lib</LibraryPath>
+    <LibraryPath>lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>C:\Users\rolan\OneDrive\Documents\Roland C++\extra libraries\Raylib\include;C:\Users\rolan\OneDrive\Documents\Roland C++\Raylib Game\Raylib Game;$(IncludePath)</IncludePath>
@@ -143,6 +143,7 @@
   <ItemGroup>
     <ClInclude Include="bullet.h" />
     <ClInclude Include="enemy.h" />
+    <ClInclude Include="textureloader.h" />
     <ClInclude Include="weapon.h" />
     <ClInclude Include="player.h" />
   </ItemGroup>

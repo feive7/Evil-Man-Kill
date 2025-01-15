@@ -4,6 +4,7 @@
 #include "raylib.h"
 #include "raymath.h"
 #include "rcamera.h"
+#include "textureloader.h"
 #include "weapon.h"
 #include "player.h"
 #include "enemy.h"
@@ -15,13 +16,7 @@ const int WINDOW_HEIGHT = 800;
 const Vector2 WINDOW_CENTER = { WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2 };
 char inputs = 0;
 
-Texture2D QuickLoadTexture(const char* filename, int width, int height) {
-    Image img = LoadImage(filename);
-    ImageResize(&img, width, height);
-    Texture2D txt = LoadTextureFromImage(img);
-    UnloadImage(img);
-    return txt;
-}
+
 Player player;
 Camera camera;
 Enemy enemy;
@@ -29,22 +24,7 @@ Weapon cowbell;
 Weapon drumstick;
 Weapon spinner;
 
-Texture2D HANDFRNT;
-Texture2D HANDBACK;
 
-Texture2D TXT_COWBELL;
-Texture2D TXT_COWBELLSHOOT;
-
-Texture2D TXT_DRUMSTICK;
-Texture2D TXT_DRUMSTICKSWING;
-
-Texture2D TXT_SPINNER;
-Texture2D TXT_SPINNERUSE;
-
-Texture2D TXT_ENEMY;
-Texture2D TXT_ENEMYHURT;
-Texture2D TXT_CROSSHAIR;
-Texture2D TXT_DEAD;
 
 void Init() {
     HANDFRNT = QuickLoadTexture("hand_front.png", WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -67,26 +47,18 @@ void Init() {
 
     cowbell.name = "Cowbell";
     cowbell.cooldown = .5;
-    cowbell.animation_length = .25;
     cowbell.damage = 10;
-    cowbell.texture_idle = TXT_COWBELL;
-    cowbell.texture_use = TXT_COWBELLSHOOT;
+    //cowbell.texture_idle = TXT_COWBELL;
+    //cowbell.texture_use = TXT_COWBELLSHOOT;
 
-    drumstick.name = "Drumstick";
-    drumstick.range = .5;
-    drumstick.cooldown = .5;
-    drumstick.animation_length = .25;
-    drumstick.damage = 1;
-    drumstick.texture_idle = TXT_DRUMSTICK;
-    drumstick.texture_use = TXT_DRUMSTICKSWING;
+    
 
     spinner.name = "Spinner";
     spinner.range = .01;
     spinner.cooldown = .25;
-    spinner.animation_length = .125;
     spinner.damage = 1;
-    spinner.texture_idle = TXT_SPINNER;
-    spinner.texture_use = TXT_SPINNERUSE;
+    //spinner.texture_idle = TXT_SPINNER;
+    //spinner.texture_use = TXT_SPINNERUSE;
 
     player.position = { 0,0,0 };
     player.target = { 0,0,1 };
@@ -126,7 +98,8 @@ void GameLoop() {
             if (collision.distance <= player.equipped().range) {
                 enemy.hurt(player.equipped().damage);
             }
-        } 
+            printf("Hit Distance: %f\n", collision.distance);
+        }
     }
     enemy.tick();
     BeginDrawing();

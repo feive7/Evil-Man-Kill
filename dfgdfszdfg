@@ -1,0 +1,29 @@
+[33mcommit c33754415ef4e5acee6bcdf90ecca8655b07bd69[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m
+Author: feive7 <feive7@gmail.com>
+Date:   Tue Jan 14 20:38:42 2025 -0800
+
+    Now portable hopefully
+
+[33mcommit 87c8c274feff6f35c22835288df0189dcda48b73[m
+Author: feive7 <feive7@gmail.com>
+Date:   Tue Jan 14 07:45:26 2025 -0800
+
+    new stuff
+
+[33mcommit f23c87f37ab3ba567a8af71f39aad725d51b2d9f[m
+Author: feive7 <feive7@gmail.com>
+Date:   Sun Jan 12 19:13:38 2025 -0800
+
+    Game work
+
+[33mcommit 00c2323f3655738b52b182b33f5849293334d424[m
+Author: feive7 <feive7@gmail.com>
+Date:   Sun Jan 12 18:59:45 2025 -0800
+
+    Add project files.
+
+[33mcommit ccddd085a266f119bb38263d42c4c9988d6a8b6e[m
+Author: feive7 <feive7@gmail.com>
+Date:   Sun Jan 12 18:59:42 2025 -0800
+
+    Add .gitattributes and .gitignore.
