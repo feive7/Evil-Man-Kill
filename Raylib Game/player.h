@@ -5,7 +5,6 @@ struct Player {
 	Vector3 up;
 	float height;
 	Camera* camera;
-
 	int selected;
 	Weapon inventory[10];
 

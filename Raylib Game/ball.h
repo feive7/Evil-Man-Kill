@@ -1,7 +1,9 @@
 struct Ball {
 	Vector3 position;
 	Vector3 velocity;
-	void tick(Vector3 target) {
+	float timestamp;
+	float life;
+	void tick() {
 		this->position = Vector3Add(position, velocity);
 	}
 	void draw(Camera camera) {

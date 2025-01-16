@@ -6,11 +6,11 @@
 #include "rcamera.h"
 #include "draw.h"
 #include "textureloader.h"
+#include "ball.h"
 #include "weapon.h"
 #include "player.h"
 #include "enemy.h"
 #include "bullet.h"
-#include "ball.h"
 
 #define MAX_COLUMNS 20
 char inputs = 0;
@@ -19,7 +19,7 @@ char inputs = 0;
 Player player;
 Camera camera;
 Enemy enemy;
-Ball ball;
+Ball projectiles[1];
 
 
 void Init() {
@@ -28,7 +28,7 @@ void Init() {
     LoadTextures();
 
     player.position = { 0,0,0 };
-    player.target = { 0,0,1 };
+    player.target = { 1,0,0 };
     player.up = { 0,1,0 };
     player.height = 2;
     player.selected = 0;
@@ -41,9 +41,6 @@ void Init() {
     enemy.hitbox = { .5,2,.5 };
     enemy.size = 2;
     enemy.health = 100;
-
-    ball.position = { 0,5,0 };
-    ball.velocity = { 0,0,0 };
 }
 
 void GameLoop() {
@@ -65,6 +62,10 @@ void GameLoop() {
         if (collision.hit && collision.distance <= player.equipped().range) {
             enemy.hurt(player.equipped().damage);
         }
+        projectiles[0].timestamp = gameTime;
+        projectiles[0].life = 1;
+        projectiles[0].position = camera.target;
+        projectiles[0].velocity = Vector3Subtract(camera.target,camera.position);
     }
     enemy.tick();
     BeginDrawing();
@@ -82,10 +83,12 @@ void GameLoop() {
             DrawPlane({ (float)x, 0.0f, (float)y }, { 1.0f, 1.0f }, color);
         }
     }
-    ball.draw(camera);
+    for (int i = 0; i < 1; i++) {
+        projectiles[i].tick();
+        projectiles[i].draw(camera);
+    }
     enemy.draw(camera);
     EndMode3D();
-    ball.tick(enemy.pos);
     player.tick();
     player.draw();
     DrawTexture(TXT_CROSSHAIR, WINDOW_WIDTH / 2 - 25, WINDOW_HEIGHT / 2 - 25, PURPLE);
