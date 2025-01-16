@@ -141,9 +141,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ball.h" />
-    <ClInclude Include="bullet.h" />
+    <ClInclude Include="character.h" />
     <ClInclude Include="draw.h" />
     <ClInclude Include="enemy.h" />
+    <ClInclude Include="humanoid.h" />
     <ClInclude Include="textureloader.h" />
     <ClInclude Include="weapon.h" />
     <ClInclude Include="player.h" />

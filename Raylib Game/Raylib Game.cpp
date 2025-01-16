@@ -6,11 +6,12 @@
 #include "rcamera.h"
 #include "draw.h"
 #include "textureloader.h"
+#include "humanoid.h"
+#include "character.h"
 #include "ball.h"
 #include "weapon.h"
 #include "player.h"
 #include "enemy.h"
-#include "bullet.h"
 
 #define MAX_COLUMNS 20
 char inputs = 0;
@@ -27,15 +28,14 @@ void Init() {
     initWeapons();
     LoadTextures();
 
-    player.position = { 0,0,0 };
-    player.target = { 1,0,0 };
-    player.up = { 0,1,0 };
-    player.height = 2;
+    player.character.position = { 0,0,0 };
+    player.character.height = 2;
+    player.camera->target = { 1,0,0 };
+    player.camera->up = { 0,1,0 };
     player.selected = 0;
     player.inventory[0] = drumstick;
     player.inventory[1] = cowbell;
     player.inventory[2] = evilmangun;
-    player.attachCamera(&camera);
 
     enemy.pos = { 0,1,6 };
     enemy.hitbox = { .5,2,.5 };

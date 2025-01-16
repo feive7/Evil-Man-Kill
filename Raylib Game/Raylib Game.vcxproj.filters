@@ -26,9 +26,6 @@
     <ClInclude Include="enemy.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="bullet.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="weapon.h">
       <Filter>Source Files</Filter>
     </ClInclude>
@@ -39,6 +36,12 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="ball.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="humanoid.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="character.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

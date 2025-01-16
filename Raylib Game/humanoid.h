@@ -1,0 +1,3 @@
+struct Humanoid {
+	int health;
+};
