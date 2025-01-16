@@ -137,11 +137,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="draw.h" />
     <ClCompile Include="Raylib Game.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ball.h" />
     <ClInclude Include="bullet.h" />
+    <ClInclude Include="draw.h" />
     <ClInclude Include="enemy.h" />
     <ClInclude Include="textureloader.h" />
     <ClInclude Include="weapon.h" />

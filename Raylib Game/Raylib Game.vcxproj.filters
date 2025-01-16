@@ -18,9 +18,6 @@
     <ClCompile Include="Raylib Game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="draw.h">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="player.h">
@@ -36,6 +33,12 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="textureloader.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="draw.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ball.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

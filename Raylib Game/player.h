@@ -1,13 +1,21 @@
 struct Player {
 	Vector3 position;
+	Vector3 velocity;
 	Vector3 target;
 	Vector3 up;
 	float height;
 	Camera* camera;
+
 	int selected;
 	Weapon inventory[10];
-	float last_shot;
+
+	int weapon_frame = 0;
+
+	int attack_tick;
+	float attack_time;
+
 	Ray ray;
+
 	char camera_mode = 0;
 
 	Weapon equipped() {
@@ -46,12 +54,13 @@ struct Player {
 		r.y = 0;
 		f = Vector3Normalize(f);
 		r = Vector3Normalize(r);
-		this->position.x += forward * f.x + right * r.x;
-		this->position.z += forward * f.z + right * r.z;
-		this->target.x += forward * f.x + right * r.x;
-		this->target.z += forward * f.z + right * r.z;
-		this->position.y += forward * f.y + right * r.y;
-		this->target.y += forward * f.y + right * r.y;
+		Vector3 movement = {
+			forward * f.x + right * r.x,
+			forward * f.y + right * r.y,
+			forward * f.z + right * r.z,
+		};
+		this->velocity = Vector3Add(Vector3Scale(this->velocity, 0.8), movement);
+
 	}
 	void PlayerYaw(float angle, bool rotateAroundTarget) {
 		Vector3 up = getUp();
@@ -120,14 +129,31 @@ struct Player {
 		}
 	}
 	void tick() {
+		float gameTime = GetTime();
+
 		// Handle rotation
 		PlayerYaw(-GetMouseDelta().x / 400.0f, false);
 		PlayerPitch(-GetMouseDelta().y / 225.0f, true, false, false);
 
 		// Handle movement
-		float moveForward = 0.2f * (IsKeyDown(KEY_W) - IsKeyDown(KEY_S));
-		float moveRight = 0.2f * (IsKeyDown(KEY_D) - IsKeyDown(KEY_A));
+		float moveForward = 0.05f * (IsKeyDown(KEY_W) - IsKeyDown(KEY_S));
+		float moveRight = 0.05f * (IsKeyDown(KEY_D) - IsKeyDown(KEY_A));
 		PlayerMove(moveForward, moveRight);
+		this->position = Vector3Add(this->position, this->velocity);
+		this->target = Vector3Add(this->target, this->velocity);
+
+		// Handle mouse down
+		this->attack_tick++;
+		this->weapon_frame = FrameIndex(gameTime - attack_time, equipped().animation.length);
+		if (IsMouseButtonDown(0)) {
+			if (gameTime - attack_time > equipped().cooldown) {
+				this->attack_time = gameTime;
+				this->attack_tick = 0;
+				this->weapon_frame = 0;
+				ray = GetMouseRay(WINDOW_CENTER, *camera);
+				PlaySound(equipped().sound);
+			}
+		}
 
 		// Update the camera's position and target
 		this->camera->position = position;
@@ -137,5 +163,8 @@ struct Player {
 		this->camera->up = up;
 		this->camera->up.y += 2;
 	}
-
+	void draw() {
+		DrawTexture(equipped().animation.frames[weapon_frame], 0, 0, WHITE);
+		DrawTextEx(goof, equipped().name.c_str(), { 10, WINDOW_HEIGHT - 100 }, 40, 1, BLACK);
+	}
 };
