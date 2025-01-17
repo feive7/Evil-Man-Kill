@@ -4,105 +4,39 @@
 #include "raylib.h"
 #include "raymath.h"
 #include "rcamera.h"
-#include "draw.h"
-#include "textureloader.h"
-#include "ball.h"
-#include "weapon.h"
-#include "player.h"
-#include "enemy.h"
-#include "bullet.h"
-
-#define MAX_COLUMNS 20
-char inputs = 0;
-
-
+#include "character.h"
+#include "newplayer.h"
+#define WINDOW_WIDTH 1500
+#define WINDOW_HEIGHT 847
 Player player;
-Camera camera;
-Enemy enemy;
-Ball projectiles[1];
-
-
 void Init() {
-    InitAudioDevice();
-    initWeapons();
-    LoadTextures();
+    player.name = "Roland Baker";
+    player.character.position = { 0.0f,0.0f,4.0f };
 
-    player.position = { 0,0,0 };
-    player.target = { 1,0,0 };
-    player.up = { 0,1,0 };
-    player.height = 2;
-    player.selected = 0;
-    player.inventory[0] = drumstick;
-    player.inventory[1] = cowbell;
-    player.inventory[2] = evilmangun;
-    player.attachCamera(&camera);
+    player.camera.position = { 0.0f, 5.0f, 8.0f };
+    player.camera.target = { 0.0f, 0.0f, 0.0f };
+    player.camera.up = { 0.0f, 6.0f, 0.0f };
+    player.camera.fovy = 60.0f;
+    player.camera.projection = CAMERA_PERSPECTIVE;
 
-    enemy.pos = { 0,1,6 };
-    enemy.hitbox = { .5,2,.5 };
-    enemy.size = 2;
-    enemy.health = 100;
 }
 
 void GameLoop() {
-    float gameTime = GetTime();
-    if (IsKeyPressed(KEY_LEFT)) {
-        player.selected--;
-        if (player.selected < 0) {
-            player.selected = 0;
-        }
-    }
-    else if (IsKeyPressed(KEY_RIGHT)) {
-        player.selected++;
-        if (player.selected > 10) {
-            player.selected = 10;
-        }
-    }
-    if (player.attack_tick == 0) {
-        RayCollision collision = GetRayCollisionBox(player.ray, enemy.boundingBox());
-        if (collision.hit && collision.distance <= player.equipped().range) {
-            enemy.hurt(player.equipped().damage);
-        }
-        projectiles[0].timestamp = gameTime;
-        projectiles[0].life = 1;
-        projectiles[0].position = camera.target;
-        projectiles[0].velocity = Vector3Subtract(camera.target,camera.position);
-    }
-    enemy.tick();
+    //UpdateCamera(&player.camera, CAMERA_FIRST_PERSON);
+    player.tick();
     BeginDrawing();
     ClearBackground(RAYWHITE);
-    BeginMode3D(*player.camera);
-    for (int x = -10; x <= 10; x++) {
-        for (int y = -10; y <= 10; y++) {
-            Color color;
-            if ((x + y) % 2 == 0) {
-                color = LIGHTGRAY;
-            }
-            else {
-                color = DARKGRAY;
-            }
-            DrawPlane({ (float)x, 0.0f, (float)y }, { 1.0f, 1.0f }, color);
-        }
-    }
-    for (int i = 0; i < 1; i++) {
-        projectiles[i].tick();
-        projectiles[i].draw(camera);
-    }
-    enemy.draw(camera);
-    EndMode3D();
-    player.tick();
-    player.draw();
-    DrawTexture(TXT_CROSSHAIR, WINDOW_WIDTH / 2 - 25, WINDOW_HEIGHT / 2 - 25, PURPLE);
+    //BeginMode3D(player.camera);
+    BeginMode3D(player.camera);
 
-    std::string fps = std::to_string(GetFPS());
-    std::string debugline1 = std::to_string(enemy.health);
-    std::string debugline2 = std::to_string(enemy.hitframe);
-    std::string debugline3 = "Shoot Time: " + std::to_string(player.attack_time) + " Shoot Tick: " + std::to_string(player.attack_tick);
-    std::string debugline4 = "Time: " + std::to_string(GetTime());
-    DrawText(fps.c_str(), 10, 0, 10, BLACK);
-    DrawText(debugline1.c_str(), 10, 20, 10, BLACK);
-    DrawText(debugline2.c_str(), 10, 40, 10, BLACK);
-    DrawText(debugline3.c_str(), 10, 60, 10, BLACK);
-    DrawText(debugline4.c_str(), 10, 80, 10, BLACK);
+    DrawCube({ 0,0,0 }, 1, 1, 1, RED);
+    EndMode3D();
+    DrawText(TextFormat("- Character Position: (%06.3f, %06.3f, %06.3f)", player.character.position.x, player.character.position.y, player.character.position.z), 610, 45, 10, BLACK);
+    DrawText(TextFormat("- Camera Position: (%06.3f, %06.3f, %06.3f)", player.camera.position.x, player.camera.position.y, player.camera.position.z), 610, 60, 10, BLACK);
+    DrawText(TextFormat("- Target: (%06.3f, %06.3f, %06.3f)", player.camera.target.x, player.camera.target.y, player.camera.target.z), 610, 75, 10, BLACK);
+    DrawText(TextFormat("- Forward: (%06.3f, %06.3f, %06.3f)", GetCameraForward(&player.camera).x, GetCameraForward(&player.camera).y, GetCameraForward(&player.camera).z), 610, 90, 10, BLACK);
+    DrawText(TextFormat("- Right: (%06.3f, %06.3f, %06.3f)", GetCameraRight(&player.camera).x, GetCameraRight(&player.camera).y, GetCameraRight(&player.camera).z), 610, 105, 10, BLACK);
+    DrawText(TextFormat("- Up: (%06.3f, %06.3f, %06.3f)", player.camera.up.x, player.camera.up.y, player.camera.up.z), 610, 120, 10, BLACK);
 
     EndDrawing();
 }

@@ -20,31 +20,11 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="player.h">
+    <ClInclude Include="newplayer.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="enemy.h">
+    <ClInclude Include="character.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="bullet.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="weapon.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="textureloader.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="draw.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ball.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="gun.png">
-      <Filter>Source Files</Filter>
-    </Image>
   </ItemGroup>
 </Project>

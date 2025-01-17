@@ -3,7 +3,8 @@ struct Player {
 	Vector3 velocity;
 	Vector3 target;
 	Vector3 up;
-	float height;
+	std::string name;
+	float height = 2;
 	Camera* camera;
 	int selected;
 	Weapon inventory[10];
