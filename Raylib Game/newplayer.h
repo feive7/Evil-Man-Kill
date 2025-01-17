@@ -18,6 +18,7 @@ class Player {
 			move(forward, right);
 			Vector3 offset = Vector3Subtract(character.position,camera.position);
 			Vector3 rotation = { -GetMouseDelta().x,-GetMouseDelta().y,0 };
-			UpdateCameraPro(&camera, offset, { 0,0,0 }, 0);
+			camera.position = Vector3Add(camera.position, offset);
+			camera.target = Vector3Add(camera.target, offset);
 		}
 };

@@ -13,9 +13,9 @@ void Init() {
     player.name = "Roland Baker";
     player.character.position = { 0.0f,0.0f,4.0f };
 
-    player.camera.position = { 0.0f, 5.0f, 8.0f };
-    player.camera.target = { 0.0f, 0.0f, 0.0f };
-    player.camera.up = { 0.0f, 6.0f, 0.0f };
+    player.camera.position = { 0.0f, 0.0f, 4.0f };
+    player.camera.target = { 4.0f, 0.0f, 4.0f };
+    player.camera.up = { 0.0f, 4.0f, 0.0f };
     player.camera.fovy = 60.0f;
     player.camera.projection = CAMERA_PERSPECTIVE;
 
