@@ -26,5 +26,11 @@
     <ClInclude Include="character.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="weapon.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="texture.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

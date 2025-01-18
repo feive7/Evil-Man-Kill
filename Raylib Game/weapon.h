@@ -1,4 +1,3 @@
-const Vector2 WINDOW_CENTER = { WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2 };
 struct Weapon {
 	std::string name;
 	int damage;
@@ -6,14 +5,13 @@ struct Weapon {
 	float cooldown;
 	Animation animation;
 	Sound sound;
-	bool shake;
 };
 Weapon drumstick;
 Weapon evilmangun;
 Weapon cowbell;
 void initWeapons() {
 	drumstick = {
-		"Drumstick",
+		"Drumstick", 
 		1,
 		1.5f,
 		0.2f,
@@ -29,7 +27,11 @@ void initWeapons() {
 		100,
 		99999.9f,
 		0.5f,
-		QuickLoadAnimation("admingun", WINDOW_WIDTH, WINDOW_HEIGHT, 0.15f),
+		0.15f,
+		QuickLoadTexture("admingun/frame1.png", WINDOW_WIDTH, WINDOW_HEIGHT),
+		QuickLoadTexture("admingun/frame2.png", WINDOW_WIDTH, WINDOW_HEIGHT),
+		QuickLoadTexture("admingun/frame3.png", WINDOW_WIDTH, WINDOW_HEIGHT),
+		QuickLoadTexture("admingun/frame4.png", WINDOW_WIDTH, WINDOW_HEIGHT),
 		LoadSound("admingun/shoot.mp3")
 	};
 	cowbell = {
@@ -37,7 +39,11 @@ void initWeapons() {
 		10,
 		15,
 		1.0f,
-		QuickLoadAnimation("cowbell", WINDOW_WIDTH, WINDOW_HEIGHT, 0.15f),
+		0.15f,
+		QuickLoadTexture("cowbell/frame1.png", WINDOW_WIDTH, WINDOW_HEIGHT),
+		QuickLoadTexture("cowbell/frame2.png", WINDOW_WIDTH, WINDOW_HEIGHT),
+		QuickLoadTexture("cowbell/frame3.png", WINDOW_WIDTH, WINDOW_HEIGHT),
+		QuickLoadTexture("cowbell/frame4.png", WINDOW_WIDTH, WINDOW_HEIGHT),
 		LoadSound("cowbell/shoot.mp3")
 	};
 }
