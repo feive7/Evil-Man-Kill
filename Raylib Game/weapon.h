@@ -9,18 +9,19 @@ struct Weapon {
 Weapon drumstick;
 Weapon evilmangun;
 Weapon cowbell;
-Weapon loadWeaponFromDirectory(std::string directory) {
+Weapon loadWeaponAssetsFromDirectory(std::string directory) {
 	Weapon loaded = {};
 	loaded.name = directory;
-	loaded.base_damage = 1;
-	loaded.range = 1.5;
-	loaded.cooldown = 15;
 	loaded.animation = QuickLoadAnimation(directory.c_str(), WINDOW_WIDTH, WINDOW_HEIGHT, 10, 2);
 	loaded.sound = LoadSound((directory + "/attack.mp3").c_str());
 	return loaded;
 }
 void initWeapons() {
-	drumstick = loadWeaponFromDirectory("drumstick");
+	drumstick = loadWeaponAssetsFromDirectory("drumstick");
+	drumstick.base_damage = 1;
+	drumstick.range = 1;
+	drumstick.cooldown = 15;
+
 	evilmangun = {
 		"Evil Man Gun",
 		100,

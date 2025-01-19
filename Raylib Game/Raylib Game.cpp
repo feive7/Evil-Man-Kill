@@ -1,6 +1,5 @@
 #include <iostream>
-#include <regex>
-#include <cmath>
+#include <stdio.h>
 #include <string>
 #include <istream>
 #include "smath.h"
