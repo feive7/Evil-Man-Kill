@@ -8,10 +8,23 @@ Texture2D QuickLoadTexture(std::string filename, int width, int height) {
 	return txt;
 }
 struct Animation {
-	float length;
+	int length;
 	Texture2D frames[4];
-	void setLength(float newLength) {
+	void setLength(int newLength) {
 		this->length = newLength;
+	}
+	Texture2D getFrame(int tick, int flags = 0) {
+		int frameNumber = (8 * tick / length);
+		
+		if ((flags >> 0) & 1) { // Loop
+			frameNumber %= 4;
+		}
+		if ((flags >> 1) & 1) { // Mirror
+			frameNumber = 4 - abs(frameNumber-4);
+		}
+		frameNumber = (frameNumber > 3 ? 3 : frameNumber);
+		frameNumber = (frameNumber < 0 ? 0 : frameNumber);
+		return frames[frameNumber];
 	}
 };
 Animation QuickLoadAnimation(std::string directory, int width, int height) {

@@ -7,6 +7,7 @@ class Player {
 		Camera camera;
 		int health;
 		Weapon weapon;
+		int attack_tick;
 		void move(float f, float r) {
 			Vector3 forward = GetCameraForward(&camera);
 			forward.y = 0;
@@ -23,6 +24,10 @@ class Player {
 			}
 		}
 		void tick() {
+			if (IsMouseButtonDown(0) && attack_tick > weapon.cooldown) {
+				attack_tick = 0;
+				PlaySound(weapon.sound);
+			}
 			CameraYaw(&camera, -GetMouseDelta().x / 300.0f, false);
 			CameraPitch(&camera, -GetMouseDelta().y / 168.0f, true, false, false);
 			float forward = (IsKeyDown(KEY_LEFT_SHIFT) ? SPRINT_SPEED : WALK_SPEED) * (IsKeyDown(KEY_W) - IsKeyDown(KEY_S));
@@ -33,12 +38,12 @@ class Player {
 			Vector3 rotation = { -GetMouseDelta().x,-GetMouseDelta().y,0 };
 			camera.position = Vector3Add(camera.position, offset);
 			camera.target = Vector3Add(camera.target, offset);
+			attack_tick++;
 		}
 		void draw2D() {
-			DrawTexture(weapon.animation.frames[0], 0, 0, WHITE);
+			DrawTexture(weapon.animation.getFrame(attack_tick,2), 0, 0, WHITE);
 		}
 	private:
 		float bob_height;
 		int bob_tick;
-		int attack_tick;
 };

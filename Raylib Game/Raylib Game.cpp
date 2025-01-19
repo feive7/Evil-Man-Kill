@@ -11,6 +11,7 @@
 
 Player player;
 void Init() {
+    InitAudioDevice();
     initWeapons();
     player.name = "Roland Baker";
     player.character.position = { 0.0f,0.0f,4.0f };
@@ -50,6 +51,7 @@ void GameLoop() {
     DrawText(TextFormat("- Forward: (%06.3f, %06.3f, %06.3f)", GetCameraForward(&player.camera).x, GetCameraForward(&player.camera).y, GetCameraForward(&player.camera).z), 610, 90, 10, BLACK);
     DrawText(TextFormat("- Right: (%06.3f, %06.3f, %06.3f)", GetCameraRight(&player.camera).x, GetCameraRight(&player.camera).y, GetCameraRight(&player.camera).z), 610, 105, 10, BLACK);
     DrawText(TextFormat("- Up: (%06.3f, %06.3f, %06.3f)", player.camera.up.x, player.camera.up.y, player.camera.up.z), 610, 120, 10, BLACK);
+    DrawText(TextFormat("- Attack Tick: %i", player.attack_tick), 610, 135, 10, BLACK);
 
     EndDrawing();
 }

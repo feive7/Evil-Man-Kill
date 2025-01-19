@@ -2,7 +2,7 @@ struct Weapon {
 	std::string name;
 	int damage;
 	float range;
-	float cooldown;
+	int cooldown;
 	Animation animation;
 	Sound sound;
 };
@@ -14,8 +14,8 @@ void initWeapons() {
 		"Drumstick", 
 		1,
 		1.5f,
-		0.2f,
-		0.3f,
+		10,
+		10,
 		QuickLoadTexture("drumstick/frame1.png", WINDOW_WIDTH, WINDOW_HEIGHT),
 		QuickLoadTexture("drumstick/frame2.png", WINDOW_WIDTH, WINDOW_HEIGHT),
 		QuickLoadTexture("drumstick/frame3.png", WINDOW_WIDTH, WINDOW_HEIGHT),
@@ -26,8 +26,8 @@ void initWeapons() {
 		"Evil Man Gun",
 		100,
 		99999.9f,
-		0.5f,
-		0.15f,
+		500,
+		15,
 		QuickLoadTexture("admingun/frame1.png", WINDOW_WIDTH, WINDOW_HEIGHT),
 		QuickLoadTexture("admingun/frame2.png", WINDOW_WIDTH, WINDOW_HEIGHT),
 		QuickLoadTexture("admingun/frame3.png", WINDOW_WIDTH, WINDOW_HEIGHT),
@@ -38,8 +38,8 @@ void initWeapons() {
 		"Cowbell",
 		10,
 		15,
-		1.0f,
-		0.15f,
+		500,
+		15,
 		QuickLoadTexture("cowbell/frame1.png", WINDOW_WIDTH, WINDOW_HEIGHT),
 		QuickLoadTexture("cowbell/frame2.png", WINDOW_WIDTH, WINDOW_HEIGHT),
 		QuickLoadTexture("cowbell/frame3.png", WINDOW_WIDTH, WINDOW_HEIGHT),
