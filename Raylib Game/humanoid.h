@@ -1,5 +1,4 @@
 struct Humanoid {
-	float height;
 	int maxhealth;
 	int health;
 	bool isAlive;

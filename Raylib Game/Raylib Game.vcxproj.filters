@@ -32,5 +32,17 @@
     <ClInclude Include="texture.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="auto.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="humanoid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NPC.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="smath.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -41,7 +41,7 @@ class Player {
 			attack_tick++;
 		}
 		void draw2D() {
-			DrawTexture(weapon.animation.getFrame(attack_tick,2), 0, 0, WHITE);
+			DrawTexture(weapon.animation.getFrame(attack_tick), 0, 0, WHITE);
 		}
 	private:
 		float bob_height;

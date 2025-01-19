@@ -1,36 +1,57 @@
 #include <iostream>
 #include <cmath>
 #include <string>
+#include "smath.h"
 #include "raylib.h"
 #include "raymath.h"
 #include "rcamera.h"
 #include "texture.h"
 #include "weapon.h"
 #include "character.h"
+#include "humanoid.h"
 #include "newplayer.h"
+#include "NPC.h"
 
 Player player;
+NPC npc;
+int fix = 10;
+
 void Init() {
     InitAudioDevice();
+    initTextures();
     initWeapons();
     player.name = "Roland Baker";
-    player.character.position = { 0.0f,0.0f,4.0f };
+    player.character.position = { 0.0f,0.0f,8.0f };
     player.character.height = 6.0f;
 
     player.camera.position = { 0.0f, 0.0f, 4.0f };
-    player.camera.target = { 4.0f, 0.0f, 4.0f };
+    player.camera.target = { 0.0f, 0.0f, 0.0f };
     player.camera.up = { 0.0f, 4.0f, 0.0f };
     player.camera.fovy = 60.0f;
     player.camera.projection = CAMERA_PERSPECTIVE;
     player.weapon = drumstick;
+
+    npc.name = "John";
+    npc.character.position = { 0.0f,0.0f,0.0f };
+    npc.character.height = 6.0f;
+    npc.character.model = ANIM_JOHN_FIGHT;
 }
 
 void GameLoop() {
-    //UpdateCamera(&player.camera, CAMERA_FIRST_PERSON);
+    // Game Logic
     player.tick();
+    npc.tick();
+    if (fix > 0) {
+        fix--;
+        player.camera.target = { 0,4,0 };
+    }
+    if (IsMouseButtonPressed(0)) {
+        npc.hit(player);
+    }
+
+    // Game Render
     BeginDrawing();
     ClearBackground(RAYWHITE);
-    //BeginMode3D(player.camera);
     BeginMode3D(player.camera);
     DrawCube({ 0,0,0 }, 1, 1, 1, RED);
     for (int x = -10; x <= 10; x++) {
@@ -43,6 +64,7 @@ void GameLoop() {
             }
         }
     }
+    npc.draw3D(player.camera);
     EndMode3D();
     player.draw2D();
     DrawText(TextFormat("- Character Position: (%06.3f, %06.3f, %06.3f)", player.character.position.x, player.character.position.y, player.character.position.z), 610, 45, 10, BLACK);

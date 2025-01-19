@@ -3,24 +3,28 @@ class NPC {
 		std::string name;
 		Character character;
 		Humanoid humanoid;
-		float hit_timestamp;
 		void draw3D(Camera camera) {
-			DrawBillboard(camera, character.model.frames[int(pingpong(10*GetTime(), 4))], Vector3Add(character.position, {0,humanoid.height / 2,0}), humanoid.height, WHITE);
+			DrawBillboard(camera, character.model.frames[0], Vector3Add(character.position, {0,character.height / 2,0}), character.height, WHITE);
 			//DrawBoundingBox(character.boundingBox(), RED);
 		}
-		void tick(Player plr) {
+		void tick() {
+			animTick++;
+			hitTick++;
+			character.move();
 			float gameTime = GetTime();
-			if (gameTime - hit_timestamp > 1.0f) {
-				character.model = ANIM_JOHN_FIGHT;
-			}
-			else {
-				character.model = ANIM_JOHN_HURT;
+			if (animTick > character.model.length) { // wait for animation to finish
+				character.model = ANIM_JOHN_FIGHT; // reset character model
+				animTick = 0; // reset animation timer
 			}
 		}
-		void hit(float amount) {
-			humanoid.hurt(amount);
-			hit_timestamp = GetTime();
+		void hit(Player player) {
+			character.model = ANIM_JOHN_HURT; // Play the hurt animation
+			hitTick = 0; // Reset hit timer
+			character.velocity = Vector3Negate(Vector3Normalize(Vector3Subtract(player.character.position, character.position))); // Push NPC Back
+			humanoid.hurt(player.weapon.base_damage); // Hurt NPC
 		}
 	private:
+		int hitTick = 20;
+		int animTick = 0;
 		bool animDone = false;
 };
