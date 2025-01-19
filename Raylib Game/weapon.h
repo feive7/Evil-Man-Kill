@@ -1,6 +1,6 @@
 struct Weapon {
 	std::string name;
-	int damage;
+	int base_damage;
 	float range;
 	int cooldown;
 	Animation animation;

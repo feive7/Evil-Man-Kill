@@ -7,7 +7,6 @@ class Player {
 		Camera camera;
 		int health;
 		Weapon weapon;
-		int attack_tick;
 		void move(float f, float r) {
 			Vector3 forward = GetCameraForward(&camera);
 			forward.y = 0;
@@ -26,6 +25,7 @@ class Player {
 		void tick() {
 			if (IsMouseButtonDown(0) && attack_tick > weapon.cooldown) {
 				attack_tick = 0;
+				SetSoundPitch(weapon.sound, GetRandomValue(10, 15) / 10.0f);
 				PlaySound(weapon.sound);
 			}
 			CameraYaw(&camera, -GetMouseDelta().x / 300.0f, false);
@@ -46,4 +46,5 @@ class Player {
 	private:
 		float bob_height;
 		int bob_tick;
+		int attack_tick;
 };
