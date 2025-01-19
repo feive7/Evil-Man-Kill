@@ -1,6 +1,8 @@
 #include <iostream>
+#include <regex>
 #include <cmath>
 #include <string>
+#include <istream>
 #include "smath.h"
 #include "raylib.h"
 #include "raymath.h"
@@ -36,7 +38,6 @@ void Init() {
     npc.character.height = 6.0f;
     npc.character.model = ANIM_JOHN_FIGHT;
 }
-
 void GameLoop() {
     // Game Logic
     player.tick();
