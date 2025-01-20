@@ -46,8 +46,12 @@ Animation QuickLoadAnimation(std::string directory, int width, int height, int l
 Animation ANIM_JOHN_IDLE;
 Animation ANIM_JOHN_FIGHT;
 Animation ANIM_JOHN_HURT;
+Animation ANIM_JOHN_DEAD;
+Texture2D TXT_CROSSHAIR;
 void initTextures() {
 	ANIM_JOHN_IDLE = QuickLoadAnimation("john/idle", 150, 450, 15, 3);
-	ANIM_JOHN_FIGHT = QuickLoadAnimation("john/fight", 150, 450, 4, 3);
-	ANIM_JOHN_HURT = QuickLoadAnimation("john/hurt", 150, 450, 15, 0);
+	ANIM_JOHN_FIGHT = QuickLoadAnimation("john/fight", 150, 450, 15, 3);
+	ANIM_JOHN_HURT = QuickLoadAnimation("john/hurt", 150, 450, 20, 0);
+	ANIM_JOHN_DEAD = QuickLoadAnimation("john/dead", 150, 450, 0, 0);
+	TXT_CROSSHAIR = QuickLoadTexture("crosshair.png", 50, 50);
 }

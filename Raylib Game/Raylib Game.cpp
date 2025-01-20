@@ -30,23 +30,33 @@ void Init() {
     player.camera.up = { 0.0f, 4.0f, 0.0f };
     player.camera.fovy = 60.0f;
     player.camera.projection = CAMERA_PERSPECTIVE;
+    player.character.friction = 3.0f / 4.0f;
     player.weapon = drumstick;
 
     npc.name = "John";
     npc.character.position = { 0.0f,0.0f,0.0f };
     npc.character.height = 6.0f;
     npc.character.model = ANIM_JOHN_FIGHT;
+    npc.character.hitbox = { 2,6,2 };
+    npc.character.friction = 3.0f / 4.0f;
+    npc.humanoid.maxhealth = 100;
+    npc.humanoid.health = 100;
+    npc.humanoid.state = IDLE;
 }
 void GameLoop() {
     // Game Logic
     player.tick();
     npc.tick();
+    npc.target(player);
     if (fix > 0) {
         fix--;
         player.camera.target = { 0,4,0 };
     }
-    if (IsMouseButtonPressed(0)) {
-        npc.hit(player);
+    if (player.isAttacking()) {
+        RayCollision collision = GetRayCollisionBox(player.ray, npc.character.boundingBox());
+        if (collision.hit && collision.distance <= player.weapon.range) {
+            npc.hitBy(player);
+        }
     }
 
     // Game Render
@@ -73,6 +83,12 @@ void GameLoop() {
     DrawText(TextFormat("- Forward: (%06.3f, %06.3f, %06.3f)", GetCameraForward(&player.camera).x, GetCameraForward(&player.camera).y, GetCameraForward(&player.camera).z), 610, 90, 10, BLACK);
     DrawText(TextFormat("- Right: (%06.3f, %06.3f, %06.3f)", GetCameraRight(&player.camera).x, GetCameraRight(&player.camera).y, GetCameraRight(&player.camera).z), 610, 105, 10, BLACK);
     DrawText(TextFormat("- Up: (%06.3f, %06.3f, %06.3f)", player.camera.up.x, player.camera.up.y, player.camera.up.z), 610, 120, 10, BLACK);
+    DrawText(TextFormat("- Player Speed: %06.3f", player.character.velocityMagnitude()), 610, 135, 10, BLACK);
+    DrawText(TextFormat("- John Speed: %06.3f", npc.character.velocityMagnitude()), 610, 150, 10, BLACK);
+    DrawText(TextFormat("- John State: %i", npc.humanoid.state), 610, 165, 10, BLACK);
+    DrawText(TextFormat("- Player damage: %i", player.damage()), 610, 180, 10, BLACK);
+    DrawText(TextFormat("- Player attact tick: %i", player.attackTick()), 610, 195, 10, BLACK);
+    DrawText(TextFormat("- Player consecutive hits: %i", player.consecutiveHits), 610, 210, 10, BLACK);
 
     EndDrawing();
 }

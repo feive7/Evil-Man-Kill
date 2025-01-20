@@ -18,8 +18,8 @@ Weapon loadWeaponAssetsFromDirectory(std::string directory) {
 }
 void initWeapons() {
 	drumstick = loadWeaponAssetsFromDirectory("drumstick");
-	drumstick.base_damage = 1;
-	drumstick.range = 1;
+	drumstick.base_damage = 10;
+	drumstick.range = 10;
 	drumstick.cooldown = 15;
 
 	evilmangun = {
