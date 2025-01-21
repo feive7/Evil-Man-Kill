@@ -14,7 +14,7 @@
 #include "newplayer.h"
 #include "NPC.h"
 #include "gamemap.h"
-#define NUM_OF_JOHNS 2
+#define NUM_OF_JOHNS 20
 Player player;
 NPC npcs[NUM_OF_JOHNS];
 RenderTexture2D target;
@@ -51,6 +51,7 @@ void Init() {
 
     for (int i = 0; i < NUM_OF_JOHNS; i++) {
         npcs[i].name = "John";
+        npcs[i].character.position = { (float)GetRandomValue(-20,20),0.0f,(float)GetRandomValue(-20,20) };
         npcs[i].character.height = 6.0f;
         npcs[i].character.model = ANIM_JOHN_FIGHT;
         npcs[i].character.hitbox = { 2,6,2 };
@@ -58,9 +59,8 @@ void Init() {
         npcs[i].humanoid.maxhealth = 100;
         npcs[i].humanoid.health = 100;
         npcs[i].humanoid.state = IDLE;
+        npcs[i].setIdleAnimation((GetRandomValue(0, 1) ? ANIM_JOHN_FIGHT : ANIM_JOHN_IDLE));
     }
-    npcs[0].character.position = { 0.0f,0.0f,0.0f };
-    npcs[1].character.position = { 4.0f,0.0f,0.0f };
 }
 void GameLoop() {
     // Game Logic

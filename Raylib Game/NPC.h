@@ -25,7 +25,7 @@ class NPC {
 				}
 			}
 			else if (humanoid.isIdle()) {
-				character.model = ANIM_JOHN_IDLE;
+				character.model = IdleAnimation;
 			}
 			else if (humanoid.isMoving()) {
 				character.model = ANIM_JOHN_FIGHT;
@@ -54,10 +54,14 @@ class NPC {
 			character.velocity = Vector3Scale(Vector3Negate(Vector3Normalize(Vector3Subtract(player.character.position, character.position))),player.character.velocityMagnitude() + .4); // Push NPC Back
 			humanoid.hurt(player.damage()); // Hurt NPC
 		}
+		void setIdleAnimation(Animation anim) {
+			this->IdleAnimation = anim;
+		}
 	private:
 		int hitTick = 20;
 		int animTick = 0;
 		float knockbackSuppression = 0.1;
 		bool animDone = false;
 		int deadTick = 0;
+		Animation IdleAnimation;
 };
