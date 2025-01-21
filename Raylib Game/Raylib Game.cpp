@@ -4,6 +4,7 @@
 #include <istream>
 #include "smath.h"
 #include "raylib.h"
+#include "rlgl.h"
 #include "raymath.h"
 #include "rcamera.h"
 #include "texture.h"
@@ -12,15 +13,30 @@
 #include "humanoid.h"
 #include "newplayer.h"
 #include "NPC.h"
-
+#include "gamemap.h"
+#define NUM_OF_JOHNS 2
 Player player;
-NPC npc;
+NPC npcs[NUM_OF_JOHNS];
+RenderTexture2D target;
+Cube cube = { {0, 0, 0}, {20,2,2}, BLUE };
+Shader shader;
+Shader discardAlpha;
+Shader viewer;
+Shader shiny;
 int fix = 10;
 
 void Init() {
     InitAudioDevice();
-    initTextures();
-    initWeapons();
+    InitTextures();
+    InitWeapons();
+    InitModels();
+    
+    target = LoadRenderTexture(WINDOW_WIDTH, WINDOW_HEIGHT);
+    shader = LoadShader(0, "shader.fs");
+    discardAlpha = LoadShader(0, "discardAlpha.fs");
+    viewer = LoadShader(0, "test.fs");
+    shiny = LoadShader(0, "shiny.fs");
+
     player.name = "Roland Baker";
     player.character.position = { 0.0f,0.0f,8.0f };
     player.character.height = 6.0f;
@@ -33,63 +49,58 @@ void Init() {
     player.character.friction = 3.0f / 4.0f;
     player.weapon = drumstick;
 
-    npc.name = "John";
-    npc.character.position = { 0.0f,0.0f,0.0f };
-    npc.character.height = 6.0f;
-    npc.character.model = ANIM_JOHN_FIGHT;
-    npc.character.hitbox = { 2,6,2 };
-    npc.character.friction = 3.0f / 4.0f;
-    npc.humanoid.maxhealth = 100;
-    npc.humanoid.health = 100;
-    npc.humanoid.state = IDLE;
+    for (int i = 0; i < NUM_OF_JOHNS; i++) {
+        npcs[i].name = "John";
+        npcs[i].character.height = 6.0f;
+        npcs[i].character.model = ANIM_JOHN_FIGHT;
+        npcs[i].character.hitbox = { 2,6,2 };
+        npcs[i].character.friction = 3.0f / 4.0f;
+        npcs[i].humanoid.maxhealth = 100;
+        npcs[i].humanoid.health = 100;
+        npcs[i].humanoid.state = IDLE;
+    }
+    npcs[0].character.position = { 0.0f,0.0f,0.0f };
+    npcs[1].character.position = { 4.0f,0.0f,0.0f };
 }
 void GameLoop() {
     // Game Logic
     player.tick();
-    npc.tick();
-    npc.target(player);
+    for (int i = 0; i < NUM_OF_JOHNS; i++) {
+        npcs[i].tick();
+    }
     if (fix > 0) {
         fix--;
         player.camera.target = { 0,4,0 };
     }
     if (player.isAttacking()) {
-        RayCollision collision = GetRayCollisionBox(player.ray, npc.character.boundingBox());
-        if (collision.hit && collision.distance <= player.weapon.range) {
-            npc.hitBy(player);
+        for (int i = 0; i < NUM_OF_JOHNS; i++) {
+            RayCollision collision = GetRayCollisionBox(player.ray, npcs[i].character.boundingBox());
+            if (collision.hit && collision.distance <= player.weapon.range) {
+                npcs[i].hitBy(player);
+            }
         }
     }
 
     // Game Render
-    BeginDrawing();
-    ClearBackground(RAYWHITE);
+    BeginTextureMode(target);
+    ClearBackground(BLACK);
     BeginMode3D(player.camera);
-    DrawCube({ 0,0,0 }, 1, 1, 1, RED);
-    for (int x = -10; x <= 10; x++) {
-        for (int y = -10; y <= 10; y++) {
-            if ((x + y) % 2 == 0) {
-                DrawPlane({ x * 6.0f,0,y * 6.0f }, { 6.0f,6.0f }, LIGHTGRAY);
-            }
-            else {
-                DrawPlane({ x * 6.0f,0,y * 6.0f }, { 6.0f,6.0f }, DARKGRAY);
-            }
-        }
+    for (int i = 0; i < map.num_of_cubes; i++) {
+        DrawCubeStruct(map.cubes[i]);
     }
-    npc.draw3D(player.camera);
+    BeginShaderMode(discardAlpha);
+    for (int i = 0; i < NUM_OF_JOHNS; i++) {
+        npcs[i].draw3D(player.camera);
+    }
+    EndShaderMode();
     EndMode3D();
     player.draw2D();
-    DrawText(TextFormat("- Character Position: (%06.3f, %06.3f, %06.3f)", player.character.position.x, player.character.position.y, player.character.position.z), 610, 45, 10, BLACK);
-    DrawText(TextFormat("- Camera Position: (%06.3f, %06.3f, %06.3f)", player.camera.position.x, player.camera.position.y, player.camera.position.z), 610, 60, 10, BLACK);
-    DrawText(TextFormat("- Target: (%06.3f, %06.3f, %06.3f)", player.camera.target.x, player.camera.target.y, player.camera.target.z), 610, 75, 10, BLACK);
-    DrawText(TextFormat("- Forward: (%06.3f, %06.3f, %06.3f)", GetCameraForward(&player.camera).x, GetCameraForward(&player.camera).y, GetCameraForward(&player.camera).z), 610, 90, 10, BLACK);
-    DrawText(TextFormat("- Right: (%06.3f, %06.3f, %06.3f)", GetCameraRight(&player.camera).x, GetCameraRight(&player.camera).y, GetCameraRight(&player.camera).z), 610, 105, 10, BLACK);
-    DrawText(TextFormat("- Up: (%06.3f, %06.3f, %06.3f)", player.camera.up.x, player.camera.up.y, player.camera.up.z), 610, 120, 10, BLACK);
-    DrawText(TextFormat("- Player Speed: %06.3f", player.character.velocityMagnitude()), 610, 135, 10, BLACK);
-    DrawText(TextFormat("- John Speed: %06.3f", npc.character.velocityMagnitude()), 610, 150, 10, BLACK);
-    DrawText(TextFormat("- John State: %i", npc.humanoid.state), 610, 165, 10, BLACK);
-    DrawText(TextFormat("- Player damage: %i", player.damage()), 610, 180, 10, BLACK);
-    DrawText(TextFormat("- Player attact tick: %i", player.attackTick()), 610, 195, 10, BLACK);
-    DrawText(TextFormat("- Player consecutive hits: %i", player.consecutiveHits), 610, 210, 10, BLACK);
-
+    EndTextureMode();
+    BeginDrawing();
+    ClearBackground(RAYWHITE);
+    BeginShaderMode(shader);
+    DrawTextureRec(target.texture, { 0,0,(float)target.texture.width,-(float)target.texture.height }, { 0,0 }, WHITE);
+    EndShaderMode();
     EndDrawing();
 }
 int main(void) {
@@ -102,6 +113,7 @@ int main(void) {
     }
     CloseAudioDevice();
     CloseWindow();
+    UnloadShader(shader);
 
     return 0;
 }

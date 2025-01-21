@@ -143,11 +143,18 @@
     <ClInclude Include="auto.h" />
     <ClInclude Include="character.h" />
     <ClInclude Include="humanoid.h" />
+    <ClInclude Include="gamemap.h" />
     <ClInclude Include="newplayer.h" />
     <ClInclude Include="NPC.h" />
     <ClInclude Include="smath.h" />
     <ClInclude Include="texture.h" />
     <ClInclude Include="weapon.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="discardAlpha.fs" />
+    <None Include="shader.fs" />
+    <None Include="shiny.fs" />
+    <None Include="test.fs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -16,7 +16,7 @@ Weapon loadWeaponAssetsFromDirectory(std::string directory) {
 	loaded.sound = LoadSound((directory + "/attack.mp3").c_str());
 	return loaded;
 }
-void initWeapons() {
+void InitWeapons() {
 	drumstick = loadWeaponAssetsFromDirectory("drumstick");
 	drumstick.base_damage = 10;
 	drumstick.range = 10;

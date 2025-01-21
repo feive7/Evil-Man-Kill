@@ -7,7 +7,7 @@ class NPC {
 		Humanoid humanoid;
 		void draw3D(Camera camera) {
 			DrawBillboard(camera, character.model.getFrame(animTick), Vector3Add(character.position, {0,character.height / 2,0}), character.height, WHITE);
-			DrawBoundingBox(character.boundingBox(), RED);
+			//DrawBoundingBox(character.boundingBox(), RED);
 		}
 		void tick() {
 			animTick++;
@@ -49,9 +49,9 @@ class NPC {
 		}
 		void hitBy(Player player) {
 			hitTick = 0; // Reset hit timer
-			character.friction = .9; // Slidey
+			character.friction = .95; // Slidey
 			humanoid.state = KNOCKBACK; // Knockback
-			character.velocity = Vector3Scale(Vector3Negate(Vector3Normalize(Vector3Subtract(player.character.position, character.position))), tanh(player.damage() / 10.0f)); // Push NPC Back
+			character.velocity = Vector3Scale(Vector3Negate(Vector3Normalize(Vector3Subtract(player.character.position, character.position))),player.character.velocityMagnitude() + .4); // Push NPC Back
 			humanoid.hurt(player.damage()); // Hurt NPC
 		}
 	private:

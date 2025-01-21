@@ -44,5 +44,14 @@
     <ClInclude Include="smath.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="gamemap.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shader.fs" />
+    <None Include="discardAlpha.fs" />
+    <None Include="test.fs" />
+    <None Include="shiny.fs" />
   </ItemGroup>
 </Project>
