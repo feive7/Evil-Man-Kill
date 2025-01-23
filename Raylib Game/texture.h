@@ -49,6 +49,7 @@ Animation ANIM_JOHN_HURT;
 Animation ANIM_JOHN_DEAD;
 Texture2D TXT_CROSSHAIR;
 Texture2D TXT_BRICK;
+Texture2D TXT_DEBUGTILE;
 void InitTextures() {
 	ANIM_JOHN_IDLE = QuickLoadAnimation("john/idle", 150, 450, 15, 3);
 	ANIM_JOHN_FIGHT = QuickLoadAnimation("john/fight", 150, 450, 15, 3);
@@ -56,4 +57,5 @@ void InitTextures() {
 	ANIM_JOHN_DEAD = QuickLoadAnimation("john/dead", 150, 450, 0, 0);
 	TXT_CROSSHAIR = QuickLoadTexture("crosshair.png", 50, 50);
 	TXT_BRICK = QuickLoadTexture("textures/Brick (4).png", 128, 128);
+	TXT_DEBUGTILE = QuickLoadTexture("textures/DebugTile.png", 128, 128);
 }

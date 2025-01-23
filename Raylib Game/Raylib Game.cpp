@@ -40,6 +40,7 @@ void Init() {
     player.name = "Roland Baker";
     player.character.position = { 0.0f,0.0f,8.0f };
     player.character.height = 6.0f;
+    player.character.hitbox = { 2,6,2 };
 
     player.camera.position = { 0.0f, 0.0f, 4.0f };
     player.camera.target = { 0.0f, 0.0f, 0.0f };
@@ -87,6 +88,16 @@ void GameLoop() {
     BeginMode3D(player.camera);
     for (int i = 0; i < map.num_of_cubes; i++) {
         DrawCubeStruct(map.cubes[i]);
+        DrawBoundingBox(map.cubes[i].boundingBox(), RED);
+        if ((map.cubes[i].flags >> 0) & 1) {
+            if (CheckCollisionBoxes(player.character.boundingBox(), map.cubes[i].boundingBox())) {
+                while (CheckCollisionBoxes(player.character.boundingBox(), map.cubes[i].boundingBox())) {
+                    player.character.acceleration = { 0,0,0 };
+                    player.character.position = Vector3Subtract(player.character.position, player.character.velocity);
+                }
+                player.stop();
+            }
+        }
     }
     BeginShaderMode(discardAlpha);
     for (int i = 0; i < NUM_OF_JOHNS; i++) {

@@ -85,6 +85,10 @@ class Player {
 			prog = abs(1-prog);
 			return prog;
 		}
+		void stop() {
+			this->character.acceleration = { 0,0,0 };
+			this->character.velocity = { 0,0,0 };
+		}
 	private:
 		float bob_height;
 		int bob_tick;
