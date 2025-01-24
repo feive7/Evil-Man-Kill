@@ -14,11 +14,13 @@ struct Character {
 		this->velocity = Vector3Scale(velocity, friction);
 		this->position = Vector3Add(position, velocity);
 	}
-	BoundingBox boundingBox() {
-		return {
-			position.x - hitbox.x / 2, position.y           , position.z - hitbox.z / 2,
-			position.x + hitbox.x / 2, position.y + hitbox.y, position.z + hitbox.z / 2,
+	BoundingBox boundingBox(Vector3 after) {
+		BoundingBox b;
+		b = {
+			position.x - hitbox.x / 2 + after.x, position.y + after.y, position.z - hitbox.z / 2 + after.z,
+			position.x + hitbox.x / 2 + after.x, position.y + hitbox.y + after.y, position.z + hitbox.z / 2 + after.z,
 		};
+		return b;
 	}
 	void setSpeedCap(float speed) {
 		this->friction = (speed - 1) / speed;

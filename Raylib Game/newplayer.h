@@ -10,14 +10,32 @@ class Player {
 		Ray ray;
 		int consecutiveHits = 0;
 		bool willCrit;
-		void move(float f, float r) {
+		void move(float f, float r, Map map) {
 			Vector3 forward = GetCameraForward(&camera);
 			forward.y = 0;
-			forward = Vector3Scale(Vector3Normalize(forward),f);
+			forward = Vector3Scale(Vector3Normalize(forward), f);
 			Vector3 right = GetCameraRight(&camera);
 			right.y = 0;
 			right = Vector3Scale(Vector3Normalize(right), r);
-			character.move(Vector3Add(forward,right));
+			Vector3 full = Vector3Add(forward, right);
+			for (int i = 0; i < map.num_of_cubes; i++) {
+				if ((map.cubes[i].flags >> 0) & 1) {
+					if (CheckCollisionBoxes(character.boundingBox(1), map.cubes[i].boundingBox())) {
+						full.x = 0;
+						character.velocity.x = 0;
+						character.acceleration.x = 0;
+					}
+					if (CheckCollisionBoxes(character.boundingBox(2), map.cubes[i].boundingBox())) {
+						full.z = 0;
+						character.velocity.z = 0;
+						character.acceleration.y = 0;
+					}
+				}
+			}
+			full.x = 0;
+			character.velocity.x = 0;
+			character.acceleration.x = 0;
+			character.move(full);
 			if (f || r) {
 				bob_tick++;
 			}
@@ -47,7 +65,7 @@ class Player {
 			float forward = (IsKeyDown(KEY_LEFT_SHIFT) ? PLAYER_SPRINT_SPEED : PLAYER_WALK_SPEED) * (IsKeyDown(KEY_W) - IsKeyDown(KEY_S));
 			float right = (IsKeyDown(KEY_LEFT_SHIFT) ? PLAYER_SPRINT_SPEED : PLAYER_WALK_SPEED) * (IsKeyDown(KEY_D) - IsKeyDown(KEY_A));
 			bob_height += .1 * (-abs(sin(bob_tick/5.0f)) - bob_height);
-			move(forward, right);
+			move(forward, right, collision_map);
 			Vector3 offset = Vector3Add(Vector3Subtract(character.position, camera.position), { 0,character.height,0 });
 			Vector3 rotation = { -GetMouseDelta().x,-GetMouseDelta().y,0 };
 			camera.position = Vector3Add(camera.position, offset);
@@ -89,8 +107,12 @@ class Player {
 			this->character.acceleration = { 0,0,0 };
 			this->character.velocity = { 0,0,0 };
 		}
+		void load_map(Map map) {
+			this->collision_map = map;
+		}
 	private:
 		float bob_height;
 		int bob_tick;
 		int attack_tick;
+		Map collision_map;
 };

@@ -9,11 +9,11 @@
 #include "rcamera.h"
 #include "texture.h"
 #include "weapon.h"
+#include "gamemap.h"
 #include "character.h"
 #include "humanoid.h"
 #include "newplayer.h"
 #include "NPC.h"
-#include "gamemap.h"
 #define NUM_OF_JOHNS 20
 Player player;
 NPC npcs[NUM_OF_JOHNS];
@@ -49,6 +49,7 @@ void Init() {
     player.camera.projection = CAMERA_PERSPECTIVE;
     player.character.friction = 3.0f / 4.0f;
     player.weapon = drumstick;
+    player.load_map(map);
 
     for (int i = 0; i < NUM_OF_JOHNS; i++) {
         npcs[i].name = "John";
