@@ -14,7 +14,7 @@ struct Character {
 		this->velocity = Vector3Scale(velocity, friction);
 		this->position = Vector3Add(position, velocity);
 	}
-	BoundingBox boundingBox(Vector3 after) {
+	BoundingBox boundingBox(Vector3 after = {}) {
 		BoundingBox b;
 		b = {
 			position.x - hitbox.x / 2 + after.x, position.y + after.y, position.z - hitbox.z / 2 + after.z,

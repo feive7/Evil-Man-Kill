@@ -8,6 +8,7 @@
 #include "raymath.h"
 #include "rcamera.h"
 #include "texture.h"
+#include "shaderLoader.h"
 #include "weapon.h"
 #include "gamemap.h"
 #include "character.h"
@@ -19,23 +20,16 @@ Player player;
 NPC npcs[NUM_OF_JOHNS];
 RenderTexture2D target;
 Cube cube = { {0, 0, 0}, {20,2,2}, BLUE };
-Shader shader;
-Shader discardAlpha;
-Shader viewer;
-Shader shiny;
 int fix = 10;
 
 void Init() {
     InitAudioDevice();
     InitTextures();
+    InitShaders();
     InitWeapons();
     InitModels();
     
     target = LoadRenderTexture(WINDOW_WIDTH, WINDOW_HEIGHT);
-    shader = LoadShader(0, "shader.fs");
-    discardAlpha = LoadShader(0, "discardAlpha.fs");
-    viewer = LoadShader(0, "test.fs");
-    shiny = LoadShader(0, "shiny.fs");
 
     player.name = "Roland Baker";
     player.character.position = { 0.0f,0.0f,8.0f };
@@ -110,7 +104,7 @@ void GameLoop() {
     EndTextureMode();
     BeginDrawing();
     ClearBackground(RAYWHITE);
-    BeginShaderMode(shader);
+    BeginShaderMode(overlayShader);
     DrawTextureRec(target.texture, { 0,0,(float)target.texture.width,-(float)target.texture.height }, { 0,0 }, WHITE);
     EndShaderMode();
     EndDrawing();
@@ -125,7 +119,7 @@ int main(void) {
     }
     CloseAudioDevice();
     CloseWindow();
-    UnloadShader(shader);
+    UnloadShaders();
 
     return 0;
 }

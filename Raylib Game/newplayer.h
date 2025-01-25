@@ -20,21 +20,13 @@ class Player {
 			Vector3 full = Vector3Add(forward, right);
 			for (int i = 0; i < map.num_of_cubes; i++) {
 				if ((map.cubes[i].flags >> 0) & 1) {
-					if (CheckCollisionBoxes(character.boundingBox(1), map.cubes[i].boundingBox())) {
+					if (CheckCollisionBoxes(character.boundingBox(), map.cubes[i].boundingBox())) {
 						full.x = 0;
 						character.velocity.x = 0;
 						character.acceleration.x = 0;
 					}
-					if (CheckCollisionBoxes(character.boundingBox(2), map.cubes[i].boundingBox())) {
-						full.z = 0;
-						character.velocity.z = 0;
-						character.acceleration.y = 0;
-					}
 				}
 			}
-			full.x = 0;
-			character.velocity.x = 0;
-			character.acceleration.x = 0;
 			character.move(full);
 			if (f || r) {
 				bob_tick++;
