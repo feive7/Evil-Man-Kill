@@ -45,6 +45,7 @@ void Init() {
     player.weapon = drumstick;
     player.load_map(map);
 
+    /*
     for (int i = 0; i < NUM_OF_JOHNS; i++) {
         npcs[i].name = "John";
         npcs[i].character.position = { (float)GetRandomValue(-20,20),0.0f,(float)GetRandomValue(-20,20) };
@@ -57,6 +58,7 @@ void Init() {
         npcs[i].humanoid.state = IDLE;
         npcs[i].setIdleAnimation((GetRandomValue(0, 1) ? ANIM_JOHN_FIGHT : ANIM_JOHN_IDLE));
     }
+    */
 }
 void GameLoop() {
     // Game Logic
