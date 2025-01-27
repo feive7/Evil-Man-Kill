@@ -24,6 +24,7 @@ class Player {
 			for (int i = 0; i < map.num_of_cubes; i++) {
 				Cube cube = map.cubes[i];
 				if ((cube.flags >> 0) & 1) {
+					// TODO: fix wall clipping when moving into wall, not super big deal, but still fix it
 					if (CheckCollisionBoxes(character.boundingBox(), cube.boundingBox())) {
 						if (abs(character.position.x - cube.center.x) - character.position.z + cube.center.z < 0) {
 							character.position.z = cube.boundingBox().max.z + 1;
@@ -45,7 +46,7 @@ class Player {
 				}
 			}
 			//character.position = Vector3Add(origin, full);
-			character.position = Vector3Add(character.position, full);
+			character.move(full);
 			if (f || r) {
 				bob_tick++;
 			}
@@ -79,13 +80,16 @@ class Player {
 			move(forward, right, jump, collision_map);
 			
 			// Camera Logic
-			bob_height += .1 * (-abs(sin(bob_tick / 5.0f)) - bob_height);
+			bob_height = .5 * (bob_height + bobWave(bob_tick));
 			CameraYaw(&camera, -GetMouseDelta().x / 300.0f, false);
 			CameraPitch(&camera, -GetMouseDelta().y / 168.0f, true, false, false);
-			Vector3 offset = Vector3Add(Vector3Subtract(character.position, camera.position), { 0,character.height + bob_height,0 });
+			Vector3 offset = Vector3Add(Vector3Subtract(character.position, camera.position), { 0,character.height - abs(bob_height),0 });
 			Vector3 rotation = { -GetMouseDelta().x,-GetMouseDelta().y,0 };
 			camera.position = Vector3Add(camera.position, offset);
 			camera.target = Vector3Add(camera.target, offset);
+		}
+		float bobWave(int tick) {
+			return sin(bob_tick / 6.0f) / 5.0f;
 		}
 		void draw2D() {
 			DrawTexture(TXT_CROSSHAIR, WINDOW_WIDTH / 2 - 25, WINDOW_HEIGHT / 2 - 25, WHITE);

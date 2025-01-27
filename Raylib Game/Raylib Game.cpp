@@ -89,7 +89,6 @@ void GameLoop() {
             DrawCubeStruct(map.cubes[i]);
         }
     }
-    DrawBoundingBox(player.character.boundingBox(), BLUE);
     BeginShaderMode(discardAlpha);
     for (int i = 0; i < NUM_OF_JOHNS; i++) {
         npcs[i].draw3D(player.camera);

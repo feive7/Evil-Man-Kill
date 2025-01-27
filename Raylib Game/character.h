@@ -9,11 +9,10 @@ struct Character {
 	float speedcap = 4;
 	float floor_y = 0;
 	void move(Vector3 xyz = {}) {
-		this->velocity = xyz;
-		//if ((xyz.x || xyz.y || xyz.z)) {
-		//	this->velocity = xyz;
-		//}
-		//this->velocity = Vector3Multiply(velocity, { friction,1,friction });
+		if ((xyz.x || xyz.y || xyz.z)) {
+			this->velocity = xyz;
+		}
+		this->velocity = Vector3Multiply(velocity, { friction,1,friction });
 		this->position = Vector3Add(position, velocity);
 		if (position.y > floor_y) {
 			velocity.y -= .1;
