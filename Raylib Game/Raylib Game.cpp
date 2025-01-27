@@ -28,7 +28,8 @@ void Init() {
     InitShaders();
     InitWeapons();
     InitModels();
-    
+    map.init();
+
     target = LoadRenderTexture(WINDOW_WIDTH, WINDOW_HEIGHT);
 
     player.name = "Roland Baker";
@@ -84,18 +85,11 @@ void GameLoop() {
     ClearBackground(BLACK);
     BeginMode3D(player.camera);
     for (int i = 0; i < map.num_of_cubes; i++) {
-        DrawCubeStruct(map.cubes[i]);
-        DrawBoundingBox(map.cubes[i].boundingBox(), RED);
-        if ((map.cubes[i].flags >> 0) & 1) {
-            if (CheckCollisionBoxes(player.character.boundingBox(), map.cubes[i].boundingBox())) {
-                while (CheckCollisionBoxes(player.character.boundingBox(), map.cubes[i].boundingBox())) {
-                    player.character.acceleration = { 0,0,0 };
-                    player.character.position = Vector3Subtract(player.character.position, player.character.velocity);
-                }
-                player.stop();
-            }
+        if ((map.cubes[i].flags >> 1) & 1) {
+            DrawCubeStruct(map.cubes[i]);
         }
     }
+    DrawBoundingBox(player.character.boundingBox(), BLUE);
     BeginShaderMode(discardAlpha);
     for (int i = 0; i < NUM_OF_JOHNS; i++) {
         npcs[i].draw3D(player.camera);
@@ -108,6 +102,7 @@ void GameLoop() {
     ClearBackground(RAYWHITE);
     BeginShaderMode(overlayShader);
     DrawTextureRec(target.texture, { 0,0,(float)target.texture.width,-(float)target.texture.height }, { 0,0 }, WHITE);
+    DrawText(TextFormat("Player Pos: %f %f %f", player.character.position.x, player.character.position.y, player.character.position.z), 0, 0, 10, WHITE);
     EndShaderMode();
     EndDrawing();
 }

@@ -10,7 +10,7 @@ class Player {
 		Ray ray;
 		int consecutiveHits = 0;
 		bool willCrit;
-		void move(float f, float r, Map map) {
+		void move(float f, float r, float u, Map map) {
 			Vector3 forward = GetCameraForward(&camera);
 			forward.y = 0;
 			forward = Vector3Scale(Vector3Normalize(forward), f);
@@ -18,16 +18,34 @@ class Player {
 			right.y = 0;
 			right = Vector3Scale(Vector3Normalize(right), r);
 			Vector3 full = Vector3Add(forward, right);
+			full.y = u;
+			Vector3 thingP = character.position;
+			Vector3 thingV = character.velocity;
 			for (int i = 0; i < map.num_of_cubes; i++) {
-				if ((map.cubes[i].flags >> 0) & 1) {
-					if (CheckCollisionBoxes(character.boundingBox(), map.cubes[i].boundingBox())) {
-						full.x = 0;
-						character.velocity.x = 0;
-						character.acceleration.x = 0;
+				Cube cube = map.cubes[i];
+				if ((cube.flags >> 0) & 1) {
+					if (CheckCollisionBoxes(character.boundingBox(), cube.boundingBox())) {
+						if (abs(character.position.x - cube.center.x) - character.position.z + cube.center.z < 0) {
+							character.position.z = cube.boundingBox().max.z + 1;
+							character.velocity.z = 0;
+						}
+						if (abs(character.position.x - cube.center.x) + character.position.z - cube.center.z < 0) {
+							character.position.z = cube.boundingBox().min.z - 1;
+							character.velocity.z = 0;
+						}
+						if (abs(character.position.z - cube.center.z) - character.position.x + cube.center.x < 0) {
+							character.position.x = cube.boundingBox().max.x + 1;
+							character.velocity.x = 0;
+						}
+						if (abs(character.position.z - cube.center.z) + character.position.x - cube.center.x < 0) {
+							character.position.x = cube.boundingBox().min.x - 1;
+							character.velocity.x = 0;
+						}
 					}
 				}
 			}
-			character.move(full);
+			//character.position = Vector3Add(origin, full);
+			character.position = Vector3Add(character.position, full);
 			if (f || r) {
 				bob_tick++;
 			}
@@ -39,6 +57,7 @@ class Player {
 			return weapon.cooldown + 10;
 		}
 		void tick() {
+			// Attack Logic
 			if (IsMouseButtonDown(0) && attack_tick >= weapon.cooldown) {
 				attack_tick = 0;
 				SetSoundPitch(weapon.sound, GetRandomValue(10, 15) / 10.0f);
@@ -52,13 +71,18 @@ class Player {
 				}
 			}
 			castRay();
-			CameraYaw(&camera, -GetMouseDelta().x / 300.0f, false);
-			CameraPitch(&camera, -GetMouseDelta().y / 168.0f, true, false, false);
+
+			// Movement Logic
 			float forward = (IsKeyDown(KEY_LEFT_SHIFT) ? PLAYER_SPRINT_SPEED : PLAYER_WALK_SPEED) * (IsKeyDown(KEY_W) - IsKeyDown(KEY_S));
 			float right = (IsKeyDown(KEY_LEFT_SHIFT) ? PLAYER_SPRINT_SPEED : PLAYER_WALK_SPEED) * (IsKeyDown(KEY_D) - IsKeyDown(KEY_A));
-			bob_height += .1 * (-abs(sin(bob_tick/5.0f)) - bob_height);
-			move(forward, right, collision_map);
-			Vector3 offset = Vector3Add(Vector3Subtract(character.position, camera.position), { 0,character.height,0 });
+			float jump = (IsKeyDown(KEY_SPACE) && character.position.y <= character.floor_y);
+			move(forward, right, jump, collision_map);
+			
+			// Camera Logic
+			bob_height += .1 * (-abs(sin(bob_tick / 5.0f)) - bob_height);
+			CameraYaw(&camera, -GetMouseDelta().x / 300.0f, false);
+			CameraPitch(&camera, -GetMouseDelta().y / 168.0f, true, false, false);
+			Vector3 offset = Vector3Add(Vector3Subtract(character.position, camera.position), { 0,character.height + bob_height,0 });
 			Vector3 rotation = { -GetMouseDelta().x,-GetMouseDelta().y,0 };
 			camera.position = Vector3Add(camera.position, offset);
 			camera.target = Vector3Add(camera.target, offset);

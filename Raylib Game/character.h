@@ -7,14 +7,25 @@ struct Character {
 	float height;
 	float friction = 0.8;
 	float speedcap = 4;
+	float floor_y = 0;
 	void move(Vector3 xyz = {}) {
-		if ((xyz.x || xyz.y || xyz.z)) {
-			this->velocity = Vector3Add(velocity, xyz);
-		}
-		this->velocity = Vector3Scale(velocity, friction);
+		this->velocity = xyz;
+		//if ((xyz.x || xyz.y || xyz.z)) {
+		//	this->velocity = xyz;
+		//}
+		//this->velocity = Vector3Multiply(velocity, { friction,1,friction });
 		this->position = Vector3Add(position, velocity);
+		if (position.y > floor_y) {
+			velocity.y -= .1;
+		}
+		else if (velocity.y < floor_y) {
+			velocity.y = 0;
+		}
+		else {
+			position.y = floor_y;
+		}
 	}
-	BoundingBox boundingBox(Vector3 after = {}) {
+	BoundingBox boundingBox(Vector3 after = {0,0,0}) {
 		BoundingBox b;
 		b = {
 			position.x - hitbox.x / 2 + after.x, position.y + after.y, position.z - hitbox.z / 2 + after.z,
