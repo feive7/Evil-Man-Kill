@@ -18,7 +18,7 @@
 #define NORMALIZE_INPUT  0
 
 static Vector2 sensitivity = { 0.005f, 0.005f };
-static Ball projectilse = {};
+static Ball projectiles;
 
 class Body {
 public:
