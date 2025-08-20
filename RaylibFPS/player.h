@@ -34,7 +34,7 @@ public:
     bool alive = true;
     void update() {
         position += velocity;
-        //velocity.y -= 0.001f;
+        velocity.y -= 0.01f;
         if (position.y < 0 || Vector3Length(position) > 1000) {
             alive = false;
         }
@@ -55,6 +55,7 @@ public:
     float standingHeight = 2.0f;
     float crouchingHeight = 1.0f;
     bool crouching;
+
 
     Vector2 lookRotation;
 
@@ -97,14 +98,22 @@ public:
 
     float headTimer;
     float walkLerp;
+    bool alive = true;
     Vector2 lean;
 
+    int deathTick;
+
     void update() {
-        updateLookRotation();
-        move();
-        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-            projectiles.push_back({ body.getHeadPos(),body.getForward() });
-            PlaySound(snd_gunshot);
+        if (alive) {
+            updateLookRotation();
+            move();
+            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                projectiles.push_back({ body.getHeadPos(),body.getForward() });
+                PlaySound(snd_gunshot);
+            }
+        }
+        else {
+            deathTick++;
         }
     }
 private:
@@ -215,11 +224,14 @@ private:
 class Enemy {
 public:
     Body body;
-    Body* target;
+    Player* target;
     bool alive = true;
     void update() {
-        Vector3 direction = Vector3Normalize(target->position - body.position); direction.y = 0.0f; direction = Vector3Normalize(direction);
+        Vector3 direction = Vector3Normalize(target->body.position - body.position); direction.y = 0.0f; direction = Vector3Normalize(direction);
         body.position += Vector3Scale(direction,0.1f);
+        if (CheckCollisionBoxes(body.getBoundingBox(), target->body.getBoundingBox())) {
+            target->alive = false;
+        }
     }
     void drawBoundingBox() {
         DrawBoundingBox(body.getBoundingBox(), BLACK);

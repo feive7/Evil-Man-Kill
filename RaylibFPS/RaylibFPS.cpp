@@ -50,6 +50,7 @@ int main() {
 	player.headTimer = 0.0f;
 	player.walkLerp = 0.0f;
 	player.lean = { 0 };
+	player.alive = true;
 
 	// Init player camera
 	Camera camera = { 0 };
@@ -64,7 +65,7 @@ int main() {
 	UpdateCameraAngle(&camera, player);
 
 	// Init enemies
-	for (int i = 0; i < 100; i++) {
+	for (int i = 0; i < 10; i++) {
 		float x = GetRandomValue(-100, 100);
 		float z = GetRandomValue(-100, 100);
 		Enemy enemy;
@@ -72,7 +73,7 @@ int main() {
 		enemy.body.position.y = 0.0f;
 		enemy.body.position.z = z;
 		enemy.alive = true;
-		enemy.target = &player.body;
+		enemy.target = &player;
 		enemies.push_back(enemy);
 	}
 	
@@ -115,9 +116,18 @@ int main() {
 			AddDebugLine("Head Lerp: %.2f", player.body.heightLerp);
 			AddDebugLine("Enemies Count: %i", enemies.size());
 			AddDebugLine("Bullet Count: %i", projectiles.size());
+			AddDebugLine(TextFormat("Player alive: %i", player.alive));
+		}
+
+		if (!player.alive) {
+			DrawRectangle(0, 0, screenWidth, screenHeight, { 255,0,0,120 });
+			const char* text = "You're Dead!!!!!!!!";
+			int measure = MeasureText(text, 40);
+			DrawText(text, screenWidth / 2 - measure / 2, screenHeight / 2 - 10, 40, WHITE);
 		}
 
 		EndDrawing();
+
 		EndShaderMode();
 	}
 
