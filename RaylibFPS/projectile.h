@@ -5,4 +5,7 @@ public:
 	void update() {
 		position += velocity;
 	}
+	void draw() {
+		DrawSphere(position, 0.5f, BLACK);
+	}
 };

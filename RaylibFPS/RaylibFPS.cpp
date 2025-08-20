@@ -19,6 +19,9 @@ void AddDebugLine(const char* text, Vector3 vec3, bool reset = false) {
 void AddDebugLine(const char* text, Vector2 vec2, bool reset = false) {
 	AddDebugLine(TextFormat(text, vec2.x, vec2.y), reset);
 }
+void AddDebugLine(const char* text, float val, bool reset = false) {
+	AddDebugLine(TextFormat(text, val), reset);
+}
 
 int main() {
 	// Init Window
@@ -62,6 +65,9 @@ int main() {
 		};
 
 		UpdateCameraAngle(&camera, player);
+
+		UpdateLevel();
+
 		BeginDrawing();
 
 		ClearBackground(RAYWHITE);
@@ -70,7 +76,9 @@ int main() {
 		DrawLevel();
 		EndMode3D();
 
-		//AddDebugLine("Position: %f, %f, %f", player.position, true);
+		AddDebugLine("Position: %.2f, %.2f, %.2f", player.position, true);
+		AddDebugLine("Camera pos: %.2f, %.2f, %.2f", camera.position);
+		AddDebugLine("Head Lerp: %.2f", player.headLerp);
 
 		EndDrawing();
 	}

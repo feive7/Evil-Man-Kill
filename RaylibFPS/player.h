@@ -18,7 +18,7 @@
 #define NORMALIZE_INPUT  0
 
 static Vector2 sensitivity = { 0.005f, 0.005f };
-static Ball projectiles;
+static std::vector<Ball> projectiles;
 
 class Body {
 public:
@@ -35,12 +35,6 @@ public:
     float headLerp;
     Vector2 lean;
 
-    void update() {
-        updateLookRotation();
-        move();
-        //warp({ 10,10,10 });
-    }
-    
     Vector3 getForward() {
         float yaw = lookRotation.x;
         float pitch = lookRotation.y;
@@ -52,6 +46,21 @@ public:
 
         return Vector3Normalize(forward);
     }
+
+    Vector3 getHeadPos() {
+        return position + Vector3{ 0,BOTTOM_HEIGHT + headLerp };
+    }
+
+    void update() {
+        updateLookRotation();
+        move();
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            projectiles.push_back({ getHeadPos(),getForward() });
+        }
+        //warp({ 10,10,10 });
+    }
+    
+    
 private:
     void updateLookRotation() {
         // Get mouse inputs
@@ -203,6 +212,13 @@ static void UpdateCameraAngle(Camera* camera, Body cameraBody) {
     camera->target = Vector3Add(camera->position, pitch);
 }
 
+// Update game level
+static void UpdateLevel(void) {
+    for (Ball& ball : projectiles) {
+        ball.update();
+    }
+}
+
 // Draw game level
 static void DrawLevel(void) {
     const int floorExtent = 25;
@@ -219,6 +235,10 @@ static void DrawLevel(void) {
                 DrawPlane({ x* tileSize, 0.0f, y* tileSize }, { tileSize, tileSize }, LIGHTGRAY);
             }
         }
+    }
+
+    for (Ball& ball : projectiles) {
+        ball.draw();
     }
 
     /*const Vector3 towerSize = { 16.0f, 32.0f, 16.0f };
