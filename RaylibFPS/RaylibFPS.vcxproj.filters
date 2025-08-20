@@ -23,8 +23,5 @@
     <ClInclude Include="player.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="projectile.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

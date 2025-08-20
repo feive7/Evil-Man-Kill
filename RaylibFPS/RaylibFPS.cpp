@@ -2,7 +2,6 @@
 #include <vector>
 #include <raylib.h>
 #include <raymath.h>
-#include <projectile.h>
 #include <player.h>
 
 void AddDebugLine(const char* text, bool reset = false) {
@@ -22,6 +21,12 @@ void AddDebugLine(const char* text, Vector2 vec2, bool reset = false) {
 void AddDebugLine(const char* text, float val, bool reset = false) {
 	AddDebugLine(TextFormat(text, val), reset);
 }
+void AddDebugLine(const char* text, int val, bool reset = false) {
+	AddDebugLine(TextFormat(text, val), reset);
+}
+void AddDebugLine(const char* text, size_t val, bool reset = false) {
+	AddDebugLine(TextFormat(text, val), reset);
+}
 
 int main() {
 	// Init Window
@@ -31,11 +36,11 @@ int main() {
 	InitWindow(screenWidth, screenHeight, "FPS");
 
 	// Init Player
-	Body player = { 0 };
-	player.lookRotation = { 0 };
+	Player player = { 0 };
+	player.body.lookRotation = { 0 };
+	player.body.height = 0.0f;
 	player.headTimer = 0.0f;
 	player.walkLerp = 0.0f;
-	player.headLerp = 0.0f;
 	player.lean = { 0 };
 
 	// Init player camera
@@ -43,10 +48,23 @@ int main() {
 	camera.fovy = 60.0f;
 	camera.projection = CAMERA_PERSPECTIVE;
 	camera.position = {
-		player.position.x,
-		player.position.y + (BOTTOM_HEIGHT + player.headLerp),
-		player.position.z,
+		player.body.position.x,
+		player.body.position.y + (BOTTOM_HEIGHT + player.body.height),
+		player.body.position.z,
 	};
+
+	for (int i = 0; i < 10; i++) {
+		float x = GetRandomValue(-100, 100);
+		float z = GetRandomValue(-100, 100);
+		Enemy enemy;
+		enemy.body.position.x = x;
+		enemy.body.position.y = 0.0f;
+		enemy.body.position.z = z;
+		enemy.body.height = 3.0f;
+		enemy.alive = true;
+		enemy.target = &player.body;
+		enemies.push_back(enemy);
+	}
 
 	UpdateCameraAngle(&camera, player);
 
@@ -59,9 +77,9 @@ int main() {
 		player.update();
 
 		camera.position = {
-			player.position.x,
-			player.position.y + (BOTTOM_HEIGHT + player.headLerp),
-			player.position.z,
+			player.body.position.x,
+			player.body.position.y + (BOTTOM_HEIGHT + player.body.height),
+			player.body.position.z,
 		};
 
 		UpdateCameraAngle(&camera, player);
@@ -76,9 +94,13 @@ int main() {
 		DrawLevel();
 		EndMode3D();
 
-		AddDebugLine("Position: %.2f, %.2f, %.2f", player.position, true);
+		DrawCircle(screenWidth / 2, screenHeight / 2, 3.0f, GRAY);
+
+		AddDebugLine("Position: %.2f, %.2f, %.2f", player.body.position, true);
 		AddDebugLine("Camera pos: %.2f, %.2f, %.2f", camera.position);
-		AddDebugLine("Head Lerp: %.2f", player.headLerp);
+		AddDebugLine("Head Lerp: %.2f", player.body.height);
+		AddDebugLine("Enemies Count: %i", enemies.size());
+		AddDebugLine("Bullet Count: %i", projectiles.size());
 
 		EndDrawing();
 	}
