@@ -35,10 +35,18 @@ int main() {
 	
 	InitWindow(screenWidth, screenHeight, "FPS");
 
+	InitAudioDevice();
+
+	DisableCursor();
+
+	// Cap the FPS to 60
+	SetTargetFPS(60);
+
 	// Init Player
 	Player player = { 0 };
 	player.body.lookRotation = { 0 };
-	player.body.height = 0.0f;
+	player.body.crouchingHeight = 1.0f;
+	player.body.standingHeight = 2.0f;
 	player.headTimer = 0.0f;
 	player.walkLerp = 0.0f;
 	player.lean = { 0 };
@@ -49,38 +57,42 @@ int main() {
 	camera.projection = CAMERA_PERSPECTIVE;
 	camera.position = {
 		player.body.position.x,
-		player.body.position.y + (BOTTOM_HEIGHT + player.body.height),
+		player.body.position.y + player.body.getHeight(),
 		player.body.position.z,
 	};
 
-	for (int i = 0; i < 10; i++) {
+	UpdateCameraAngle(&camera, player);
+
+	// Init enemies
+	for (int i = 0; i < 100; i++) {
 		float x = GetRandomValue(-100, 100);
 		float z = GetRandomValue(-100, 100);
 		Enemy enemy;
 		enemy.body.position.x = x;
 		enemy.body.position.y = 0.0f;
 		enemy.body.position.z = z;
-		enemy.body.height = 3.0f;
 		enemy.alive = true;
 		enemy.target = &player.body;
 		enemies.push_back(enemy);
 	}
+	
+	// Textures
+	tex_john = LoadTexture("npc_john.png");
 
-	UpdateCameraAngle(&camera, player);
+	// Shaders
+	shader_discard = LoadShader(NULL, "discard.fs");
 
-	DisableCursor();
+	// Sounds
+	snd_gunshot = LoadSound("8bitgunshot.wav");
+	snd_hit = LoadSound("hit01.wav");
 
-	// Cap the FPS to 60
-	SetTargetFPS(60);
+	// Debug toggle
+	bool debugEnabled = false;
 
 	while (!WindowShouldClose()) {
 		player.update();
 
-		camera.position = {
-			player.body.position.x,
-			player.body.position.y + (BOTTOM_HEIGHT + player.body.height),
-			player.body.position.z,
-		};
+		if (IsKeyPressed(KEY_F3)) debugEnabled = !debugEnabled;
 
 		UpdateCameraAngle(&camera, player);
 
@@ -90,20 +102,26 @@ int main() {
 
 		ClearBackground(RAYWHITE);
 
+		BeginShaderMode(shader_discard);
 		BeginMode3D(camera);
-		DrawLevel();
+		DrawLevel(camera);
 		EndMode3D();
 
 		DrawCircle(screenWidth / 2, screenHeight / 2, 3.0f, GRAY);
 
-		AddDebugLine("Position: %.2f, %.2f, %.2f", player.body.position, true);
-		AddDebugLine("Camera pos: %.2f, %.2f, %.2f", camera.position);
-		AddDebugLine("Head Lerp: %.2f", player.body.height);
-		AddDebugLine("Enemies Count: %i", enemies.size());
-		AddDebugLine("Bullet Count: %i", projectiles.size());
+		if (debugEnabled) {
+			AddDebugLine("Position: %.2f, %.2f, %.2f", player.body.position, true);
+			AddDebugLine("Camera pos: %.2f, %.2f, %.2f", camera.position);
+			AddDebugLine("Head Lerp: %.2f", player.body.heightLerp);
+			AddDebugLine("Enemies Count: %i", enemies.size());
+			AddDebugLine("Bullet Count: %i", projectiles.size());
+		}
 
 		EndDrawing();
+		EndShaderMode();
 	}
+
+	CloseAudioDevice();
 
 	CloseWindow();
 

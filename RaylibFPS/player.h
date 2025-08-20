@@ -19,6 +19,13 @@
 
 static Vector2 sensitivity = { 0.005f, 0.005f };
 
+static Texture tex_john;
+
+static Shader shader_discard;
+
+static Sound snd_gunshot;
+static Sound snd_hit;
+
 class Projectile {
 public:
     Vector3 position;
@@ -44,7 +51,9 @@ public:
     Vector3 dir;
     bool isGrounded;
 
-    float height = 1.0f;
+    float heightLerp = 1.0f;
+    float standingHeight = 2.0f;
+    float crouchingHeight = 1.0f;
     bool crouching;
 
     Vector2 lookRotation;
@@ -61,8 +70,12 @@ public:
         return Vector3Normalize(forward);
     }
 
+    float getHeight() {
+        return Lerp(crouchingHeight, standingHeight, heightLerp);
+    }
+
     Vector3 getHeadPos() {
-        return position + Vector3{ 0,BOTTOM_HEIGHT + height,0 };
+        return position + Vector3{ 0,getHeight(),0};
     }
 
     void update() {
@@ -91,6 +104,7 @@ public:
         move();
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
             projectiles.push_back({ body.getHeadPos(),body.getForward() });
+            PlaySound(snd_gunshot);
         }
     }
 private:
@@ -179,7 +193,7 @@ private:
             body.isGrounded = true; // Enable jumping
         }
 
-        body.height = Lerp(body.height, (body.crouching ? CROUCH_HEIGHT : STAND_HEIGHT), 20.0f * delta);
+        body.heightLerp = Lerp(body.heightLerp, (body.crouching ? CROUCH_HEIGHT : STAND_HEIGHT), 20.0f * delta);
 
         if (body.isGrounded && ((forward != 0) || (sideway != 0))) {
             headTimer += delta * 3.0f;
@@ -204,10 +218,10 @@ public:
     Body* target;
     bool alive = true;
     void update() {
-        Vector3 direction = Vector3Normalize(target->position - body.position);
+        Vector3 direction = Vector3Normalize(target->position - body.position); direction.y = 0.0f; direction = Vector3Normalize(direction);
         body.position += Vector3Scale(direction,0.1f);
     }
-    void draw() {
+    void drawBoundingBox() {
         DrawBoundingBox(body.getBoundingBox(), BLACK);
     }
 };
@@ -217,14 +231,14 @@ static std::vector<Enemy> enemies;
 // Update camera
 static void UpdateCameraAngle(Camera* camera, Player player) {
     float delta = GetFrameTime();
-    
+
+    camera->position = player.body.getHeadPos();
+
     const Vector3 up = { 0.0f, 1.0f, 0.0f };
     const Vector3 targetOffset = { 0.0f, 0.0f, -1.0f };
 
     // Left and right
     Vector3 yaw = Vector3RotateByAxisAngle(targetOffset, up, player.body.lookRotation.x);
-
-    
 
     // Up and down
     Vector3 right = Vector3Normalize(Vector3CrossProduct(yaw, up));
@@ -235,12 +249,10 @@ static void UpdateCameraAngle(Camera* camera, Player player) {
     // Update camera based on body state
     if (player.body.crouching) {
         camera->fovy = Lerp(camera->fovy, 55.0f, 5.0f * delta);
-
     }
     else {
         camera->fovy = Lerp(camera->fovy, 60.0f, 5.0f * delta);
     }
-
 
     // Head animation
     // Rotate up direction around forward axis
@@ -267,7 +279,10 @@ static void UpdateLevel(void) {
         for (Enemy& enemy : enemies) {
             if (CheckCollisionBoxSphere(enemy.body.getBoundingBox(), projectile.position, projectile.radius)) {
                 projectile.alive = false;
-                enemy.alive = false;
+                //enemy.alive = false;
+                enemy.body.position.x = GetRandomValue(-100, 100);
+                enemy.body.position.z = GetRandomValue(-100, 100);
+                PlaySound(snd_hit);
                 break;
             }
             if (projectile.position.y < 0.0f) {
@@ -290,7 +305,7 @@ static void UpdateLevel(void) {
 }
 
 // Draw game level
-static void DrawLevel(void) {
+static void DrawLevel(Camera camera) {
     const int floorExtent = 25;
     const float tileSize = 5.0f;
     const Color tileColor1 = { 150, 200, 200, 255 };
@@ -312,7 +327,9 @@ static void DrawLevel(void) {
     }
 
     for (Enemy& enemy : enemies) {
-        enemy.draw();
+        //enemy.drawBoundingBox();
+        //float midHeight = (enemy.body.getBoundingBox().max.y + enemy.body.getBoundingBox().min.y) / 2.0f;
+        DrawBillboard(camera, tex_john, enemy.body.position + Vector3{ 0.0f,enemy.body.getHeight() / 2.0f,0.0f}, enemy.body.getHeight(), WHITE);
     }
 
     /*const Vector3 towerSize = { 16.0f, 32.0f, 16.0f };
