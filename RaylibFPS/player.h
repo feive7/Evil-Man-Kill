@@ -20,6 +20,7 @@
 static Vector2 sensitivity = { 0.005f, 0.005f };
 
 static Texture tex_john;
+static Texture tex_john_victory;
 
 static Shader shader_discard;
 
@@ -226,11 +227,15 @@ public:
     Body body;
     Player* target;
     bool alive = true;
+    bool victoryDance;
     void update() {
+        if (target->alive) {
         Vector3 direction = Vector3Normalize(target->body.position - body.position); direction.y = 0.0f; direction = Vector3Normalize(direction);
-        body.position += Vector3Scale(direction,0.1f);
+            body.position += Vector3Scale(direction, 0.1f);
         if (CheckCollisionBoxes(body.getBoundingBox(), target->body.getBoundingBox())) {
             target->alive = false;
+                victoryDance = true;
+            }
         }
     }
     void drawBoundingBox() {
@@ -341,7 +346,7 @@ static void DrawLevel(Camera camera) {
     for (Enemy& enemy : enemies) {
         //enemy.drawBoundingBox();
         //float midHeight = (enemy.body.getBoundingBox().max.y + enemy.body.getBoundingBox().min.y) / 2.0f;
-        DrawBillboard(camera, tex_john, enemy.body.position + Vector3{ 0.0f,enemy.body.getHeight() / 2.0f,0.0f}, enemy.body.getHeight(), WHITE);
+        DrawBillboard(camera, (enemy.victoryDance ? tex_john_victory : tex_john), enemy.body.position + Vector3{0.0f,enemy.body.getHeight() / 2.0f,0.0f}, enemy.body.getHeight(), WHITE);
     }
 
     /*const Vector3 towerSize = { 16.0f, 32.0f, 16.0f };
