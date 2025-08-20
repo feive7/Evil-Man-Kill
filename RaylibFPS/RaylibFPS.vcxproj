@@ -71,7 +71,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>./raylib/include;./;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\rolan\OneDrive\Documents\Roland C++\RaylibOpenKeys\RaylibOpenKeys\raylib\include;./;$(IncludePath)</IncludePath>
     <LibraryPath>./raylib/lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -132,6 +132,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="player.h" />
+    <ClInclude Include="projectile.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

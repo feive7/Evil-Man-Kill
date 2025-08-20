@@ -18,6 +18,7 @@
 #define NORMALIZE_INPUT  0
 
 static Vector2 sensitivity = { 0.005f, 0.005f };
+static Ball projectilse = {};
 
 class Body {
 public:
@@ -35,22 +36,57 @@ public:
     Vector2 lean;
 
     void update() {
-        // Get keyboard inputs
-        bool jumpPressed = IsKeyPressed(KEY_SPACE);
-        char sideway = (IsKeyDown(KEY_D) - IsKeyDown(KEY_A));
-        char forward = (IsKeyDown(KEY_W) - IsKeyDown(KEY_S));
+        updateLookRotation();
+        move();
+        //warp({ 10,10,10 });
+    }
+    
+    Vector3 getForward() {
+        float yaw = lookRotation.x;
+        float pitch = lookRotation.y;
 
+        Vector3 forward;
+        forward.x = -sinf(yaw) * cosf(pitch);
+        forward.y = -sinf(pitch);
+        forward.z = -cosf(yaw) * cosf(pitch);
+
+        return Vector3Normalize(forward);
+    }
+private:
+    void updateLookRotation() {
         // Get mouse inputs
         Vector2 mouse_delta = GetMouseDelta();
         lookRotation.x -= mouse_delta.x * sensitivity.x;
         lookRotation.y += mouse_delta.y * sensitivity.y;
+        const Vector3 targetOffset = { 0.0f, 0.0f, -1.0f };
+
+        const Vector3 up = { 0.0f, 1.0f, 0.0f };
+        Vector3 yaw = Vector3RotateByAxisAngle(targetOffset, up, lookRotation.x);
+
+        // Clamp view up
+        float maxAngleUp = Vector3Angle(up, yaw);
+        maxAngleUp -= 0.001f; // Avoid numerical errors
+        if (-(lookRotation.y) > maxAngleUp) { lookRotation.y = -maxAngleUp; }
+
+        // Clamp view down
+        float maxAngleDown = Vector3Angle(Vector3Negate(up), yaw);
+        maxAngleDown *= -1.0f; // Downwards angle is negative
+        maxAngleDown += 0.001f; // Avoid numerical errors
+        if (-(lookRotation.y) < maxAngleDown) { lookRotation.y = -maxAngleDown; }
+    }
+    void move() {
+        // Get keyboard inputs
+        bool jumpPressed = IsKeyPressed(KEY_SPACE);
+        char sideway = (IsKeyDown(KEY_D) - IsKeyDown(KEY_A));
+        char forward = (IsKeyDown(KEY_W) - IsKeyDown(KEY_S));
+        crouching = IsKeyDown(KEY_LEFT_CONTROL);
 
         Vector2 input = { (float)sideway, (float)-forward };
 
-#if defined(NORMALIZE_INPUT)
+        #if defined(NORMALIZE_INPUT)
         // Slow down diagonal movement
         if ((sideway != 0) && (forward != 0)) input = Vector2Normalize(input);
-#endif
+        #endif
 
         float delta = GetFrameTime();
 
@@ -104,7 +140,7 @@ public:
 
         headLerp = Lerp(headLerp, (crouching ? CROUCH_HEIGHT : STAND_HEIGHT), 20.0f * delta);
 
-        if (crouching && ((forward != 0) || (sideway != 0))) {
+        if (isGrounded && ((forward != 0) || (sideway != 0))) {
             headTimer += delta * 3.0f;
             walkLerp = Lerp(walkLerp, 1.0f, 10.0f * delta);
         }
@@ -114,6 +150,11 @@ public:
 
         lean.x = Lerp(lean.x, sideway * 0.02f, 10.0f * delta);
         lean.y = Lerp(lean.y, forward * 0.015f, 10.0f * delta);
+    }
+    void warp(Vector3 bounds) {
+        position.x = fmod(position.x, bounds.x);
+        position.y = fmod(position.y, bounds.y);
+        position.z = fmod(position.z, bounds.z);
     }
 };
 
@@ -127,16 +168,7 @@ static void UpdateCameraAngle(Camera* camera, Body cameraBody) {
     // Left and right
     Vector3 yaw = Vector3RotateByAxisAngle(targetOffset, up, cameraBody.lookRotation.x);
 
-    // Clamp view up
-    float maxAngleUp = Vector3Angle(up, yaw);
-    maxAngleUp -= 0.001f; // Avoid numerical errors
-    if (-(cameraBody.lookRotation.y) > maxAngleUp) { cameraBody.lookRotation.y = -maxAngleUp; }
-
-    // Clamp view down
-    float maxAngleDown = Vector3Angle(Vector3Negate(up), yaw);
-    maxAngleDown *= -1.0f; // Downwards angle is negative
-    maxAngleDown += 0.001f; // Avoid numerical errors
-    if (-(cameraBody.lookRotation.y) < maxAngleDown) { cameraBody.lookRotation.y = -maxAngleDown; }
+    
 
     // Up and down
     Vector3 right = Vector3Normalize(Vector3CrossProduct(yaw, up));
@@ -189,7 +221,7 @@ static void DrawLevel(void) {
         }
     }
 
-    const Vector3 towerSize = { 16.0f, 32.0f, 16.0f };
+    /*const Vector3 towerSize = { 16.0f, 32.0f, 16.0f };
     const Color towerColor = { 150, 200, 200, 255 };
 
     Vector3 towerPos ={ 16.0f, 16.0f, 16.0f };
@@ -206,8 +238,5 @@ static void DrawLevel(void) {
 
     towerPos.x *= -1;
     DrawCubeV(towerPos, towerSize, towerColor);
-    DrawCubeWiresV(towerPos, towerSize, DARKBLUE);
-
-    // Red sun
-    DrawSphere({ 300.0f, 300.0f, 0.0f }, 100.0f, { 255, 0, 0, 255 });
+    DrawCubeWiresV(towerPos, towerSize, DARKBLUE);*/
 }

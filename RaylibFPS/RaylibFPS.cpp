@@ -1,7 +1,24 @@
 #include <iostream>
+#include <vector>
 #include <raylib.h>
 #include <raymath.h>
+#include <projectile.h>
 #include <player.h>
+
+void AddDebugLine(const char* text, bool reset = false) {
+	static int y = 5;
+	if (reset) { 
+		y = 5;
+	}
+	DrawText(text, 5, y, 20, BLACK);
+	y += 20;
+}
+void AddDebugLine(const char* text, Vector3 vec3, bool reset = false) {
+	AddDebugLine(TextFormat(text, vec3.x, vec3.y, vec3.z), reset);
+}
+void AddDebugLine(const char* text, Vector2 vec2, bool reset = false) {
+	AddDebugLine(TextFormat(text, vec2.x, vec2.y), reset);
+}
 
 int main() {
 	// Init Window
@@ -52,6 +69,8 @@ int main() {
 		BeginMode3D(camera);
 		DrawLevel();
 		EndMode3D();
+
+		//AddDebugLine("Position: %f, %f, %f", player.position, true);
 
 		EndDrawing();
 	}
