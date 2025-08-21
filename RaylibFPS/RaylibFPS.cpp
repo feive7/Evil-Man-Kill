@@ -88,10 +88,33 @@ int main() {
 	snd_gunshot = LoadSound("8bitgunshot.wav");
 	snd_hit = LoadSound("hit01.wav");
 
+	// Music
+	music_main = LoadMusicStream("fight_looped.wav");
+	music_main.looping = true;
+	music_lose = LoadMusicStream("lost_town.mp3");
+	music_lose.looping = true;
+
 	// Debug toggle
 	bool debugEnabled = false;
 
+	// Music toggle
+	bool musicToggle = true;
+
+	PlayMusicStream(music_main);
+
 	while (!WindowShouldClose()) {
+		if (!player.alive && musicToggle) {
+			StopMusicStream(music_main);
+			PlayMusicStream(music_lose);
+			musicToggle = false;
+		}
+		if (player.alive) {
+			UpdateMusicStream(music_main);
+		}
+		else {
+			UpdateMusicStream(music_lose);
+		}
+
 		player.update();
 
 		if (IsKeyPressed(KEY_F3)) debugEnabled = !debugEnabled;

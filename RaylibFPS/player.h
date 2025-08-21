@@ -27,6 +27,9 @@ static Shader shader_discard;
 static Sound snd_gunshot;
 static Sound snd_hit;
 
+static Music music_main;
+static Music music_lose;
+
 class Projectile {
 public:
     Vector3 position;
