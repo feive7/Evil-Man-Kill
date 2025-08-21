@@ -111,7 +111,7 @@ int main() {
 			musicToggle = false;
 		}
 		if (player.alive) {
-			//UpdateMusicStream(music_main);
+			UpdateMusicStream(music_main);
 		}
 		else {
 			UpdateMusicStream(music_lose);
