@@ -86,7 +86,7 @@ int main() {
 	// Textures
 	tex_john = LoadTexture("npc_john.png");
 	tex_john_victory = LoadTexture("npc_john_victory.png");
-	tile_1 = LoadTexture("tile_1.png");
+	tile_1 = LoadTexture("tile_2.png");
 
 	// Shaders
 	shader_discard = LoadShader(NULL, "discard.fs");
@@ -139,7 +139,7 @@ int main() {
 		BeginMode3D(camera);
 		DrawEntities(camera);
 		rlSetTexture(tile_1.id);
-		rlColor4ub(255, 140, 0, 255);
+		rlColor4ub(255, 255, 255, 255);
 		rlBegin(RL_QUADS);
 		testmap.draw();
 		rlEnd();

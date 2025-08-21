@@ -73,9 +73,13 @@ public:
     float distanceToPoint(Vector2 p) {
         return DistancePointToLine(p, p1, p2);
     }
-    Vector2 getNormal() {
+    Vector2 getDirection() {
         Vector2 dir = p2 - p1;
-        return Vector2Normalize({dir.y,-dir.x});
+        return Vector2Normalize(dir);
+    }
+    Vector2 getNormal() {
+        Vector2 dir = getDirection();
+        return {dir.y,-dir.x};
     }
 };
 class Wall {
@@ -97,12 +101,69 @@ public:
     }
     void draw() {
         for (int i = 0; i < 4; i++) {
-            Vector2 p1 = points[i];
-            Vector2 p2 = points[(i+1)%4];
-            rlTexCoord2f(0, 1); rlVertex3f(p1.x, z, p1.y);
-            rlTexCoord2f(0, 0); rlVertex3f(p1.x, z + height, p1.y);
-            rlTexCoord2f(1, 0); rlVertex3f(p2.x, z + height, p2.y);
-            rlTexCoord2f(1, 1); rlVertex3f(p2.x, z, p2.y);
+            Sector sect = { points[i],points[(i + 1) % 4] };
+            Vector2 hDir = sect.getDirection();
+
+            // Bottom Left Corner
+            rlTexCoord2f(1, 1); rlVertex3f(sect.p1.x, z, sect.p1.y);
+            rlTexCoord2f(1, 0.75); rlVertex3f(sect.p1.x, z + 1, sect.p1.y);
+            rlTexCoord2f(0.75, 0.75); rlVertex3f(sect.p1.x + hDir.x, z + 1, sect.p1.y + hDir.y);
+            rlTexCoord2f(0.75, 1); rlVertex3f(sect.p1.x + hDir.x, z, sect.p1.y + hDir.y);
+
+            // Bottom Right Corner
+            rlTexCoord2f(0, 1); rlVertex3f(sect.p2.x, z, sect.p2.y);
+            rlTexCoord2f(0.25, 1); rlVertex3f(sect.p2.x - hDir.x, z, sect.p2.y - hDir.y);
+            rlTexCoord2f(0.25, 0.75); rlVertex3f(sect.p2.x - hDir.x, z + 1, sect.p2.y - hDir.y);
+            rlTexCoord2f(0, 0.75); rlVertex3f(sect.p2.x, z + 1, sect.p2.y);
+
+            // Top Left Corner
+            rlTexCoord2f(1, 0.25); rlVertex3f(sect.p1.x, z + height - 1, sect.p1.y);
+            rlTexCoord2f(1, 0); rlVertex3f(sect.p1.x, z + height, sect.p1.y);
+            rlTexCoord2f(0.75, 0); rlVertex3f(sect.p1.x + hDir.x, z + height, sect.p1.y + hDir.y);
+            rlTexCoord2f(0.75, 0.25); rlVertex3f(sect.p1.x + hDir.x, z + height - 1, sect.p1.y + hDir.y);
+
+            // Top Right Corner
+            rlTexCoord2f(0, 0.25); rlVertex3f(sect.p2.x, z + height - 1, sect.p2.y);
+            rlTexCoord2f(0.25, 0.25); rlVertex3f(sect.p2.x - hDir.x, z + height - 1, sect.p2.y - hDir.y);
+            rlTexCoord2f(0.25, 0); rlVertex3f(sect.p2.x - hDir.x, z + height, sect.p2.y - hDir.y);
+            rlTexCoord2f(0, 0); rlVertex3f(sect.p2.x, z + height, sect.p2.y);
+
+            // Bottom Side
+            rlTexCoord2f(0.75, 1); rlVertex3f(sect.p1.x + hDir.x, z, sect.p1.y + hDir.y);
+            rlTexCoord2f(0.75, 0.75); rlVertex3f(sect.p1.x + hDir.x, z + 1, sect.p1.y + hDir.y);
+            rlTexCoord2f(0.25, 0.75); rlVertex3f(sect.p2.x - hDir.x, z + 1, sect.p2.y - hDir.y);
+            rlTexCoord2f(0.25, 1); rlVertex3f(sect.p2.x - hDir.x, z, sect.p2.y - hDir.y);
+
+            // Top Side
+            rlTexCoord2f(0.75, 0.25); rlVertex3f(sect.p1.x + hDir.x, z + height - 1, sect.p1.y + hDir.y);
+            rlTexCoord2f(0.75, 0); rlVertex3f(sect.p1.x + hDir.x, z + height, sect.p1.y + hDir.y);
+            rlTexCoord2f(0.25, 0); rlVertex3f(sect.p2.x - hDir.x, z + height, sect.p2.y - hDir.y);
+            rlTexCoord2f(0.25, 0.25); rlVertex3f(sect.p2.x - hDir.x, z + height - 1, sect.p2.y - hDir.y);
+
+            // Right Side
+            rlTexCoord2f(1, 0.75); rlVertex3f(sect.p1.x, z + 1, sect.p1.y);
+            rlTexCoord2f(1, 0.25); rlVertex3f(sect.p1.x, z + height - 1, sect.p1.y);
+            rlTexCoord2f(0.75, 0.25); rlVertex3f(sect.p1.x + hDir.x, z + height - 1, sect.p1.y + hDir.y);
+            rlTexCoord2f(0.75, 0.75); rlVertex3f(sect.p1.x + hDir.x, z + 1, sect.p1.y + hDir.y);
+
+            // Left Side
+            rlTexCoord2f(0.25, 0.25); rlVertex3f(sect.p2.x - hDir.x, z + height - 1, sect.p2.y - hDir.y);
+            rlTexCoord2f(0, 0.25); rlVertex3f(sect.p2.x, z + height - 1, sect.p2.y);
+            rlTexCoord2f(0, 0.75); rlVertex3f(sect.p2.x, z + 1, sect.p2.y);
+            rlTexCoord2f(0.25, 0.75); rlVertex3f(sect.p2.x - hDir.x, z + 1, sect.p2.y - hDir.y);
+
+            // Center
+            rlTexCoord2f(0.25, 0.25); rlVertex3f(sect.p2.x - hDir.x, z + height - 1, sect.p2.y - hDir.y);
+            rlTexCoord2f(0.25, 0.75); rlVertex3f(sect.p2.x - hDir.x, z + 1, sect.p2.y - hDir.y);
+            rlTexCoord2f(0.75, 0.75); rlVertex3f(sect.p1.x + hDir.x, z + 1, sect.p1.y + hDir.y);
+            rlTexCoord2f(0.75, 0.25); rlVertex3f(sect.p1.x + hDir.x, z + height - 1, sect.p1.y + hDir.y);
+            
+
+
+            /*rlTexCoord2f(0, 1); rlVertex3f(sect.p1.x, z, sect.p1.y);
+            rlTexCoord2f(0, 0); rlVertex3f(sect.p1.x, z + height, sect.p1.y);
+            rlTexCoord2f(1, 0); rlVertex3f(sect.p2.x, z + height, sect.p2.y);
+            rlTexCoord2f(1, 1); rlVertex3f(sect.p2.x, z, sect.p2.y);*/
         }
 
         rlTexCoord2f(0, 0); rlVertex3f(points[0].x, z, points[0].y);
