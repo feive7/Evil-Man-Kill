@@ -6,6 +6,7 @@
 #include <collisions.h>
 #include <testmap.h>
 #include <player.h>
+#include <customdebug.h>
 
 void AddDebugLine(const char* text, bool reset = false) {
 	static int y = 5;
