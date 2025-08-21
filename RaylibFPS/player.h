@@ -127,7 +127,6 @@ public:
 class Player {
 public:
     Body body;
-
     float headTimer;
     float walkLerp;
     bool alive = true;
@@ -137,8 +136,17 @@ public:
 
     void update() {
         if (alive) {
+            if (IsKeyPressed(KEY_V)) {
+                noclipping = !noclipping;
+            }
             updateLookRotation();
+            if (noclipping) {
+                body.velocity = { 0.0f,0.0f,0.0f };
+                noclip();
+            }
+            else {
             move();
+            }
             if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
                 projectiles.push_back({ body.getHeadPos(),body.getForward() });
                 PlaySound(snd_gunshot);
@@ -169,6 +177,18 @@ private:
         maxAngleDown *= -1.0f; // Downwards angle is negative
         maxAngleDown += 0.001f; // Avoid numerical errors
         if (-(body.lookRotation.y) < maxAngleDown) { body.lookRotation.y = -maxAngleDown; }
+    }
+    void noclip() {
+        char sideway = (IsKeyDown(KEY_D) - IsKeyDown(KEY_A));
+        char forward = (IsKeyDown(KEY_W) - IsKeyDown(KEY_S));
+        char vertical = (IsKeyDown(KEY_SPACE) - IsKeyDown(KEY_LEFT_CONTROL));
+
+        float speed = 0.2f;
+
+        Quaternion qLook = QuaternionFromEuler(-body.lookRotation.y, body.lookRotation.x, 0.0f);
+        Vector3 movement = Vector3RotateByQuaternion({ (float) sideway,(float)vertical,(float)-forward}, qLook);
+
+        body.position += Vector3Scale(movement,speed);
     }
     void move() {
         // Get keyboard inputs
