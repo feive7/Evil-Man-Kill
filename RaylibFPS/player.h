@@ -18,6 +18,7 @@
 #define NORMALIZE_INPUT  0
 
 static Vector2 sensitivity = { 0.005f, 0.005f };
+static int score = 0;
 
 static Texture tex_john;
 static Texture tex_john_victory;
@@ -26,9 +27,36 @@ static Shader shader_discard;
 
 static Sound snd_gunshot;
 static Sound snd_hit;
+static Sound snd_step;
 
 static Music music_main;
 static Music music_lose;
+
+static void SetSoundPosition(Camera listener, Sound sound, Vector3 position, float maxDist) {
+    // Calculate direction vector and distance between listener and sound source
+    Vector3 direction = Vector3Subtract(position, listener.position);
+    float distance = Vector3Length(direction);
+
+    // Apply logarithmic distance attenuation and clamp between 0-1
+    float attenuation = 1.0f / (1.0f + (distance / maxDist));
+    attenuation = Clamp(attenuation, 0.0f, 1.0f);
+
+    // Calculate normalized vectors for spatial positioning
+    Vector3 normalizedDirection = Vector3Normalize(direction);
+    Vector3 forward = Vector3Normalize(Vector3Subtract(listener.target, listener.position));
+    Vector3 right = Vector3Normalize(Vector3CrossProduct(listener.up, forward));
+
+    // Reduce volume for sounds behind the listener
+    float dotProduct = Vector3DotProduct(forward, normalizedDirection);
+    if (dotProduct < 0.0f) attenuation *= (1.0f + dotProduct * 0.5f);
+
+    // Set stereo panning based on sound position relative to listener
+    float pan = 0.5f + 0.5f * Vector3DotProduct(normalizedDirection, right);
+
+    // Apply final sound properties
+    SetSoundVolume(sound, 1.0f / distance);
+    SetSoundPan(sound, pan);
+}
 
 class Projectile {
 public:
@@ -231,12 +259,20 @@ public:
     Player* target;
     bool alive = true;
     bool victoryDance;
+    float speed;
+
+    float walkTimer;
+
     void update() {
+        if (target == nullptr) {
+            printf("Error: No target\n");
+            return;
+        }
         if (target->alive) {
             Vector3 direction = Vector3Normalize(target->body.position - body.position); direction.y = 0.0f; direction = Vector3Normalize(direction);
-            body.position += Vector3Scale(direction, 0.1f);
+            body.position += Vector3Scale(direction, speed);
+            walkTimer += GetFrameTime();
             if (CheckCollisionBoxes(body.getBoundingBox(), target->body.getBoundingBox())) {
-                body.position -= Vector3Scale(direction, 0.1f);
                 target->alive = false;
                 victoryDance = true;
             }
@@ -303,6 +339,19 @@ static void UpdateLevel(void) {
                 //enemy.alive = false;
                 enemy.body.position.x = GetRandomValue(-100, 100);
                 enemy.body.position.z = GetRandomValue(-100, 100);
+
+                float x = GetRandomValue(-100, 100);
+                float z = GetRandomValue(-100, 100);
+                Enemy newEnemy;
+                newEnemy.body.position.x = x;
+                newEnemy.body.position.y = 0.0f;
+                newEnemy.body.position.z = z;
+                newEnemy.alive = true;
+                newEnemy.target = enemy.target;
+                newEnemy.speed = enemy.speed + 0.01f;
+                enemies.push_back(newEnemy);
+
+                score++;
                 PlaySound(snd_hit);
                 break;
             }
@@ -350,6 +399,10 @@ static void DrawLevel(Camera camera) {
     for (Enemy& enemy : enemies) {
         //enemy.drawBoundingBox();
         //float midHeight = (enemy.body.getBoundingBox().max.y + enemy.body.getBoundingBox().min.y) / 2.0f;
+        if (!IsSoundPlaying(snd_step)) {
+            SetSoundPosition(camera, snd_step, enemy.body.position, 20.0f);
+            PlaySound(snd_step);
+        }
         DrawBillboard(camera, (enemy.victoryDance ? tex_john_victory : tex_john), enemy.body.position + Vector3{0.0f,enemy.body.getHeight() / 2.0f,0.0f}, enemy.body.getHeight(), WHITE);
     }
 

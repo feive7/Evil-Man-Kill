@@ -74,6 +74,7 @@ int main() {
 		enemy.body.position.z = z;
 		enemy.alive = true;
 		enemy.target = &player;
+		enemy.speed = 0.1f;
 		enemies.push_back(enemy);
 	}
 	
@@ -87,6 +88,7 @@ int main() {
 	// Sounds
 	snd_gunshot = LoadSound("8bitgunshot.wav");
 	snd_hit = LoadSound("hit01.wav");
+	snd_step = LoadSound("step.wav");
 
 	// Music
 	music_main = LoadMusicStream("fight_looped.wav");
@@ -109,7 +111,7 @@ int main() {
 			musicToggle = false;
 		}
 		if (player.alive) {
-			UpdateMusicStream(music_main);
+			//UpdateMusicStream(music_main);
 		}
 		else {
 			UpdateMusicStream(music_lose);
@@ -146,8 +148,15 @@ int main() {
 		if (!player.alive) {
 			DrawRectangle(0, 0, screenWidth, screenHeight, { 255,0,0,120 });
 			const char* text = "You're Dead!!!!!!!!";
-			int measure = MeasureText(text, 40);
-			DrawText(text, screenWidth / 2 - measure / 2, screenHeight / 2 - 10, 40, WHITE);
+			int textWidth = MeasureText(text, 40);
+			DrawText(text, screenWidth / 2 - textWidth / 2, screenHeight / 2 - 30, 40, WHITE);
+
+			const char* scoreText = TextFormat("Score: %i", score);
+			int scoreWidth = MeasureText(scoreText, 20);
+			DrawText(scoreText, screenWidth / 2 - scoreWidth / 2, screenHeight / 2 + 20, 20, WHITE);
+		}
+		else {
+			DrawText(TextFormat("Score: %i", score), 5, 5, 20, BLACK);
 		}
 
 		EndDrawing();
