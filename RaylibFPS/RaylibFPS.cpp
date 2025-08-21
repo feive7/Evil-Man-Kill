@@ -2,6 +2,9 @@
 #include <vector>
 #include <raylib.h>
 #include <raymath.h>
+#include <rlgl.h>
+#include <collisions.h>
+#include <testmap.h>
 #include <player.h>
 
 void AddDebugLine(const char* text, bool reset = false) {
@@ -44,6 +47,7 @@ int main() {
 
 	// Init Player
 	Player player = { 0 };
+	player.body.radius = 1.0f;
 	player.body.lookRotation = { 0 };
 	player.body.crouchingHeight = 1.0f;
 	player.body.standingHeight = 2.0f;
@@ -66,7 +70,7 @@ int main() {
 
 	// Init enemies
 	for (int i = 0; i < 10; i++) {
-		float x = GetRandomValue(-100, 100);
+		/*float x = GetRandomValue(-100, 100);
 		float z = GetRandomValue(-100, 100);
 		Enemy enemy;
 		enemy.body.position.x = x;
@@ -75,12 +79,13 @@ int main() {
 		enemy.alive = true;
 		enemy.target = &player;
 		enemy.speed = 0.1f;
-		enemies.push_back(enemy);
+		enemies.push_back(enemy);*/
 	}
 	
 	// Textures
 	tex_john = LoadTexture("npc_john.png");
 	tex_john_victory = LoadTexture("npc_john_victory.png");
+	tile_1 = LoadTexture("tile_1.png");
 
 	// Shaders
 	shader_discard = LoadShader(NULL, "discard.fs");
@@ -102,7 +107,7 @@ int main() {
 	// Music toggle
 	bool musicToggle = true;
 
-	PlayMusicStream(music_main);
+	//PlayMusicStream(music_main);
 
 	while (!WindowShouldClose()) {
 		if (!player.alive && musicToggle) {
@@ -111,7 +116,7 @@ int main() {
 			musicToggle = false;
 		}
 		if (player.alive) {
-			UpdateMusicStream(music_main);
+			//UpdateMusicStream(music_main);
 		}
 		else {
 			UpdateMusicStream(music_lose);
@@ -131,18 +136,21 @@ int main() {
 
 		BeginShaderMode(shader_discard);
 		BeginMode3D(camera);
-		DrawLevel(camera);
+		DrawEntities(camera);
+		rlSetTexture(tile_1.id);
+		rlColor4ub(255, 140, 0, 255);
+		rlBegin(RL_QUADS);
+		testmap.draw();
+		rlEnd();
+		DrawCircle3D(player.body.position, player.body.radius, { 1.0f, 0.0f, 0.0f }, 90.0f, GRAY); // Draw player as a circle on the ground
 		EndMode3D();
 
 		DrawCircle(screenWidth / 2, screenHeight / 2, 3.0f, GRAY);
 
 		if (debugEnabled) {
 			AddDebugLine("Position: %.2f, %.2f, %.2f", player.body.position, true);
-			AddDebugLine("Camera pos: %.2f, %.2f, %.2f", camera.position);
-			AddDebugLine("Head Lerp: %.2f", player.body.heightLerp);
-			AddDebugLine("Enemies Count: %i", enemies.size());
-			AddDebugLine("Bullet Count: %i", projectiles.size());
-			AddDebugLine(TextFormat("Player alive: %i", player.alive));
+			AddDebugLine("Velocity: %.2f, %.2f, %.2f", player.body.velocity);
+			AddDebugLine("Speed: %.2f", Vector3Length(player.body.velocity));
 		}
 
 		if (!player.alive) {

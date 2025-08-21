@@ -23,5 +23,11 @@
     <ClInclude Include="player.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="collisions.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="testmap.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

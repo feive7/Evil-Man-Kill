@@ -131,7 +131,9 @@
     <ClCompile Include="RaylibFPS.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="collisions.h" />
     <ClInclude Include="player.h" />
+    <ClInclude Include="testmap.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

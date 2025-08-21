@@ -22,6 +22,7 @@ static int score = 0;
 
 static Texture tex_john;
 static Texture tex_john_victory;
+static Texture tile_1;
 
 static Shader shader_discard;
 
@@ -88,6 +89,7 @@ public:
     float crouchingHeight = 1.0f;
     bool crouching;
 
+    float radius;
 
     Vector2 lookRotation;
 
@@ -111,8 +113,44 @@ public:
         return position + Vector3{ 0,getHeight(),0};
     }
 
-    void update() {
-        
+    void tryMove() {
+        float delta = GetFrameTime();
+        Vector3 newpos = position + Vector3Scale(velocity, delta);
+        Vector3 newvel = velocity;
+        float height = getHeight();
+
+        bool grounded = false;
+
+        for (Wall& wall : testmap.walls) {
+            for (int i = 0; i < 4; i++) {
+                Sector sect = { wall.points[i],wall.points[(i + 1) % 4] };
+                float lineDist = sect.distanceToPoint({ newpos.x,newpos.z });
+                if (lineDist < radius && position.y + height > wall.z && position.y < wall.z + wall.height ) {
+                    float cDist = (radius - lineDist) * lineSide({ newpos.x,newpos.z }, sect.p1, sect.p2); // Distance into the wall
+                    Vector2 normal = sect.getNormal();
+                    newpos.x += normal.x * cDist;
+                    newpos.z += normal.y * cDist;
+                    Vector2 velocityClip = ClipVelocityAgainstNormal({ newvel.x,newvel.z }, normal, true);
+                    newvel.x = velocityClip.x;
+                    newvel.z = velocityClip.y;
+                }
+            }
+            if (CheckCollisionCircleQuad({ newpos.x,newpos.z }, radius, wall.points[0], wall.points[1], wall.points[2], wall.points[3])) { // Checking vertical collisions
+                if (newpos.y <= wall.z + wall.height && newpos.y > wall.z + wall.height - 1.0f) { // Hit top of wall
+                    newpos.y = wall.z + wall.height;
+                    grounded = true;
+                    newvel.y = 0.0f;
+                }
+                else if (newpos.y + height > wall.z && newpos.y + height < wall.z + 1.0f) { // Hit bottom of wall
+                    newvel.y = 0.0f;
+                    newpos.y = wall.z - height;
+                }
+            }
+        }
+
+        isGrounded = grounded;
+        velocity = newvel;
+        position = newpos;
     }
     
     BoundingBox getBoundingBox() {
@@ -130,6 +168,7 @@ public:
     float headTimer;
     float walkLerp;
     bool alive = true;
+    bool noclipping = false;
     Vector2 lean;
 
     int deathTick;
@@ -145,7 +184,7 @@ public:
                 noclip();
             }
             else {
-            move();
+                move();
             }
             if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
                 projectiles.push_back({ body.getHeadPos(),body.getForward() });
@@ -243,16 +282,14 @@ private:
         body.velocity.x = hvel.x;
         body.velocity.z = hvel.z;
 
-        body.position.x += body.velocity.x * delta;
-        body.position.y += body.velocity.y * delta;
-        body.position.z += body.velocity.z * delta;
+        body.tryMove();
 
         // Fancy collision system against the floor
-        if (body.position.y <= 0.0f) {
-            body.position.y = 0.0f;
-            body.velocity.y = 0.0f;
-            body.isGrounded = true; // Enable jumping
-        }
+        //if (body.position.y <= 0.0f) {
+        //    body.position.y = 0.0f;
+        //    body.velocity.y = 0.0f;
+        //    body.isGrounded = true; // Enable jumping
+        //}
 
         body.heightLerp = Lerp(body.heightLerp, (body.crouching ? CROUCH_HEIGHT : STAND_HEIGHT), 20.0f * delta);
 
@@ -395,13 +432,13 @@ static void UpdateLevel(void) {
 }
 
 // Draw game level
-static void DrawLevel(Camera camera) {
+static void DrawEntities(Camera camera) {
     const int floorExtent = 25;
     const float tileSize = 5.0f;
     const Color tileColor1 = { 150, 200, 200, 255 };
 
     // Floor tiles
-    for (int y = -floorExtent; y < floorExtent; y++) {
+    /*for (int y = -floorExtent; y < floorExtent; y++) {
         for (int x = -floorExtent; x < floorExtent; x++) {
             if ((y & 1) && (x & 1)) {
                 DrawPlane({ x* tileSize, 0.0f, y* tileSize },{ tileSize, tileSize }, tileColor1);
@@ -410,7 +447,7 @@ static void DrawLevel(Camera camera) {
                 DrawPlane({ x* tileSize, 0.0f, y* tileSize }, { tileSize, tileSize }, LIGHTGRAY);
             }
         }
-    }
+    }*/
 
     for (Projectile& ball : projectiles) {
         ball.draw();
