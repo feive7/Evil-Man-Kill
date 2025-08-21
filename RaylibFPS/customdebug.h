@@ -30,6 +30,3 @@ void WatchSignFlip(float* value) {
 		wasNeg = isNeg(*value);
 	}
 }
-void Test() {
-	printf("Test\n");
-}
