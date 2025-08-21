@@ -230,10 +230,11 @@ public:
     bool victoryDance;
     void update() {
         if (target->alive) {
-        Vector3 direction = Vector3Normalize(target->body.position - body.position); direction.y = 0.0f; direction = Vector3Normalize(direction);
+            Vector3 direction = Vector3Normalize(target->body.position - body.position); direction.y = 0.0f; direction = Vector3Normalize(direction);
             body.position += Vector3Scale(direction, 0.1f);
-        if (CheckCollisionBoxes(body.getBoundingBox(), target->body.getBoundingBox())) {
-            target->alive = false;
+            if (CheckCollisionBoxes(body.getBoundingBox(), target->body.getBoundingBox())) {
+                body.position -= Vector3Scale(direction, 0.1f);
+                target->alive = false;
                 victoryDance = true;
             }
         }

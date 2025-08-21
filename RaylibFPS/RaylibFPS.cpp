@@ -79,6 +79,7 @@ int main() {
 	
 	// Textures
 	tex_john = LoadTexture("npc_john.png");
+	tex_john_victory = LoadTexture("npc_john_victory.png");
 
 	// Shaders
 	shader_discard = LoadShader(NULL, "discard.fs");
