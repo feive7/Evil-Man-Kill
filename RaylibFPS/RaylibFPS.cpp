@@ -165,7 +165,9 @@ int main() {
 			DrawText(scoreText, screenWidth / 2 - scoreWidth / 2, screenHeight / 2 + 20, 20, WHITE);
 		}
 		else {
-			DrawText(TextFormat("Score: %i", score), 5, 5, 20, BLACK);
+			if (!debugEnabled) {
+				DrawText(TextFormat("Score: %i", score), 5, 5, 20, BLACK);
+			}
 		}
 
 		EndDrawing();
