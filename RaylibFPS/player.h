@@ -82,14 +82,14 @@ public:
     Vector3 position;
     Vector3 velocity;
     Vector3 dir;
-    bool isGrounded;
+    bool isGrounded = true;
 
     float heightLerp = 1.0f;
     float standingHeight = 2.0f;
     float crouchingHeight = 1.0f;
-    bool crouching;
+    bool crouching = false;
 
-    float radius;
+    float radius = 1.0f;
 
     Vector2 lookRotation;
 
@@ -152,6 +152,12 @@ public:
         velocity = newvel;
         position = newpos;
     }
+
+    void update() {
+        float delta = GetFrameTime();
+        if (!isGrounded) velocity.y -= GRAVITY * delta;
+        tryMove();
+    }
     
     BoundingBox getBoundingBox() {
         return {
@@ -185,6 +191,7 @@ public:
             }
             else {
                 move();
+                body.update();
             }
             if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
                 projectiles.push_back({ body.getHeadPos(),body.getForward() });
@@ -245,7 +252,6 @@ private:
 
         float delta = GetFrameTime();
 
-        if (!body.isGrounded) body.velocity.y -= GRAVITY * delta;
 
         if (body.isGrounded && jumpPressed) {
             body.velocity.y = JUMP_FORCE;
@@ -281,8 +287,6 @@ private:
 
         body.velocity.x = hvel.x;
         body.velocity.z = hvel.z;
-
-        body.tryMove();
 
         // Fancy collision system against the floor
         //if (body.position.y <= 0.0f) {
