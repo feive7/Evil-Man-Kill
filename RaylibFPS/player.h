@@ -136,7 +136,7 @@ public:
                 }
             }
             if (CheckCollisionCircleQuad({ newpos.x,newpos.z }, radius, wall.points[0], wall.points[1], wall.points[2], wall.points[3])) { // Checking vertical collisions
-                if (newpos.y <= wall.z + wall.height && newpos.y > wall.z + wall.height - 1.0f) { // Hit top of wall
+                if (newpos.y <= wall.z + wall.height && newpos.y > wall.z + wall.height - 1.0f && velocity.y <= 0) { // Hit top of wall
                     newpos.y = wall.z + wall.height;
                     grounded = true;
                     newvel.y = 0.0f;
@@ -209,13 +209,13 @@ private:
         // Clamp view up
         float maxAngleUp = Vector3Angle(up, yaw);
         maxAngleUp -= 0.001f; // Avoid numerical errors
-        if (-(body.lookRotation.y) > maxAngleUp) { body.lookRotation.y = -maxAngleUp; }
 
         // Clamp view down
         float maxAngleDown = Vector3Angle(Vector3Negate(up), yaw);
         maxAngleDown *= -1.0f; // Downwards angle is negative
         maxAngleDown += 0.001f; // Avoid numerical errors
-        if (-(body.lookRotation.y) < maxAngleDown) { body.lookRotation.y = -maxAngleDown; }
+
+        body.lookRotation.y = Clamp(body.lookRotation.y, maxAngleDown, maxAngleUp);
     }
     void noclip() {
         char sideway = (IsKeyDown(KEY_D) - IsKeyDown(KEY_A));
@@ -358,7 +358,9 @@ static void UpdateCameraAngle(Camera* camera, Player player) {
     Vector3 right = Vector3Normalize(Vector3CrossProduct(yaw, up));
 
     // Rotate view vector around right axis
-    Vector3 pitch = Vector3RotateByAxisAngle(yaw, right, -player.body.lookRotation.y - player.lean.y);
+    float pitchAngle = -player.body.lookRotation.y - player.lean.y;
+    pitchAngle = Clamp(pitchAngle, -PI / 2 + 0.0001f, PI / 2 - 0.0001f); // Clamp angle so it doesn't go past straight up or straight down
+    Vector3 pitch = Vector3RotateByAxisAngle(yaw, right, pitchAngle);
 
     // Update camera based on body state
     if (player.body.crouching) {
