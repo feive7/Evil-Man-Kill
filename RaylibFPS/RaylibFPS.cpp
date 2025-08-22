@@ -130,7 +130,7 @@ int main() {
 		}
 
 		player.update();
-		testmap.walls[1].rotate(0.01f);
+		testmap.update();
 
 		if (IsKeyPressed(KEY_F3)) debugEnabled = !debugEnabled;
 

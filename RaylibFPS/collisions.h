@@ -87,6 +87,10 @@ public:
     Vector2 points[4];
     float z;
     float height;
+    
+    float rotation;
+    float rotating;
+
     float area() const { // unused
         Vector2 a = points[0];
         Vector2 b = points[1];
@@ -222,5 +226,12 @@ struct GameMap {
             }
         }
         return result;
+    }
+    void update() {
+        for (Wall& wall : walls) {
+            if (wall.rotating) {
+                wall.rotate(wall.rotation);
+            }
+        }
     }
 };
