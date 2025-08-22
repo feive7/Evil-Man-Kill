@@ -169,7 +169,7 @@ public:
             rlTexCoord2f(1, 0); rlVertex3f(sect.p2.x, z + height, sect.p2.y);
             rlTexCoord2f(1, 1); rlVertex3f(sect.p2.x, z, sect.p2.y);
             #else
-            const float SIZE = 1.0f;
+            const float SIZE = 2.0f;
             for (int i = 0; i < 4; i++) {
                 int j = (i + 1) % 4;
 
@@ -259,6 +259,8 @@ struct GameMap {
             wall.draw();
         }
         rlEnd();
+
+        rlSetTexture(0);
     }
     RayCollision castRay(Ray ray) {
         RayCollision result = { 0 };
