@@ -96,12 +96,6 @@ int main() {
 	// Load assets
 	LoadGlob();
 
-	// Music
-	music_main = LoadMusicStream("fight_looped.wav");
-	music_main.looping = true;
-	music_lose = LoadMusicStream("lost_town.mp3");
-	music_lose.looping = true;
-
 	// Debug toggle
 	bool debugEnabled = false;
 
