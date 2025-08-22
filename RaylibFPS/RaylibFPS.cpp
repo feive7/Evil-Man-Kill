@@ -72,8 +72,8 @@ int main() {
 
 	// Init enemies
 	for (int i = 0; i < 10; i++) {
-		/*float x = GetRandomValue(-100, 100);
-		float z = GetRandomValue(-100, 100);
+		float x = GetRandomValue(-10, 10);
+		float z = GetRandomValue(-20, -40);
 		Enemy enemy;
 		enemy.body.position.x = x;
 		enemy.body.position.y = 0.0f;
@@ -81,12 +81,16 @@ int main() {
 		enemy.body.crouching = false;
 		enemy.body.radius = 0.25f;
 		enemy.speed = 1.0f;
-		enemy.reachedTarget = true;
+		enemy.reachedTarget = false;
 		enemy.body.lookRotation = { 0 };
 		enemy.body.crouchingHeight = 1.0f;
 		enemy.body.standingHeight = 2.0f;
 		enemy.body.dir = { 0 };
-		enemies.push_back(enemy);*/
+		enemy.downRay.position = enemy.body.position;
+		enemy.downRay.position.y += 0.001f;
+		enemy.downRay.direction = { 0.0f,-1.0f,0.0f };
+		enemy.target = &player.body.position;
+		enemies.push_back(enemy);
 	}
 	
 	// Textures
