@@ -350,6 +350,9 @@ public:
             if (!overGround && !inAir) {
                 body.jump();
             }
+            if (body.touchingWall) {
+                body.jump();
+            }
             //checkForTarget();
         }
         else {
