@@ -91,7 +91,7 @@ public:
     float height;
     
     float rotation;
-    float rotating;
+    bool rotating;
 
     float area() const { // unused
         Vector2 a = points[0];
@@ -296,9 +296,10 @@ struct GameMap {
         return result;
     }
     void update() {
+        float delta = GetFrameTime();
         for (Wall& wall : walls) {
             if (wall.rotating) {
-                wall.rotate(wall.rotation);
+                wall.rotate(wall.rotation * delta);
             }
         }
     }
