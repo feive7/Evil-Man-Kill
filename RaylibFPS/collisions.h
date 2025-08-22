@@ -176,6 +176,12 @@ public:
         rlTexCoord2f(0, 1); rlVertex3f(points[1].x, z + height, points[1].y);
         rlTexCoord2f(0, 0); rlVertex3f(points[0].x, z + height, points[0].y);
     }
+    void rotate(float angle) {
+        Vector2 mid = center();
+        for (int i = 0; i < 4; i++) {
+            points[i] = Vector2Rotate(points[i] - mid, angle) + mid;
+        }
+    }
 };
 struct GameMap {
     std::vector<Wall> walls;
