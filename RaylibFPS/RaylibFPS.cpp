@@ -93,18 +93,8 @@ int main() {
 		enemies.push_back(enemy);
 	}
 	
-	// Textures
-	tex_john = LoadTexture("npc_john.png");
-	tex_john_victory = LoadTexture("npc_john_victory.png");
-	tile_1 = LoadTexture("tile_2.png");
-
-	// Shaders
-	shader_discard = LoadShader(NULL, "discard.fs");
-
-	// Sounds
-	snd_gunshot = LoadSound("8bitgunshot.wav");
-	snd_hit = LoadSound("hit01.wav");
-	snd_step = LoadSound("step.wav");
+	// Load assets
+	LoadGlob();
 
 	// Music
 	music_main = LoadMusicStream("fight_looped.wav");
