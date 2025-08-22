@@ -338,11 +338,16 @@ public:
     }
     void update() {
         if (!reachedTarget) {
-            move();
-            if (body.touchingWall) {
-                body.jump();
+            bool overGround = downRayCollision.hit;
+            bool inAir = !body.isGrounded;
+            if (overGround && inAir) { // above ground
+                // Don't move
+                body.move(Vector3Negate(body.velocity));
             }
-            if (!downRayCollision.hit) {
+            if (overGround && !inAir) { // on ground
+                body.move(*target - body.position);
+            }
+            if (!overGround && !inAir) {
                 body.jump();
             }
             //checkForTarget();
@@ -356,7 +361,7 @@ public:
         downRay.position.y += 0.001f;
     }
     void move() {
-        body.move(*target - body.position);
+        
     }
     void drawBoundingBox() {
         DrawBoundingBox(body.getBoundingBox(), BLACK);
