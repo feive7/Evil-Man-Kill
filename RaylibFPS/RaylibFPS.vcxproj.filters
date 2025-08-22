@@ -29,5 +29,16 @@
     <ClInclude Include="testmap.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="customdebug.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="glob.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="discard.fs">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
