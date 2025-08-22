@@ -1,3 +1,4 @@
+#define TILEABLE_TEXTURE
 float DistancePointToLine(Vector2 p, Vector2 a, Vector2 b) {
     // Vector from A to P
     Vector2 ap = { p.x - a.x, p.y - a.y };
@@ -47,6 +48,7 @@ static inline Vector2 ClipVelocityAgainstNormal(Vector2 v, Vector2 n, bool nIsNo
     }
     return v;
 }
+
 
 bool CheckCollisionPointQuad(Vector2 p, Vector2 a, Vector2 b, Vector2 c, Vector2 d) {
     return CheckCollisionPointTriangle(p, a, b, c) || CheckCollisionPointTriangle(p, a, c, d) || CheckCollisionPointLine(p, a, c, 1.0f);
@@ -107,8 +109,7 @@ public:
         for (int i = 0; i < 4; i++) {
             Sector sect = { points[i],points[(i + 1) % 4] };
             Vector2 hDir = sect.getDirection();
-
-            #ifdef TILEABLE_TEXTURE
+            #ifdef MULTI_TILEABLE_TEXTURE
             // Bottom Left Corner
             rlTexCoord2f(1, 1); rlVertex3f(sect.p1.x, z, sect.p1.y);
             rlTexCoord2f(1, 0.75); rlVertex3f(sect.p1.x, z + 1, sect.p1.y);
@@ -162,15 +163,76 @@ public:
             rlTexCoord2f(0.25, 0.75); rlVertex3f(sect.p2.x - hDir.x, z + 1, sect.p2.y - hDir.y);
             rlTexCoord2f(0.75, 0.75); rlVertex3f(sect.p1.x + hDir.x, z + 1, sect.p1.y + hDir.y);
             rlTexCoord2f(0.75, 0.25); rlVertex3f(sect.p1.x + hDir.x, z + height - 1, sect.p1.y + hDir.y);
-            #else
+            #elifdef REGULAR_TEXTURE
             rlTexCoord2f(0, 1); rlVertex3f(sect.p1.x, z, sect.p1.y);
             rlTexCoord2f(0, 0); rlVertex3f(sect.p1.x, z + height, sect.p1.y);
             rlTexCoord2f(1, 0); rlVertex3f(sect.p2.x, z + height, sect.p2.y);
             rlTexCoord2f(1, 1); rlVertex3f(sect.p2.x, z, sect.p2.y);
+            #else
+            const float SIZE = 1.0f;
+            for (int i = 0; i < 4; i++) {
+                int j = (i + 1) % 4;
+
+                // Bottom and top vertices
+                Vector3 v1 = { points[i].x,     z,         points[i].y };
+                Vector3 v2 = { points[j].x,     z,         points[j].y };
+                Vector3 v3 = { points[j].x,     z + height, points[j].y };
+                Vector3 v4 = { points[i].x,     z + height, points[i].y };
+
+                // Wall dimensions for texture tiling
+                float wallWidth = Vector2Distance(points[i], points[j]);
+                float wallHeight = height;
+
+                float tileW = wallWidth / SIZE;
+                float tileH = wallHeight / SIZE;
+
+                // Draw one face (i -> j)
+                rlTexCoord2f(0, tileH);   rlVertex3f(v4.x, v4.y, v4.z);
+                rlTexCoord2f(tileW, tileH); rlVertex3f(v3.x, v3.y, v3.z);
+                rlTexCoord2f(tileW, 0);   rlVertex3f(v2.x, v2.y, v2.z);
+                rlTexCoord2f(0, 0);       rlVertex3f(v1.x, v1.y, v1.z);
+            }
+            // --- Floor (bottom face) ---
+            {
+                Vector3 v1 = { points[0].x, z, points[0].y };
+                Vector3 v2 = { points[1].x, z, points[1].y };
+                Vector3 v3 = { points[2].x, z, points[2].y };
+                Vector3 v4 = { points[3].x, z, points[3].y };
+
+                float w = Vector2Distance(points[0], points[1]);
+                float h = Vector2Distance(points[1], points[2]);
+
+                float tileW = w / SIZE;
+                float tileH = h / SIZE;
+
+                rlTexCoord2f(0, 0);       rlVertex3f(v1.x, v1.y, v1.z);
+                rlTexCoord2f(tileW, 0);   rlVertex3f(v2.x, v2.y, v2.z);
+                rlTexCoord2f(tileW, tileH); rlVertex3f(v3.x, v3.y, v3.z);
+                rlTexCoord2f(0, tileH);   rlVertex3f(v4.x, v4.y, v4.z);
+            }
+
+            // --- Ceiling (top face) ---
+            {
+                Vector3 v1 = { points[0].x, z + height, points[0].y };
+                Vector3 v2 = { points[1].x, z + height, points[1].y };
+                Vector3 v3 = { points[2].x, z + height, points[2].y };
+                Vector3 v4 = { points[3].x, z + height, points[3].y };
+
+                float w = Vector2Distance(points[0], points[1]);
+                float h = Vector2Distance(points[1], points[2]);
+
+                float tileW = w / SIZE;
+                float tileH = h / SIZE;
+
+                rlTexCoord2f(0, tileH);   rlVertex3f(v4.x, v4.y, v4.z);
+                rlTexCoord2f(tileW, tileH); rlVertex3f(v3.x, v3.y, v3.z);
+                rlTexCoord2f(tileW, 0);   rlVertex3f(v2.x, v2.y, v2.z);
+                rlTexCoord2f(0, 0);       rlVertex3f(v1.x, v1.y, v1.z);
+            }
             #endif
         }
 
-        rlTexCoord2f(0, 0); rlVertex3f(points[0].x, z, points[0].y);
+        /*rlTexCoord2f(0, 0); rlVertex3f(points[0].x, z, points[0].y);
         rlTexCoord2f(0, 1); rlVertex3f(points[1].x, z, points[1].y);
         rlTexCoord2f(1, 1); rlVertex3f(points[2].x, z, points[2].y);
         rlTexCoord2f(1, 0); rlVertex3f(points[3].x, z, points[3].y);
@@ -178,7 +240,7 @@ public:
         rlTexCoord2f(1, 0); rlVertex3f(points[3].x, z + height, points[3].y);
         rlTexCoord2f(1, 1); rlVertex3f(points[2].x, z + height, points[2].y);
         rlTexCoord2f(0, 1); rlVertex3f(points[1].x, z + height, points[1].y);
-        rlTexCoord2f(0, 0); rlVertex3f(points[0].x, z + height, points[0].y);
+        rlTexCoord2f(0, 0); rlVertex3f(points[0].x, z + height, points[0].y);*/
     }
     void rotate(float angle) {
         Vector2 mid = center();
