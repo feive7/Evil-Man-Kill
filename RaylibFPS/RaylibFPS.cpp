@@ -113,6 +113,7 @@ int main() {
 		player.update();
 
 		if (IsKeyPressed(KEY_F3)) debugEnabled = !debugEnabled;
+		if (IsKeyPressed(KEY_R)) player = { 0 };
 
 		UpdateCameraAngle(&camera, player);
 
