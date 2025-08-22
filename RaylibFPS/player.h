@@ -79,9 +79,9 @@ public:
 static std::vector<Projectile> projectiles;
 class Body {
 public:
-    Vector3 position = { 0.0f,0.0f,0.0f };
-    Vector3 velocity = { 0.0f,0.0f,0.0f };
-    Vector3 dir;
+    Vector3 position = { 0 };
+    Vector3 velocity = { 0 };
+    Vector3 dir = { 0 };
     bool isGrounded = true;
 
     float heightLerp = 1.0f;
@@ -92,7 +92,8 @@ public:
 
     float radius = 1.0f;
 
-    Vector2 lookRotation;
+    Vector2 lookRotation = { 0 };
+
     Vector3 getForward() {
         float yaw = lookRotation.x;
         float pitch = lookRotation.y;
@@ -332,13 +333,13 @@ private:
 };
 class Enemy {
 public:
-    Body body;
-    Vector3 target;
+    Body body = { 0 };
+    Vector3 target = { 0 };
     bool alive = true;
     bool reachedTarget = false;
-    float speed;
+    float speed = 1.0f;
 
-    float walkTimer;
+    float walkTimer = 0.0f;
 
     void checkForTarget() {
         if (Vector3Distance(body.position, target) < 1) {
