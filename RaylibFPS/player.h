@@ -184,11 +184,11 @@ public:
 class Player {
 public:
     Body body;
-    float headTimer;
-    float walkLerp;
+    float headTimer = 0.0f;
+    float walkLerp = 0.0f;
     bool alive = true;
     bool noclipping = false;
-    Vector2 lean;
+    Vector2 lean = { 0 };
 
     int deathTick;
 

@@ -49,14 +49,6 @@ int main() {
 
 	// Init Player
 	Player player = { 0 };
-	player.body.radius = 1.0f;
-	player.body.lookRotation = { 0 };
-	player.body.crouchingHeight = 1.0f;
-	player.body.standingHeight = 2.0f;
-	player.headTimer = 0.0f;
-	player.walkLerp = 0.0f;
-	player.lean = { 0 };
-	player.alive = true;
 
 	// Init player camera
 	Camera camera = { 0 };
