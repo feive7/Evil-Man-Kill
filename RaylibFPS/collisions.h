@@ -252,9 +252,13 @@ public:
 struct GameMap {
     std::vector<Wall> walls;
     void draw() {
+        rlSetTexture(tile_4.id);
+        rlColor4ub(255, 255, 255, 255);
+        rlBegin(RL_QUADS);
         for (Wall wall : walls) {
             wall.draw();
         }
+        rlEnd();
     }
     RayCollision castRay(Ray ray) {
         RayCollision result = { 0 };

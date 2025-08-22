@@ -139,11 +139,9 @@ int main() {
 		BeginShaderMode(shader_discard);
 		BeginMode3D(camera);
 		DrawEntities(camera);
-		rlSetTexture(tile_4.id);
-		rlColor4ub(255, 255, 255, 255);
-		rlBegin(RL_QUADS);
+		
 		testmap.draw();
-		rlEnd();
+
 		DrawCircle3D(player.body.position, player.body.radius, { 1.0f, 0.0f, 0.0f }, 90.0f, GRAY); // Draw player as a circle on the ground
 		EndMode3D();
 
