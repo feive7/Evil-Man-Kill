@@ -192,7 +192,7 @@ public:
                 rlTexCoord2f(tileW, 0);   rlVertex3f(v2.x, v2.y, v2.z);
                 rlTexCoord2f(0, 0);       rlVertex3f(v1.x, v1.y, v1.z);
             }
-            // --- Floor (bottom face) ---
+            // --- Ceiling (bottom face) ---
             {
                 Vector3 v1 = { points[0].x, z, points[0].y };
                 Vector3 v2 = { points[1].x, z, points[1].y };
@@ -211,7 +211,7 @@ public:
                 rlTexCoord2f(0, tileH);   rlVertex3f(v4.x, v4.y, v4.z);
             }
 
-            // --- Ceiling (top face) ---
+            // --- Floor (top face) ---
             {
                 Vector3 v1 = { points[0].x, z + height, points[0].y };
                 Vector3 v2 = { points[1].x, z + height, points[1].y };
