@@ -71,16 +71,21 @@ int main() {
 
 	// Init enemies
 	for (int i = 0; i < 10; i++) {
-		/*float x = GetRandomValue(-100, 100);
+		float x = GetRandomValue(-100, 100);
 		float z = GetRandomValue(-100, 100);
 		Enemy enemy;
 		enemy.body.position.x = x;
 		enemy.body.position.y = 0.0f;
 		enemy.body.position.z = z;
-		enemy.alive = true;
-		enemy.target = &player;
-		enemy.speed = 0.1f;
-		enemies.push_back(enemy);*/
+		enemy.body.crouching = false;
+		enemy.body.radius = 0.25f;
+		enemy.speed = 1.0f;
+		enemy.reachedTarget = true;
+		enemy.body.lookRotation = { 0 };
+		enemy.body.crouchingHeight = 1.0f;
+		enemy.body.standingHeight = 2.0f;
+		enemy.body.dir = { 0 };
+		enemies.push_back(enemy);
 	}
 	
 	// Textures
@@ -149,9 +154,14 @@ int main() {
 		DrawCircle(screenWidth / 2, screenHeight / 2, 3.0f, GRAY);
 
 		if (debugEnabled) {
-			AddDebugLine("Position: %.2f, %.2f, %.2f", player.body.position, true);
-			AddDebugLine("Velocity: %.2f, %.2f, %.2f", player.body.velocity);
-			AddDebugLine("Speed: %.2f", Vector3Length(player.body.velocity));
+			AddDebugLine("Player Position: %.2f, %.2f, %.2f", player.body.position, true);
+			AddDebugLine("Player Velocity: %.2f, %.2f, %.2f", player.body.velocity);
+			AddDebugLine("Player Speed: %.2f", Vector3Length(player.body.velocity));
+
+			AddDebugLine("Enemy Position: % .2f, % .2f, % .2f", enemies[0].body.position);
+			AddDebugLine("Enemy Velocity: %.2f, %.2f, %.2f", enemies[0].body.velocity);
+			AddDebugLine("Enemy Dir: %.2f, %.2f, %.2f", enemies[0].body.dir);
+			AddDebugLine(TextFormat("Enemy Grounded: %i", enemies[0].body.isGrounded));
 		}
 
 		if (!player.alive) {

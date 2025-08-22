@@ -79,8 +79,8 @@ public:
 static std::vector<Projectile> projectiles;
 class Body {
 public:
-    Vector3 position;
-    Vector3 velocity;
+    Vector3 position = { 0.0f,0.0f,0.0f };
+    Vector3 velocity = { 0.0f,0.0f,0.0f };
     Vector3 dir;
     bool isGrounded = true;
 
@@ -88,11 +88,11 @@ public:
     float standingHeight = 2.0f;
     float crouchingHeight = 1.0f;
     bool crouching = false;
+    bool touchingWall = false;
 
     float radius = 1.0f;
 
     Vector2 lookRotation;
-
     Vector3 getForward() {
         float yaw = lookRotation.x;
         float pitch = lookRotation.y;
@@ -104,15 +104,41 @@ public:
 
         return Vector3Normalize(forward);
     }
-
     float getHeight() {
         return Lerp(crouchingHeight, standingHeight, heightLerp);
     }
-
     Vector3 getHeadPos() {
         return position + Vector3{ 0,getHeight(),0};
     }
+    void jump() {
+        if (isGrounded) {
+            velocity.y = JUMP_FORCE;
+            isGrounded = false;
+        }
+    }
+    void move(Vector3 direction) {
+        float delta = GetFrameTime();
 
+        Vector3 desiredDir = Vector3ClampValue(direction, 0, 1);
+        dir = Vector3Lerp(dir, desiredDir, CONTROL * delta);
+
+        float decel = (isGrounded ? FRICTION : AIR_DRAG);
+        Vector3 hvel = { velocity.x, 0.0f, velocity.z };
+
+        float hvelLength = Vector3Length(hvel); // Magnitude
+        if (hvelLength < (MAX_SPEED * 0.01f)) hvel = { 0 };
+
+        // This is what creates strafing
+        float speed = Vector3DotProduct(hvel, dir);
+
+        float maxSpeed = (crouching ? CROUCH_SPEED : MAX_SPEED);
+        float accel = Clamp(maxSpeed - speed, 0.f, MAX_ACCEL * delta);
+        hvel.x += dir.x * accel;
+        hvel.z += dir.z * accel;
+
+        velocity.x = hvel.x * decel;
+        velocity.z = hvel.z * decel;
+    }
     void tryMove() {
         float delta = GetFrameTime();
         Vector3 newpos = position + Vector3Scale(velocity, delta);
@@ -120,6 +146,8 @@ public:
         float height = getHeight();
 
         bool grounded = false;
+
+        touchingWall = false;
 
         for (Wall& wall : testmap.walls) {
             for (int i = 0; i < 4; i++) {
@@ -133,6 +161,7 @@ public:
                     Vector2 velocityClip = ClipVelocityAgainstNormal({ newvel.x,newvel.z }, normal, true);
                     newvel.x = velocityClip.x;
                     newvel.z = velocityClip.y;
+                    touchingWall = true;
                 }
             }
             if (CheckCollisionCircleQuad({ newpos.x,newpos.z }, radius, wall.points[0], wall.points[1], wall.points[2], wall.points[3])) { // Checking vertical collisions
@@ -152,21 +181,17 @@ public:
         velocity = newvel;
         position = newpos;
     }
-
     void update() {
         float delta = GetFrameTime();
         if (!isGrounded) velocity.y -= GRAVITY * delta;
         tryMove();
     }
-    
     BoundingBox getBoundingBox() {
         return {
             Vector3Subtract(position,{0.5f,0.0f,0.5f}),
             Vector3Add(getHeadPos(),{0.5f,0.0f,0.5f}),
         };
     }
-    
-
 };
 class Player {
 public:
@@ -190,6 +215,7 @@ public:
                 noclip();
             }
             else {
+                if (IsKeyPressed(KEY_SPACE)) body.jump();
                 move();
                 body.update();
             }
@@ -252,16 +278,6 @@ private:
 
         float delta = GetFrameTime();
 
-
-        if (body.isGrounded && jumpPressed) {
-            body.velocity.y = JUMP_FORCE;
-            body.isGrounded = false;
-
-            // Sound can be played at this moment
-            //SetSoundPitch(fxJump, 1.0f + (GetRandomValue(-100, 100)*0.001));
-            //PlaySound(fxJump);
-        }
-
         Vector3 front = { sin(body.lookRotation.x), 0.f, cos(body.lookRotation.x) };
         Vector3 right = { cos(-body.lookRotation.x), 0.f, sin(-body.lookRotation.x) };
 
@@ -317,27 +333,34 @@ private:
 class Enemy {
 public:
     Body body;
-    Player* target;
+    Vector3 target;
     bool alive = true;
-    bool victoryDance;
+    bool reachedTarget = false;
     float speed;
 
     float walkTimer;
 
+    void checkForTarget() {
+        if (Vector3Distance(body.position, target) < 1) {
+            reachedTarget = true;
+        }
+    }
     void update() {
-        if (target == nullptr) {
-            printf("Error: No target\n");
-            return;
-        }
-        if (target->alive) {
-            Vector3 direction = Vector3Normalize(target->body.position - body.position); direction.y = 0.0f; direction = Vector3Normalize(direction);
-            body.position += Vector3Scale(direction, speed);
-            walkTimer += GetFrameTime();
-            if (CheckCollisionBoxes(body.getBoundingBox(), target->body.getBoundingBox())) {
-                target->alive = false;
-                victoryDance = true;
+        if (!reachedTarget) {
+            move();
+            if (body.touchingWall) {
+                body.jump();
             }
+            checkForTarget();
         }
+        else {
+            body.velocity.x = 0.0f;
+            body.velocity.z = 0.0f;
+        }
+        body.update();
+    }
+    void move() {
+        body.move(target - body.position);
     }
     void drawBoundingBox() {
         DrawBoundingBox(body.getBoundingBox(), BLACK);
@@ -395,32 +418,11 @@ static void UpdateCameraAngle(Camera* camera, Player player) {
 static void UpdateLevel(void) {
     for (Projectile& projectile : projectiles) {
         projectile.update();
-
-        for (Enemy& enemy : enemies) {
-            if (CheckCollisionBoxSphere(enemy.body.getBoundingBox(), projectile.position, projectile.radius)) {
-                projectile.alive = false;
-                //enemy.alive = false;
-                enemy.body.position.x = GetRandomValue(-100, 100);
-                enemy.body.position.z = GetRandomValue(-100, 100);
-
-                float x = GetRandomValue(-100, 100);
-                float z = GetRandomValue(-100, 100);
-                Enemy newEnemy;
-                newEnemy.body.position.x = x;
-                newEnemy.body.position.y = 0.0f;
-                newEnemy.body.position.z = z;
-                newEnemy.alive = true;
-                newEnemy.target = enemy.target;
-                newEnemy.speed = enemy.speed + 0.01f;
-                enemies.push_back(newEnemy);
-
-                score++;
-                PlaySound(snd_hit);
-                break;
-            }
-            if (projectile.position.y < 0.0f) {
-                projectile.alive = false;
-            }
+        // Use projectile as John target
+        if (!projectile.alive) {
+            enemies[0].target = projectile.position;
+            enemies[0].target.y = 0.0f;
+            enemies[0].reachedTarget = false;
         }
     }
 
@@ -462,11 +464,11 @@ static void DrawEntities(Camera camera) {
     for (Enemy& enemy : enemies) {
         //enemy.drawBoundingBox();
         //float midHeight = (enemy.body.getBoundingBox().max.y + enemy.body.getBoundingBox().min.y) / 2.0f;
-        if (!IsSoundPlaying(snd_step)) {
-            SetSoundPosition(camera, snd_step, enemy.body.position, 20.0f);
-            PlaySound(snd_step);
-        }
-        DrawBillboard(camera, (enemy.victoryDance ? tex_john_victory : tex_john), enemy.body.position + Vector3{0.0f,enemy.body.getHeight() / 2.0f,0.0f}, enemy.body.getHeight(), WHITE);
+        //if (!IsSoundPlaying(snd_step)) {
+        //    SetSoundPosition(camera, snd_step, enemy.body.position, 20.0f);
+        //    PlaySound(snd_step);
+        //}
+        DrawBillboard(camera, (enemy.reachedTarget ? tex_john_victory : tex_john), enemy.body.position + Vector3{0.0f,enemy.body.getHeight() / 2.0f,0.0f}, enemy.body.getHeight(), WHITE);
     }
 
     /*const Vector3 towerSize = { 16.0f, 32.0f, 16.0f };
