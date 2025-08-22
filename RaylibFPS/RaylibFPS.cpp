@@ -3,6 +3,7 @@
 #include <raylib.h>
 #include <raymath.h>
 #include <rlgl.h>
+#include <glob.h>
 #include <collisions.h>
 #include <testmap.h>
 #include <player.h>

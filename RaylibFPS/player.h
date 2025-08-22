@@ -20,19 +20,6 @@
 static Vector2 sensitivity = { 0.005f, 0.005f };
 static int score = 0;
 
-static Texture tex_john;
-static Texture tex_john_victory;
-static Texture tile_1;
-
-static Shader shader_discard;
-
-static Sound snd_gunshot;
-static Sound snd_hit;
-static Sound snd_step;
-
-static Music music_main;
-static Music music_lose;
-
 static void SetSoundPosition(Camera listener, Sound sound, Vector3 position, float maxDist) {
     // Calculate direction vector and distance between listener and sound source
     Vector3 direction = Vector3Subtract(position, listener.position);
