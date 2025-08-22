@@ -71,7 +71,7 @@ int main() {
 
 	// Init enemies
 	for (int i = 0; i < 10; i++) {
-		float x = GetRandomValue(-100, 100);
+		/*float x = GetRandomValue(-100, 100);
 		float z = GetRandomValue(-100, 100);
 		Enemy enemy;
 		enemy.body.position.x = x;
@@ -85,7 +85,7 @@ int main() {
 		enemy.body.crouchingHeight = 1.0f;
 		enemy.body.standingHeight = 2.0f;
 		enemy.body.dir = { 0 };
-		enemies.push_back(enemy);
+		enemies.push_back(enemy);*/
 	}
 	
 	// Textures
@@ -157,11 +157,6 @@ int main() {
 			AddDebugLine("Player Position: %.2f, %.2f, %.2f", player.body.position, true);
 			AddDebugLine("Player Velocity: %.2f, %.2f, %.2f", player.body.velocity);
 			AddDebugLine("Player Speed: %.2f", Vector3Length(player.body.velocity));
-
-			AddDebugLine("Enemy Position: % .2f, % .2f, % .2f", enemies[0].body.position);
-			AddDebugLine("Enemy Velocity: %.2f, %.2f, %.2f", enemies[0].body.velocity);
-			AddDebugLine("Enemy Dir: %.2f, %.2f, %.2f", enemies[0].body.dir);
-			AddDebugLine(TextFormat("Enemy Grounded: %i", enemies[0].body.isGrounded));
 		}
 
 		if (!player.alive) {
