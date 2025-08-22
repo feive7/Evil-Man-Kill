@@ -4,6 +4,7 @@ static Texture tex_john_victory;
 static Texture tile_1;
 static Texture tile_2;
 static Texture tile_3;
+static Texture tile_4;
 
 static Shader shader_discard;
 
@@ -21,6 +22,7 @@ void LoadGlob() {
 	tile_1 = LoadTexture("tile_1.png");
 	tile_2 = LoadTexture("tile_2.png");
 	tile_3 = LoadTexture("tile_3.png");
+	tile_3 = LoadTexture("tile_4.png");
 
 	// Shaders
 	shader_discard = LoadShader(NULL, "discard.fs");
