@@ -418,12 +418,6 @@ static void UpdateCameraAngle(Camera* camera, Player player) {
 static void UpdateLevel(void) {
     for (Projectile& projectile : projectiles) {
         projectile.update();
-        // Use projectile as John target
-        if (!projectile.alive) {
-            enemies[0].target = projectile.position;
-            enemies[0].target.y = 0.0f;
-            enemies[0].reachedTarget = false;
-        }
     }
 
     // Remove dead projectiles in one pass
