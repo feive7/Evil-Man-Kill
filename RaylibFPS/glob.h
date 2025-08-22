@@ -17,24 +17,24 @@ static Music music_lose;
 
 void LoadGlob() {
 	// Textures
-	tex_john = LoadTexture("npc_john.png");
-	tex_john_victory = LoadTexture("npc_john_victory.png");
-	tile_1 = LoadTexture("tile_1.png");
-	tile_2 = LoadTexture("tile_2.png");
-	tile_3 = LoadTexture("tile_3.png");
-	tile_4 = LoadTexture("tile_4.png");
+	tex_john = LoadTexture("assets/textures/npc_john.png");
+	tex_john_victory = LoadTexture("assets/textures/npc_john_victory.png");
+	tile_1 = LoadTexture("assets/textures/tile_1.png");
+	tile_2 = LoadTexture("assets/textures/tile_2.png");
+	tile_3 = LoadTexture("assets/textures/tile_3.png");
+	tile_4 = LoadTexture("assets/textures/tile_4.png");
 
 	// Shaders
-	shader_discard = LoadShader(NULL, "discard.fs");
+	shader_discard = LoadShader(NULL, "assets/shaders/discard.fs");
 
 	// Sounds
-	snd_gunshot = LoadSound("8bitgunshot.wav");
-	snd_hit = LoadSound("hit01.wav");
-	snd_step = LoadSound("step.wav");
+	snd_gunshot = LoadSound("assets/audio/8bitgunshot.wav");
+	snd_hit = LoadSound("assets/audio/hit01.wav");
+	snd_step = LoadSound("assets/audio/step.wav");
 
 	// Music
-	music_main = LoadMusicStream("fight_looped.wav");
+	music_main = LoadMusicStream("assets/audio/fight_looped.wav");
 	music_main.looping = true;
-	music_lose = LoadMusicStream("lost_town.mp3");
+	music_lose = LoadMusicStream("assets/audio/lost_town.mp3");
 	music_lose.looping = true;
 }
