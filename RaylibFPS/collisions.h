@@ -108,6 +108,7 @@ public:
             Sector sect = { points[i],points[(i + 1) % 4] };
             Vector2 hDir = sect.getDirection();
 
+            #ifdef TILEABLE_TEXTURE
             // Bottom Left Corner
             rlTexCoord2f(1, 1); rlVertex3f(sect.p1.x, z, sect.p1.y);
             rlTexCoord2f(1, 0.75); rlVertex3f(sect.p1.x, z + 1, sect.p1.y);
@@ -161,13 +162,12 @@ public:
             rlTexCoord2f(0.25, 0.75); rlVertex3f(sect.p2.x - hDir.x, z + 1, sect.p2.y - hDir.y);
             rlTexCoord2f(0.75, 0.75); rlVertex3f(sect.p1.x + hDir.x, z + 1, sect.p1.y + hDir.y);
             rlTexCoord2f(0.75, 0.25); rlVertex3f(sect.p1.x + hDir.x, z + height - 1, sect.p1.y + hDir.y);
-            
-
-
-            /*rlTexCoord2f(0, 1); rlVertex3f(sect.p1.x, z, sect.p1.y);
+            #else
+            rlTexCoord2f(0, 1); rlVertex3f(sect.p1.x, z, sect.p1.y);
             rlTexCoord2f(0, 0); rlVertex3f(sect.p1.x, z + height, sect.p1.y);
             rlTexCoord2f(1, 0); rlVertex3f(sect.p2.x, z + height, sect.p2.y);
-            rlTexCoord2f(1, 1); rlVertex3f(sect.p2.x, z, sect.p2.y);*/
+            rlTexCoord2f(1, 1); rlVertex3f(sect.p2.x, z, sect.p2.y);
+            #endif
         }
 
         rlTexCoord2f(0, 0); rlVertex3f(points[0].x, z, points[0].y);
