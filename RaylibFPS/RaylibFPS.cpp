@@ -139,7 +139,7 @@ int main() {
 		BeginShaderMode(shader_discard);
 		BeginMode3D(camera);
 		DrawEntities(camera);
-		rlSetTexture(tile_1.id);
+		rlSetTexture(tile_4.id);
 		rlColor4ub(255, 255, 255, 255);
 		rlBegin(RL_QUADS);
 		testmap.draw();

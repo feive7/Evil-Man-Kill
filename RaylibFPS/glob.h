@@ -22,7 +22,7 @@ void LoadGlob() {
 	tile_1 = LoadTexture("tile_1.png");
 	tile_2 = LoadTexture("tile_2.png");
 	tile_3 = LoadTexture("tile_3.png");
-	tile_3 = LoadTexture("tile_4.png");
+	tile_4 = LoadTexture("tile_4.png");
 
 	// Shaders
 	shader_discard = LoadShader(NULL, "discard.fs");
