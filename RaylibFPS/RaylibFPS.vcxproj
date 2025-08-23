@@ -137,9 +137,6 @@
     <ClInclude Include="player.h" />
     <ClInclude Include="testmap.h" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="discard.fs" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
