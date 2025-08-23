@@ -48,10 +48,10 @@ static void SetSoundPosition(Camera listener, Sound sound, Vector3 position, flo
 inline bool FuzzyLess(float a, float b, float thresh) {
     return a < b + thresh;
 }
-inline bool FuzzyGreater(float a, float b, float thresh) {
+inline bool FuzzyGreater(float a, float b, float thresh = 1.0f) {
     return a > b - thresh;
 }
-inline bool FeatherEqual(float a, float b, float thresh) {
+inline bool FeatherEqual(float a, float b, float thresh = 1.0f) {
     return FuzzyLess(a, b, thresh) && FuzzyGreater(a, b, thresh);
 }
 
