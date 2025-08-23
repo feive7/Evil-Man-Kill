@@ -179,6 +179,9 @@ public:
                 Vector3 v3 = { points[j].x,     z + height, points[j].y };
                 Vector3 v4 = { points[i].x,     z + height, points[i].y };
 
+                Sector sector = { points[i],points[j] };
+                Vector2 normal = sector.getNormal();
+
                 // Wall dimensions for texture tiling
                 float wallWidth = Vector2Distance(points[i], points[j]);
                 float wallHeight = height;
@@ -187,6 +190,7 @@ public:
                 float tileH = wallHeight / SIZE;
 
                 // Draw one face (i -> j)
+                rlNormal3f(normal.x, 0.0f, normal.y);
                 rlTexCoord2f(0, tileH);   rlVertex3f(v4.x, v4.y, v4.z);
                 rlTexCoord2f(tileW, tileH); rlVertex3f(v3.x, v3.y, v3.z);
                 rlTexCoord2f(tileW, 0);   rlVertex3f(v2.x, v2.y, v2.z);
@@ -205,6 +209,7 @@ public:
                 float tileW = w / SIZE;
                 float tileH = h / SIZE;
 
+                rlNormal3f(0.0f, -1.0f, 0.0f);
                 rlTexCoord2f(0, 0);       rlVertex3f(v1.x, v1.y, v1.z);
                 rlTexCoord2f(tileW, 0);   rlVertex3f(v2.x, v2.y, v2.z);
                 rlTexCoord2f(tileW, tileH); rlVertex3f(v3.x, v3.y, v3.z);
@@ -224,6 +229,7 @@ public:
                 float tileW = w / SIZE;
                 float tileH = h / SIZE;
 
+                rlNormal3f(0.0f, 1.0f, 0.0f);
                 rlTexCoord2f(0, tileH);   rlVertex3f(v4.x, v4.y, v4.z);
                 rlTexCoord2f(tileW, tileH); rlVertex3f(v3.x, v3.y, v3.z);
                 rlTexCoord2f(tileW, 0);   rlVertex3f(v2.x, v2.y, v2.z);
