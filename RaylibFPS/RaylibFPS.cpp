@@ -9,6 +9,8 @@
 #include <player.h>
 #include <customdebug.h>
 
+//#define ENABLE_JOHNS
+
 void AddDebugLine(const char* text, bool reset = false) {
 	static int y = 5;
 	if (reset) { 
@@ -59,6 +61,7 @@ int main() {
 	UpdateCameraAngle(&camera, player);
 
 	// Init enemies
+#ifdef ENABLE_JOHNS
 	for (int i = 0; i < 1; i++) {
 		Enemy enemy;
 		enemy.body.position = testmap.getRandomSpawnPoint();
@@ -68,6 +71,7 @@ int main() {
 		enemy.target = &player.body.position;
 		enemies.push_back(enemy);
 	}
+#endif
 	
 	// Load assets
 	LoadGlob();
@@ -128,10 +132,6 @@ int main() {
 			AddDebugLine("Player Speed: %.2f", Vector3Length(player.body.velocity));
 			AddDebugLine(TextFormat("Player OnGround: %i", player.body.isGrounded));
 			AddDebugLine("Player Height: %.2f", player.body.getHeight());
-			AddDebugLine("Enemy Height: %.2f", enemies[0].body.getHeight());
-			AddDebugLine(TextFormat("Enemy OnGround: %i", enemies[0].body.isGrounded));
-			AddDebugLine(TextFormat("Enemy Touching Ceiling: %i", enemies[0].body.isTouchingCeiling));
-			AddDebugLine(TextFormat("Enemy Crouching: %i", enemies[0].body.crouching));
 		}
 
 		if (!player.alive) {
