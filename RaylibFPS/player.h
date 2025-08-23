@@ -14,6 +14,7 @@
 #define CROUCH_HEIGHT    0.0f
 #define STAND_HEIGHT     1.0f
 #define BOTTOM_HEIGHT    0.5f
+#define HEAD_OFFSET      0.5f // How far down the head is from height
 
 #define NORMALIZE_INPUT  0
 
@@ -106,7 +107,7 @@ public:
         return Lerp(crouchingHeight, standingHeight, heightLerp);
     }
     Vector3 getHeadPos() {
-        return position + Vector3{ 0,getHeight(),0};
+        return position + Vector3{ 0,getHeight() - HEAD_OFFSET,0};
     }
     void jump() {
         if (isGrounded) {
