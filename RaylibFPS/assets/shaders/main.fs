@@ -18,7 +18,10 @@ out vec4 finalColor;
 void main() {
     vec4 texelColor = texture(texture0, fragTexCoord);
     
-    float NdotL = dot(viewPos - fragPosition, fragNormal) / length(viewPos - fragPosition);
+    if(texelColor.a < 0.9) discard;
+
+    //float NdotL = dot(viewPos - fragPosition, fragNormal) / length(viewPos - fragPosition);
+    float NdotL = 1.0;
 
     finalColor = texelColor * colDiffuse * fragColor;
     finalColor.rgb *= NdotL;
