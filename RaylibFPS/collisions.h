@@ -178,7 +178,7 @@ public:
                 Vector3 v2 = { points[j].x,     z,         points[j].y };
                 Vector3 v3 = { points[j].x,     z + height, points[j].y };
                 Vector3 v4 = { points[i].x,     z + height, points[i].y };
-
+                
                 Sector sector = { points[i],points[j] };
                 Vector2 normal = sector.getNormal();
 
