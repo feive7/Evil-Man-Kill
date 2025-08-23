@@ -84,8 +84,7 @@ public:
         return {dir.y,-dir.x};
     }
 };
-class Wall {
-public:
+struct Wall {
     Vector2 points[4];
     float z;
     float height;
