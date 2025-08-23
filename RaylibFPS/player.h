@@ -11,8 +11,8 @@
 #define AIR_DRAG         0.98f
 // Responsiveness for turning movement direction to looked direction
 #define CONTROL         15.0f
-#define CROUCH_HEIGHT    0.0f
-#define STAND_HEIGHT     1.0f
+#define CROUCH_HEIGHT    0.75f
+#define STAND_HEIGHT     2.0f
 #define BOTTOM_HEIGHT    0.5f
 #define HEAD_OFFSET      0.5f // How far down the head is from height
 
@@ -79,14 +79,18 @@ public:
     Vector3 position = { 0 };
     Vector3 velocity = { 0 };
     Vector3 dir = { 0 };
+    float movementSpeed = 20.0f;
     bool isGrounded = true;
-    Wall* groundWall;
+    bool isTouchingWall = false;
+    bool isTouchingCeiling = false;
+
+    Wall* groundWall; // Wall that the body last stood on
+    Wall* wallTouching; // Wall the body last collided with horizontally
 
     float heightLerp = 1.0f;
     float standingHeight = 2.0f;
     float crouchingHeight = 1.0f;
     bool crouching = false;
-    bool touchingWall = false;
 
     float radius = 1.0f;
 
@@ -105,6 +109,9 @@ public:
     }
     float getHeight() {
         return Lerp(crouchingHeight, standingHeight, heightLerp);
+    }
+    bool getCrouchState() {
+        return getHeight() < STAND_HEIGHT;
     }
     Vector3 getHeadPos() {
         return position + Vector3{ 0,getHeight() - HEAD_OFFSET,0};
@@ -125,12 +132,12 @@ public:
         Vector3 hvel = { velocity.x, 0.0f, velocity.z };
 
         float hvelLength = Vector3Length(hvel); // Magnitude
-        if (hvelLength < (MAX_SPEED * 0.01f)) hvel = { 0 };
+        if (hvelLength < (movementSpeed * 0.01f)) hvel = { 0 };
 
         // This is what creates strafing
         float speed = Vector3DotProduct(hvel, dir);
 
-        float maxSpeed = (crouching ? CROUCH_SPEED : MAX_SPEED);
+        float maxSpeed = (getCrouchState() ? CROUCH_SPEED : movementSpeed);
         float accel = Clamp(maxSpeed - speed, 0.f, MAX_ACCEL * delta);
         hvel.x += dir.x * accel;
         hvel.z += dir.z * accel;
@@ -142,11 +149,13 @@ public:
         float delta = GetFrameTime();
         Vector3 newpos = position + Vector3Scale(velocity, delta);
         Vector3 newvel = velocity;
+        float newHeightLerp = Lerp(heightLerp, (crouching ? CROUCH_HEIGHT : STAND_HEIGHT), 20.0f * delta);
+        float newHeight = Lerp(crouchingHeight, standingHeight, newHeightLerp);
         float height = getHeight();
 
         bool grounded = false;
-
-        touchingWall = false;
+        isTouchingWall = false;
+        isTouchingCeiling = false;
 
         for (Wall& wall : testmap.walls) {
             for (int i = 0; i < 4; i++) {
@@ -160,7 +169,8 @@ public:
                     Vector2 velocityClip = ClipVelocityAgainstNormal({ newvel.x,newvel.z }, normal, true);
                     newvel.x = velocityClip.x;
                     newvel.z = velocityClip.y;
-                    touchingWall = true;
+                    wallTouching = &wall;
+                    isTouchingWall = true;
                 }
             }
             if (CheckCollisionCircleQuad({ newpos.x,newpos.z }, radius, wall.points[0], wall.points[1], wall.points[2], wall.points[3])) { // Checking vertical collisions
@@ -170,11 +180,17 @@ public:
                     newvel.y = 0.0f;
                     groundWall = &wall;
                 }
-                else if (newpos.y + height > wall.z && newpos.y + height < wall.z + 1.0f) { // Hit bottom of wall
+                else if (newpos.y + newHeight > wall.z && newpos.y + newHeight < wall.z + 1.0f) { // Hit bottom of wall
                     newvel.y = 0.0f;
-                    newpos.y = wall.z - height;
+                    if (!grounded) {
+                        newpos.y = wall.z - height;
+                    }
+                    isTouchingCeiling = true;
                 }
             }
+        }
+        if (!isTouchingCeiling) {
+            heightLerp = newHeightLerp;
         }
 
         isGrounded = grounded;
@@ -216,6 +232,7 @@ public:
             }
             else {
                 if (IsKeyPressed(KEY_SPACE)) body.jump();
+                body.crouching = IsKeyDown(KEY_LEFT_CONTROL);
                 move();
                 body.update();
             }
@@ -267,7 +284,6 @@ private:
         bool jumpPressed = IsKeyPressed(KEY_SPACE);
         char sideway = (IsKeyDown(KEY_D) - IsKeyDown(KEY_A));
         char forward = (IsKeyDown(KEY_W) - IsKeyDown(KEY_S));
-        body.crouching = IsKeyDown(KEY_LEFT_CONTROL);
 
         Vector2 input = { (float)sideway, (float)-forward };
 
@@ -288,7 +304,7 @@ private:
         Vector3 hvel = { body.velocity.x * decel, 0.0f, body.velocity.z * decel };
 
         float hvelLength = Vector3Length(hvel); // Magnitude
-        if (hvelLength < (MAX_SPEED * 0.01f)) hvel = { 0 };
+        if (hvelLength < (body.movementSpeed * 0.01f)) hvel = { 0 };
 
         // This is what creates strafing
         float speed = Vector3DotProduct(hvel, body.dir);
@@ -296,7 +312,7 @@ private:
         // Whenever the amount of acceleration to add is clamped by the maximum acceleration constant,
         // a Player can make the speed faster by bringing the direction closer to horizontal velocity angle
         // More info here: https://youtu.be/v3zT3Z5apaM?t=165
-        float maxSpeed = (body.crouching ? CROUCH_SPEED : MAX_SPEED);
+        float maxSpeed = (body.getCrouchState() ? CROUCH_SPEED : body.movementSpeed);
         float accel = Clamp(maxSpeed - speed, 0.f, MAX_ACCEL * delta);
         hvel.x += body.dir.x * accel;
         hvel.z += body.dir.z * accel;
@@ -311,7 +327,6 @@ private:
         //    body.isGrounded = true; // Enable jumping
         //}
 
-        body.heightLerp = Lerp(body.heightLerp, (body.crouching ? CROUCH_HEIGHT : STAND_HEIGHT), 20.0f * delta);
 
         if (body.isGrounded && ((forward != 0) || (sideway != 0))) {
             headTimer += delta * 3.0f;
@@ -336,14 +351,17 @@ public:
     Vector3* target = { 0 };
     bool alive = true;
     bool reachedTarget = false;
-    float speed = 1.0f;
 
     RayCollision downRayCollision = { 0 };
+    RayCollision upRayCollision = { 0 };
 
     float walkTimer = 0.0f;
 
     Ray getDownRay() {
         return { body.getHeadPos(), {0.0f,-1.0f,0.0f} };
+    }
+    Ray getUpRay() {
+        return { body.getHeadPos(), body.getForward() + Vector3{0,1.0f,0.0f} };
     }
     void checkForTarget() {
         if (Vector3Distance(body.position, *target) < 1) {
@@ -364,8 +382,16 @@ public:
             if (!overGround && !inAir && body.position.y <= target->y) {
                 body.jump();
             }
-            if (body.touchingWall) {
-                body.jump();
+            if (body.isTouchingWall && body.wallTouching != nullptr) {
+                if (body.position.y < body.wallTouching->z) {
+                    body.crouching = true;
+                }
+                else if (body.wallTouching->z < body.position.y - 1.0f) {
+                    body.jump();
+                }
+            }
+            else {
+                body.crouching = false;
             }
             //checkForTarget();
         }
@@ -452,33 +478,29 @@ static void UpdateLevel(void) {
     for (Wall& wall : testmap.walls) {
         for (Enemy& enemy : enemies) {
             Ray downRay = enemy.getDownRay();
+            Ray upRay = enemy.getUpRay();
 
             Vector3 p1 = { wall.points[0].x,wall.z,wall.points[0].y };
             Vector3 p2 = { wall.points[1].x,wall.z,wall.points[1].y };
             Vector3 p3 = { wall.points[2].x,wall.z,wall.points[2].y };
             Vector3 p4 = { wall.points[3].x,wall.z,wall.points[3].y };
-            RayCollision col = GetRayCollisionQuad(downRay, p1, p2, p3, p4);
-            if (col.hit && (!enemy.downRayCollision.hit || col.distance < enemy.downRayCollision.distance)) {
-                enemy.downRayCollision = col;
-            }
+            ClosestRayCollision(enemy.downRayCollision, GetRayCollisionQuad(downRay, p1, p2, p3, p4));
+            ClosestRayCollision(enemy.upRayCollision, GetRayCollisionQuad(upRay, p1, p2, p3, p4));
 
             p1 = { wall.points[0].x,wall.z + wall.height,wall.points[0].y };
             p2 = { wall.points[1].x,wall.z + wall.height,wall.points[1].y };
             p3 = { wall.points[2].x,wall.z + wall.height,wall.points[2].y };
             p4 = { wall.points[3].x,wall.z + wall.height,wall.points[3].y };
-            col = GetRayCollisionQuad(downRay, p1, p2, p3, p4);
-            if (col.hit && (!enemy.downRayCollision.hit || col.distance < enemy.downRayCollision.distance)) {
-                enemy.downRayCollision = col;
-            }
+            ClosestRayCollision(enemy.downRayCollision, GetRayCollisionQuad(downRay, p1, p2, p3, p4));
+            ClosestRayCollision(enemy.upRayCollision, GetRayCollisionQuad(upRay, p1, p2, p3, p4));
+
             for (int i = 0; i < 4; i++) {
                 p1 = { wall.points[i].x,wall.z,wall.points[i].y };
                 p2 = { wall.points[(i + 1) % 4].x,wall.z,wall.points[(i + 1) % 4].y };
                 p3 = { wall.points[(i + 1) % 4].x,wall.z + wall.height,wall.points[(i + 1) % 4].y };
                 p4 = { wall.points[i].x,wall.z + wall.height,wall.points[i].y };
-                col = GetRayCollisionQuad(downRay, p1, p2, p3, p4);
-                if (col.hit && (!enemy.downRayCollision.hit || col.distance < enemy.downRayCollision.distance)) {
-                    enemy.downRayCollision = col;
-                }
+                ClosestRayCollision(enemy.downRayCollision, GetRayCollisionQuad(downRay, p1, p2, p3, p4));
+                ClosestRayCollision(enemy.upRayCollision, GetRayCollisionQuad(upRay, p1, p2, p3, p4));
             }
         }
     }
@@ -519,13 +541,13 @@ static void DrawEntities(Camera camera) {
     }
 
     for (Enemy& enemy : enemies) {
-        //enemy.drawBoundingBox();
+        enemy.drawBoundingBox();
         //float midHeight = (enemy.body.getBoundingBox().max.y + enemy.body.getBoundingBox().min.y) / 2.0f;
         //if (!IsSoundPlaying(snd_step)) {
         //    SetSoundPosition(camera, snd_step, enemy.body.position, 20.0f);
         //    PlaySound(snd_step);
         //}
-        DrawBillboard(camera, (enemy.reachedTarget ? tex_john_victory : tex_john), enemy.body.position + Vector3{0.0f,enemy.body.getHeight() / 2.0f,0.0f}, enemy.body.getHeight(), WHITE);
+        DrawBillboard(camera, (enemy.body.getCrouchState() ? tex_john_crouch : tex_john), enemy.body.position + Vector3{0.0f,STAND_HEIGHT / 2.0f,0.0f}, STAND_HEIGHT, WHITE);
     }
 
     /*const Vector3 towerSize = { 16.0f, 32.0f, 16.0f };

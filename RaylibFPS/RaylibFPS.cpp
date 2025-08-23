@@ -59,11 +59,12 @@ int main() {
 	UpdateCameraAngle(&camera, player);
 
 	// Init enemies
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < 1; i++) {
 		Enemy enemy;
 		enemy.body.position = testmap.getRandomSpawnPoint();
 		enemy.body.radius = 0.25f;
 		enemy.body.dir = { 0 };
+		enemy.body.movementSpeed = 15.0f;
 		enemy.target = &player.body.position;
 		enemies.push_back(enemy);
 	}
@@ -72,7 +73,7 @@ int main() {
 	LoadGlob();
 
 	// Debug toggle
-	bool debugEnabled = false;
+	bool debugEnabled = true;
 
 	// Music toggle
 	bool musicToggle = true;
@@ -125,6 +126,12 @@ int main() {
 			AddDebugLine("Player Position: %.2f, %.2f, %.2f", player.body.position, true);
 			AddDebugLine("Player Velocity: %.2f, %.2f, %.2f", player.body.velocity);
 			AddDebugLine("Player Speed: %.2f", Vector3Length(player.body.velocity));
+			AddDebugLine(TextFormat("Player OnGround: %i", player.body.isGrounded));
+			AddDebugLine("Player Height: %.2f", player.body.getHeight());
+			AddDebugLine("Enemy Height: %.2f", enemies[0].body.getHeight());
+			AddDebugLine(TextFormat("Enemy OnGround: %i", enemies[0].body.isGrounded));
+			AddDebugLine(TextFormat("Enemy Touching Ceiling: %i", enemies[0].body.isTouchingCeiling));
+			AddDebugLine(TextFormat("Enemy Crouching: %i", enemies[0].body.crouching));
 		}
 
 		if (!player.alive) {
