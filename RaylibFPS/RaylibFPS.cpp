@@ -63,7 +63,7 @@ int main() {
 	UpdateCameraAngle(&camera, player);
 
 	// Init enemies
-	/*for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < 10; i++) {
 		float x = GetRandomValue(-10, 10);
 		float z = GetRandomValue(-20, -40);
 		Enemy enemy;
@@ -83,7 +83,7 @@ int main() {
 		enemy.downRay.direction = { 0.0f,-1.0f,0.0f };
 		enemy.target = &player.body.position;
 		enemies.push_back(enemy);
-	}*/
+	}
 	
 	// Load assets
 	LoadGlob();
