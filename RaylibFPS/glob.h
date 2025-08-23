@@ -6,7 +6,7 @@ static Texture tile_2;
 static Texture tile_3;
 static Texture tile_4;
 
-static Shader shader_discard;
+static Shader shader_main;
 static Shader shader_debug_normals;
 
 static Sound snd_gunshot;
@@ -26,7 +26,7 @@ void LoadGlob() {
 	tile_4 = LoadTexture("assets/textures/tile_4.png");
 
 	// Shaders
-	shader_discard = LoadShader(NULL, "assets/shaders/discard.fs");
+	shader_main = LoadShader("assets/shaders/main.vs", "assets/shaders/main.fs");
 	shader_debug_normals = LoadShader("assets/shaders/normal.vs", "assets/shaders/normal.fs");
 
 	// Sounds
