@@ -288,7 +288,7 @@ struct Wall {
 struct GameMap {
     std::vector<Wall> walls;
     void draw() {
-        rlSetTexture(tile_3.id);
+        rlSetTexture(tile_5.id);
         rlBegin(RL_QUADS);
         for (Wall wall : walls) {
             wall.draw();
