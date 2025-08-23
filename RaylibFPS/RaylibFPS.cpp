@@ -125,6 +125,7 @@ int main() {
 
 		BeginMode3D(camera);
 
+		SetShaderValue(shader_main, shader_main_viewpos_loc, &camera.position, RL_SHADER_UNIFORM_VEC3);
 		BeginShaderMode(shader_main);
 
 		testmap.draw();

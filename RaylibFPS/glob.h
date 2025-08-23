@@ -7,6 +7,7 @@ static Texture tile_3;
 static Texture tile_4;
 
 static Shader shader_main;
+static int shader_main_viewpos_loc;
 static Shader shader_debug_normals;
 
 static Sound snd_gunshot;
@@ -27,6 +28,7 @@ void LoadGlob() {
 
 	// Shaders
 	shader_main = LoadShader("assets/shaders/main.vs", "assets/shaders/main.fs");
+	shader_main_viewpos_loc = GetShaderLocation(shader_main, "viewPos");
 	shader_debug_normals = LoadShader("assets/shaders/normal.vs", "assets/shaders/normal.fs");
 
 	// Sounds
