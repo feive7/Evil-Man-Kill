@@ -79,6 +79,7 @@ public:
     Vector3 velocity = { 0 };
     Vector3 dir = { 0 };
     bool isGrounded = true;
+    Wall* groundWall;
 
     float heightLerp = 1.0f;
     float standingHeight = 2.0f;
@@ -166,6 +167,7 @@ public:
                     newpos.y = wall.z + wall.height;
                     grounded = true;
                     newvel.y = 0.0f;
+                    groundWall = &wall;
                 }
                 else if (newpos.y + height > wall.z && newpos.y + height < wall.z + 1.0f) { // Hit bottom of wall
                     newvel.y = 0.0f;
@@ -445,9 +447,9 @@ static void UpdateLevel(void) {
         [](const Enemy& p) { return !p.alive; }),
         enemies.end());
 
-    for (Enemy& enemy : enemies) {
-        enemy.downRayCollision = { 0 }; // Reset raycollision
-        for (Wall& wall : testmap.walls) {
+    
+    for (Wall& wall : testmap.walls) {
+        for (Enemy& enemy : enemies) {
             Vector3 p1 = { wall.points[0].x,wall.z,wall.points[0].y };
             Vector3 p2 = { wall.points[1].x,wall.z,wall.points[1].y };
             Vector3 p3 = { wall.points[2].x,wall.z,wall.points[2].y };
@@ -476,18 +478,18 @@ static void UpdateLevel(void) {
                 }
             }
         }
-        enemy.update();
     }
     for (auto itA = enemies.begin(); itA != enemies.end(); itA++) {
+        Enemy& enemyA = *itA;
         for (auto itB = enemies.begin(); itB != enemies.end(); itB++) {
             if (itA == itB) continue;
-            Enemy& enemyA = *itA;
             Enemy& enemyB = *itB;
             float invdist = 1.0f / Vector3Distance(enemyA.body.position, enemyB.body.position);
             if (invdist > 1.0f) {
                 enemyA.body.velocity -= Vector3Scale(Vector3Normalize(enemyB.body.position - enemyA.body.position), invdist);
             }
         }
+        enemyA.update();
     }
 }
 
