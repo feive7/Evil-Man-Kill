@@ -107,7 +107,13 @@ struct Wall {
         Vector2 sum = points[0] + points[1] + points[2] + points[3];
         return Vector2Scale(sum, 0.25f);
     }
-    void draw() {
+    void draw(bool tintOverride = false, Color newTint = WHITE) {
+        if (tintOverride) {
+            rlColor4ub(newTint.r, newTint.g, newTint.b, newTint.a);
+        }
+        else {
+            rlColor4ub(tint.r, tint.g, tint.b, tint.a);
+        }
         for (int i = 0; i < 4; i++) {
             Sector sect = { points[i],points[(i + 1) % 4] };
             Vector2 hDir = sect.getDirection();
@@ -285,7 +291,6 @@ struct GameMap {
         rlSetTexture(tile_3.id);
         rlBegin(RL_QUADS);
         for (Wall wall : walls) {
-            rlColor4ub(wall.tint.r, wall.tint.g, wall.tint.b, wall.tint.a);
             wall.draw();
         }
         rlEnd();
