@@ -124,11 +124,11 @@ int main() {
 		ClearBackground(RAYWHITE);
 
 		BeginMode3D(camera);
-		DrawEntities(camera);
 
 		BeginShaderMode(shader_debug_normals);
 
 		testmap.draw();
+		DrawEntities(camera);
 
 		EndShaderMode();
 
