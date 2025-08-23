@@ -49,7 +49,6 @@ static inline Vector2 ClipVelocityAgainstNormal(Vector2 v, Vector2 n, bool nIsNo
     return v;
 }
 
-
 bool CheckCollisionPointQuad(Vector2 p, Vector2 a, Vector2 b, Vector2 c, Vector2 d) {
     return CheckCollisionPointTriangle(p, a, b, c) || CheckCollisionPointTriangle(p, a, c, d) || CheckCollisionPointLine(p, a, c, 1.0f);
 }
@@ -93,6 +92,8 @@ struct Wall {
     
     float rotation;
     bool rotating;
+
+    bool canSpawn;
 
     float area() const { // unused
         Vector2 a = points[0];
@@ -255,6 +256,28 @@ struct Wall {
             points[i] = Vector2Rotate(points[i] - mid, angle) + mid;
         }
     }
+    BoundingBox getBoundingBox() {
+        BoundingBox bbox = {
+            {INFINITY,z,INFINITY},
+            {-INFINITY,z + height,-INFINITY},
+};
+        for (int i = 0; i < 4; i++) {
+            Vector2 p = points[i];
+            bbox.min.x = fmin(bbox.min.x, p.x);
+            bbox.min.z = fmin(bbox.min.z, p.y);
+            bbox.max.x = fmax(bbox.max.x, p.x);
+            bbox.max.z = fmax(bbox.max.z, p.y);
+        }
+        return bbox;
+    }
+    Vector3 getRandomPoint() {
+        Vector3 randomPoint = { 0 };
+        BoundingBox boundingBox = getBoundingBox();
+        randomPoint.x = GetRandomValue(boundingBox.min.x, boundingBox.max.x);
+        randomPoint.z = GetRandomValue(boundingBox.min.z, boundingBox.max.z);
+        randomPoint.y = z + height;
+        return randomPoint;
+    }
 };
 struct GameMap {
     std::vector<Wall> walls;
@@ -309,5 +332,13 @@ struct GameMap {
                 wall.rotate(wall.rotation * delta);
             }
         }
+    }
+    Vector3 getRandomSpawnPoint() {
+        for (Wall& wall : walls) {
+            if (wall.canSpawn) {
+                return wall.getRandomPoint();
+            }
+        }
+        return { 0,0,0 };
     }
 };
