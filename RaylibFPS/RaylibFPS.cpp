@@ -64,8 +64,8 @@ int main() {
 
 	// Init enemies
 	for (int i = 0; i < 10; i++) {
-		float x = GetRandomValue(-10, 10);
-		float z = GetRandomValue(-20, -40);
+		float x = GetRandomValue(-36, 36);
+		float z = GetRandomValue(-28, -36);
 		Enemy enemy;
 		enemy.body.position.x = x;
 		enemy.body.position.y = 0.0f;
