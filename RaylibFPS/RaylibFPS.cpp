@@ -125,7 +125,7 @@ int main() {
 
 		BeginMode3D(camera);
 
-		BeginShaderMode(shader_debug_normals);
+		BeginShaderMode(shader_main);
 
 		testmap.draw();
 		DrawEntities(camera);
