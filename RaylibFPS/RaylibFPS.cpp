@@ -64,12 +64,9 @@ int main() {
 
 	// Init enemies
 	for (int i = 0; i < 10; i++) {
-		float x = GetRandomValue(-36, 36);
-		float z = GetRandomValue(-28, -36);
 		Enemy enemy;
-		enemy.body.position.x = x;
-		enemy.body.position.y = 0.0f;
-		enemy.body.position.z = z;
+		enemy.body.position = testmap.getRandomSpawnPoint();
+		printf("%f %f %f\n", enemy.body.position.x, enemy.body.position.y, enemy.body.position.z);
 		enemy.body.crouching = false;
 		enemy.body.radius = 0.25f;
 		enemy.speed = 1.0f;
