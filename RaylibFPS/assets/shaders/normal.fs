@@ -16,6 +16,6 @@ out vec4 finalColor;
 
 // NOTE: Add your custom variables here
 void main() {
-    vec3 color = fragNormal + vec3(0.3,0.3,0.3);
+    vec3 color = fragNormal;
     finalColor = vec4(color,1.0);
 }
