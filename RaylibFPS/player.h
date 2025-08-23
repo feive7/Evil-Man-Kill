@@ -45,6 +45,15 @@ static void SetSoundPosition(Camera listener, Sound sound, Vector3 position, flo
     SetSoundVolume(sound, 1.0f / distance);
     SetSoundPan(sound, pan);
 }
+inline bool FuzzyLess(float a, float b, float thresh) {
+    return a < b + thresh;
+}
+inline bool FuzzyGreater(float a, float b, float thresh) {
+    return a > b - thresh;
+}
+inline bool FeatherEqual(float a, float b, float thresh) {
+    return FuzzyLess(a, b, thresh) && FuzzyGreater(a, b, thresh);
+}
 
 class Projectile {
 public:
