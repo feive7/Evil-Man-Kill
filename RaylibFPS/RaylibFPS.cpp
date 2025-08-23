@@ -123,11 +123,14 @@ int main() {
 
 		ClearBackground(RAYWHITE);
 
-		BeginShaderMode(shader_discard);
 		BeginMode3D(camera);
 		DrawEntities(camera);
 		
+		BeginShaderMode(shader_debug_normals);
+
 		testmap.draw();
+
+		EndShaderMode();
 
 		DrawCircle3D(player.body.position, player.body.radius, { 1.0f, 0.0f, 0.0f }, 90.0f, GRAY); // Draw player as a circle on the ground
 		EndMode3D();
@@ -157,8 +160,6 @@ int main() {
 		}
 
 		EndDrawing();
-
-		EndShaderMode();
 	}
 
 	CloseAudioDevice();
