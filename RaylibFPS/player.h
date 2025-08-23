@@ -45,7 +45,7 @@ static void SetSoundPosition(Camera listener, Sound sound, Vector3 position, flo
     SetSoundVolume(sound, 1.0f / distance);
     SetSoundPan(sound, pan);
 }
-inline bool FuzzyLess(float a, float b, float thresh) {
+inline bool FuzzyLess(float a, float b, float thresh = 1.0f) {
     return a < b + thresh;
 }
 inline bool FuzzyGreater(float a, float b, float thresh = 1.0f) {
@@ -347,16 +347,16 @@ public:
     }
     void update() {
         if (!reachedTarget) {
-            bool overGround = downRayCollision.hit && downRayCollision.distance < 10;
-            bool inAir = !body.isGrounded;
+            bool overGround = downRayCollision.hit && downRayCollision.distance < 10; // Is above a ground
+            bool inAir = !body.isGrounded; // Is in air
             if (overGround && inAir) { // above ground
-                // Don't move
+                // stop moving to land on ground
                 stopMove();
             }
             if (overGround && !inAir) { // on ground
                 moveToTarget();
             }
-            if (!overGround && !inAir) {
+            if (!overGround && !inAir && body.position.y <= target->y) {
                 body.jump();
             }
             if (body.touchingWall) {
