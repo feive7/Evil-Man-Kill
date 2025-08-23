@@ -342,10 +342,10 @@ public:
             bool inAir = !body.isGrounded;
             if (overGround && inAir) { // above ground
                 // Don't move
-                body.move(Vector3Negate(body.velocity));
+                stopMove();
             }
             if (overGround && !inAir) { // on ground
-                body.move(*target - body.position);
+                moveToTarget();
             }
             if (!overGround && !inAir) {
                 body.jump();
@@ -363,11 +363,15 @@ public:
         downRay.position = body.position;
         downRay.position.y += 0.001f;
     }
-    void move() {
-        
-    }
     void drawBoundingBox() {
         DrawBoundingBox(body.getBoundingBox(), BLACK);
+    }
+private:
+    void moveToTarget() {
+        body.move(*target - body.position);
+    }
+    void stopMove() {
+        body.move(Vector3Negate(body.velocity));
     }
 };
 
