@@ -89,6 +89,8 @@ public:
     Vector2 points[4];
     float z;
     float height;
+
+    Color tint = BLUE;
     
     float rotation;
     bool rotating;
@@ -259,9 +261,9 @@ struct GameMap {
     std::vector<Wall> walls;
     void draw() {
         rlSetTexture(tile_3.id);
-        rlColor4ub(255, 255, 255, 255);
         rlBegin(RL_QUADS);
         for (Wall wall : walls) {
+            rlColor4ub(wall.tint.r, wall.tint.g, wall.tint.b, wall.tint.a);
             wall.draw();
         }
         rlEnd();
