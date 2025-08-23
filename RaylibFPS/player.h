@@ -337,11 +337,13 @@ public:
     bool reachedTarget = false;
     float speed = 1.0f;
 
-    Ray downRay = { 0 };
     RayCollision downRayCollision = { 0 };
 
     float walkTimer = 0.0f;
 
+    Ray getDownRay() {
+        return { body.getHeadPos(), {0.0f,-1.0f,0.0f} };
+    }
     void checkForTarget() {
         if (Vector3Distance(body.position, *target) < 1) {
             reachedTarget = true;
@@ -371,8 +373,6 @@ public:
             body.velocity.z = 0.0f;
         }
         body.update();
-        downRay.position = body.position;
-        downRay.position.y += 0.001f;
     }
     void drawBoundingBox() {
         DrawBoundingBox(body.getBoundingBox(), BLACK);
@@ -450,11 +450,13 @@ static void UpdateLevel(void) {
     
     for (Wall& wall : testmap.walls) {
         for (Enemy& enemy : enemies) {
+            Ray downRay = enemy.getDownRay();
+
             Vector3 p1 = { wall.points[0].x,wall.z,wall.points[0].y };
             Vector3 p2 = { wall.points[1].x,wall.z,wall.points[1].y };
             Vector3 p3 = { wall.points[2].x,wall.z,wall.points[2].y };
             Vector3 p4 = { wall.points[3].x,wall.z,wall.points[3].y };
-            RayCollision col = GetRayCollisionQuad(enemy.downRay, p1, p2, p3, p4);
+            RayCollision col = GetRayCollisionQuad(downRay, p1, p2, p3, p4);
             if (col.hit && (!enemy.downRayCollision.hit || col.distance < enemy.downRayCollision.distance)) {
                 enemy.downRayCollision = col;
             }
@@ -463,7 +465,7 @@ static void UpdateLevel(void) {
             p2 = { wall.points[1].x,wall.z + wall.height,wall.points[1].y };
             p3 = { wall.points[2].x,wall.z + wall.height,wall.points[2].y };
             p4 = { wall.points[3].x,wall.z + wall.height,wall.points[3].y };
-            col = GetRayCollisionQuad(enemy.downRay, p1, p2, p3, p4);
+            col = GetRayCollisionQuad(downRay, p1, p2, p3, p4);
             if (col.hit && (!enemy.downRayCollision.hit || col.distance < enemy.downRayCollision.distance)) {
                 enemy.downRayCollision = col;
             }
@@ -472,7 +474,7 @@ static void UpdateLevel(void) {
                 p2 = { wall.points[(i + 1) % 4].x,wall.z,wall.points[(i + 1) % 4].y };
                 p3 = { wall.points[(i + 1) % 4].x,wall.z + wall.height,wall.points[(i + 1) % 4].y };
                 p4 = { wall.points[i].x,wall.z + wall.height,wall.points[i].y };
-                col = GetRayCollisionQuad(enemy.downRay, p1, p2, p3, p4);
+                col = GetRayCollisionQuad(downRay, p1, p2, p3, p4);
                 if (col.hit && (!enemy.downRayCollision.hit || col.distance < enemy.downRayCollision.distance)) {
                     enemy.downRayCollision = col;
                 }

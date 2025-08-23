@@ -75,9 +75,6 @@ int main() {
 		enemy.body.crouchingHeight = 1.0f;
 		enemy.body.standingHeight = 2.0f;
 		enemy.body.dir = { 0 };
-		enemy.downRay.position = enemy.body.position;
-		enemy.downRay.position.y += 0.001f;
-		enemy.downRay.direction = { 0.0f,-1.0f,0.0f };
 		enemy.target = &player.body.position;
 		enemies.push_back(enemy);
 	}
