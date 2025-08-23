@@ -54,11 +54,7 @@ int main() {
 	Camera camera = { 0 };
 	camera.fovy = 60.0f;
 	camera.projection = CAMERA_PERSPECTIVE;
-	camera.position = {
-		player.body.position.x,
-		player.body.position.y + player.body.getHeight(),
-		player.body.position.z,
-	};
+	camera.position = player.body.getHeadPos();
 
 	UpdateCameraAngle(&camera, player);
 
