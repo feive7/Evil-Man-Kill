@@ -338,7 +338,7 @@ public:
     }
     void update() {
         if (!reachedTarget) {
-            bool overGround = downRayCollision.hit;
+            bool overGround = downRayCollision.hit && downRayCollision.distance < 10;
             bool inAir = !body.isGrounded;
             if (overGround && inAir) { // above ground
                 // Don't move
