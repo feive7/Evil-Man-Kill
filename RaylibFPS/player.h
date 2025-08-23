@@ -465,6 +465,17 @@ static void UpdateLevel(void) {
         }
         enemy.update();
     }
+    for (auto itA = enemies.begin(); itA != enemies.end(); itA++) {
+        for (auto itB = enemies.begin(); itB != enemies.end(); itB++) {
+            if (itA == itB) continue;
+            Enemy& enemyA = *itA;
+            Enemy& enemyB = *itB;
+            float invdist = 1.0f / Vector3Distance(enemyA.body.position, enemyB.body.position);
+            if (invdist > 1.0f) {
+                enemyA.body.velocity -= Vector3Scale(Vector3Normalize(enemyB.body.position - enemyA.body.position), invdist);
+            }
+        }
+    }
 }
 
 // Draw game level
