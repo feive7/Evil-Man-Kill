@@ -62,14 +62,7 @@ int main() {
 	for (int i = 0; i < 10; i++) {
 		Enemy enemy;
 		enemy.body.position = testmap.getRandomSpawnPoint();
-		printf("%f %f %f\n", enemy.body.position.x, enemy.body.position.y, enemy.body.position.z);
-		enemy.body.crouching = false;
 		enemy.body.radius = 0.25f;
-		enemy.speed = 1.0f;
-		enemy.reachedTarget = false;
-		enemy.body.lookRotation = { 0 };
-		enemy.body.crouchingHeight = 1.0f;
-		enemy.body.standingHeight = 2.0f;
 		enemy.body.dir = { 0 };
 		enemy.target = &player.body.position;
 		enemies.push_back(enemy);
