@@ -249,9 +249,9 @@ public:
     float walkLerp = 0.0f;
     bool noclipping = false;
     Vector2 lean = { 0 };
-    RayCollision target;
+    RayCollision target = { 0 };
 
-    int deathTick;
+    int deathTick = 0;
     Ray getForwardRay() {
         return { body.getHeadPos(), body.getForward() };
     }
