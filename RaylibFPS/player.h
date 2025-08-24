@@ -189,7 +189,6 @@ public:
                     touchWall(wall);
                     wallTouching = &wall;
                     isTouchingWall = true;
-                    printf("%f\n", lineDist);
                 }
             }
             if (CheckCollisionCircleQuad({ newpos.x,newpos.z }, radius, wall.points[0], wall.points[1], wall.points[2], wall.points[3])) { // Checking vertical collisions
