@@ -583,14 +583,14 @@ static void DrawEntities(Camera camera) {
     }
 
     for (Enemy& enemy : enemies) {
-        enemy.drawBoundingBox();
         //float midHeight = (enemy.body.getBoundingBox().max.y + enemy.body.getBoundingBox().min.y) / 2.0f;
         //if (!IsSoundPlaying(snd_step)) {
         //    SetSoundPosition(camera, snd_step, enemy.body.position, 20.0f);
         //    PlaySound(snd_step);
         //}
-        DrawRay(enemy.getDownRay(), RED);
-        DrawSphere(enemy.downRayCollision.point, 0.5f, RED);
+        //DrawRay(enemy.getDownRay(), RED);
+        //DrawSphere(enemy.downRayCollision.point, 0.5f, RED);
+        //enemy.drawBoundingBox();
         DrawBillboard(camera, (enemy.body.getCrouchState() ? tex_john_crouch : tex_john), enemy.body.position + Vector3{0.0f,STAND_HEIGHT / 2.0f,0.0f}, STAND_HEIGHT, WHITE);
     }
 
