@@ -9,7 +9,7 @@
 #include <player.h>
 #include <customdebug.h>
 
-#define ENABLE_JOHNS
+//#define ENABLE_JOHNS
 
 void AddDebugLine(const char* text, bool reset = false) {
 	static int y = 5;
@@ -77,7 +77,7 @@ int main() {
 	LoadGlob();
 
 	// Debug toggle
-	bool debugEnabled = true;
+	bool debugEnabled = false;
 
 	// Music toggle
 	bool musicToggle = true;

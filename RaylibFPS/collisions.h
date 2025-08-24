@@ -203,15 +203,15 @@ struct Wall {
                 float wallWidth = Vector2Distance(points[i], points[j]);
                 float wallHeight = height;
 
-                float tileW = wallWidth / SIZE;
-                float tileH = wallHeight / SIZE;
+                float tileW = round(wallWidth / SIZE);
+                float tileH = round(wallHeight / SIZE);
 
                 // Draw one face (i -> j)
                 rlNormal3f(normal.x, 0.0f, normal.y);
-                rlTexCoord2f(0, tileH);   rlVertex3f(v4.x, v4.y, v4.z);
-                rlTexCoord2f(tileW, tileH); rlVertex3f(v3.x, v3.y, v3.z);
-                rlTexCoord2f(tileW, 0);   rlVertex3f(v2.x, v2.y, v2.z);
-                rlTexCoord2f(0, 0);       rlVertex3f(v1.x, v1.y, v1.z);
+                rlTexCoord2f(tileW, 0);   rlVertex3f(v4.x, v4.y, v4.z);
+                rlTexCoord2f(0, 0); rlVertex3f(v3.x, v3.y, v3.z);
+                rlTexCoord2f(0, tileH);   rlVertex3f(v2.x, v2.y, v2.z);
+                rlTexCoord2f(tileW, tileH);       rlVertex3f(v1.x, v1.y, v1.z);
             }
             // --- Ceiling (bottom face) ---
             {
@@ -297,7 +297,7 @@ struct Wall {
 struct GameMap {
     std::vector<Wall> walls;
     void draw() {
-        rlSetTexture(tile_5.id);
+        rlSetTexture(tile_4.id);
         rlBegin(RL_QUADS);
         for (Wall wall : walls) {
             wall.draw();
