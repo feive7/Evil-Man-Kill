@@ -203,8 +203,8 @@ struct Wall {
                 float wallWidth = Vector2Distance(points[i], points[j]);
                 float wallHeight = height;
 
-                float tileW = round(wallWidth / SIZE);
-                float tileH = round(wallHeight / SIZE);
+                float tileW = wallWidth / SIZE;
+                float tileH = wallHeight / SIZE;
 
                 // Draw one face (i -> j)
                 rlNormal3f(normal.x, 0.0f, normal.y);
