@@ -1,90 +1,86 @@
 static GameMap testmap = {
 	{ // Walls
-		{ // Cube.032
-			.points = {{6.0f,6.0f},{-6.0f,6.0f},{-6.0f,-18.0f},{6.0f,-18.0f}},
+		{ // Cube.021
+			.points = {{10.0f,10.0f},{-10.0f,10.0f},{-10.0f,-10.0f},{10.0f,-10.0f}},
 			.z = -2.0f,
 			.height = 2.0f,
 			.tint = {255,255,255,255},
 			.surfaceMaterial = SURFACE_REGULAR,
 		},
 
-		{ // Cube.033
-			.points = {{6.0f,8.0f},{-6.0f,8.0f},{-6.0f,6.0f},{6.0f,6.0f}},
-			.z = 0.0f,
-			.height = 8.0f,
-			.tint = {255,255,255,255},
-			.surfaceMaterial = SURFACE_REGULAR,
-		},
-
-		{ // Cube.034
-			.points = {{-6.0f,-18.0f},{-6.0f,6.0f},{-8.0f,6.0f},{-8.0f,-18.0f}},
-			.z = 0.0f,
-			.height = 8.0f,
-			.tint = {255,255,255,255},
-			.surfaceMaterial = SURFACE_REGULAR,
-		},
-
-		{ // Cube.035
-			.points = {{8.0f,-4.0f},{8.0f,6.0f},{6.0f,6.0f},{6.0f,-4.0f}},
-			.z = 0.0f,
-			.height = 8.0f,
-			.tint = {255,255,255,255},
-			.surfaceMaterial = SURFACE_REGULAR,
-		},
-
-		{ // Cube.036
-			.points = {{6.0f,-6.0f},{4.0f,-6.0f},{4.0f,-18.0f},{6.0f,-18.0f}},
-			.z = -14.0f,
-			.height = 12.0f,
-			.tint = {255,255,255,255},
-			.surfaceMaterial = SURFACE_REGULAR,
-		},
-
-		{ // Cube.037
-			.points = {{6.0f,-18.0f},{-6.0f,-18.0f},{-6.0f,-20.0f},{6.0f,-20.0f}},
-			.z = 0.0f,
-			.height = 8.0f,
-			.tint = {255,255,255,255},
-			.surfaceMaterial = SURFACE_REGULAR,
-		},
-
-		{ // Cube.038
-			.points = {{18.0f,-20.0f},{18.0f,-18.0f},{6.0f,-18.0f},{6.0f,-20.0f}},
-			.z = -14.0f,
-			.height = 22.0f,
-			.tint = {255,255,255,255},
-			.surfaceMaterial = SURFACE_REGULAR,
-		},
-
-		{ // Cube.039
-			.points = {{18.0f,-6.0f},{18.0f,-4.0f},{6.0f,-4.0f},{6.0f,-6.0f}},
-			.z = -14.0f,
-			.height = 22.0f,
-			.tint = {255,255,255,255},
-			.surfaceMaterial = SURFACE_REGULAR,
-		},
-
-		{ // Cube.040
-			.points = {{18.0f,-6.0f},{6.0f,-6.0f},{6.0f,-18.0f},{18.0f,-18.0f}},
-			.z = -14.0f,
-			.height = 2.0f,
-			.tint = {0,255,0,255},
-			.surfaceMaterial = SURFACE_BOUNCY,
-		},
-
-		{ // Cube.041
-			.points = {{20.0f,-6.0f},{18.0f,-6.0f},{18.0f,-18.0f},{20.0f,-18.0f}},
-			.z = -14.0f,
-			.height = 12.0f,
-			.tint = {255,255,255,255},
-			.surfaceMaterial = SURFACE_REGULAR,
-		},
-
-		{ // Cube.042
-			.points = {{42.0f,-18.0f},{42.0f,-6.0f},{18.0f,-6.0f},{18.0f,-18.0f}},
+		{ // Cube.023
+			.points = {{22.0f,14.0f},{14.0f,14.0f},{14.0f,-14.0f},{22.0f,-14.0f}},
 			.z = -2.0f,
 			.height = 2.0f,
 			.tint = {255,255,255,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+		},
+
+		{ // Cube.024
+			.points = {{22.0f,-22.0f},{22.0f,-14.0f},{-22.0f,-14.0f},{-22.0f,-22.0f}},
+			.z = -2.0f,
+			.height = 2.0f,
+			.tint = {255,255,255,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+		},
+
+		{ // Cube.025
+			.points = {{-14.0f,14.0f},{-22.0f,14.0f},{-22.0f,-14.0f},{-14.0f,-14.0f}},
+			.z = -2.0f,
+			.height = 2.0f,
+			.tint = {255,255,255,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+		},
+
+		{ // Cube.026
+			.points = {{-22.0f,22.0f},{-22.0f,14.0f},{22.0f,14.0f},{22.0f,22.0f}},
+			.z = -2.0f,
+			.height = 2.0f,
+			.tint = {255,255,255,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+		},
+
+		{ // Cube.027
+			.points = {{36.0f,28.0f},{28.0f,28.0f},{28.0f,-28.0f},{36.0f,-28.0f}},
+			.z = -2.0f,
+			.height = 2.0f,
+			.tint = {255,255,255,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+			.canSpawn = 1,
+		},
+
+		{ // Cube.028
+			.points = {{-36.0f,-28.0f},{-28.0f,-28.0f},{-28.0f,28.0f},{-36.0f,28.0f}},
+			.z = -2.0f,
+			.height = 2.0f,
+			.tint = {255,255,255,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+			.canSpawn = 1,
+		},
+
+		{ // Cube.029
+			.points = {{36.0f,-36.0f},{36.0f,-28.0f},{-36.0f,-28.0f},{-36.0f,-36.0f}},
+			.z = -2.0f,
+			.height = 2.0f,
+			.tint = {255,255,255,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+			.canSpawn = 1,
+		},
+
+		{ // Cube.030
+			.points = {{-36.0f,36.0f},{-36.0f,28.0f},{36.0f,28.0f},{36.0f,36.0f}},
+			.z = -2.0f,
+			.height = 2.0f,
+			.tint = {255,255,255,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+			.canSpawn = 1,
+		},
+
+		{ // Cube.031
+			.points = {{40.0f,40.0f},{-40.0f,40.0f},{-40.0f,-40.0f},{40.0f,-40.0f}},
+			.z = -27.0f,
+			.height = 2.0f,
+			.tint = {255,0,0,255},
 			.surfaceMaterial = SURFACE_REGULAR,
 		},
 

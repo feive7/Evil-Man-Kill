@@ -9,7 +9,7 @@
 #include <player.h>
 #include <customdebug.h>
 
-//#define ENABLE_JOHNS
+#define ENABLE_JOHNS
 
 void AddDebugLine(const char* text, bool reset = false) {
 	static int y = 5;
@@ -62,7 +62,7 @@ int main() {
 
 	// Init enemies
 #ifdef ENABLE_JOHNS
-	for (int i = 0; i < 1; i++) {
+	for (int i = 0; i < 10; i++) {
 		Enemy enemy;
 		enemy.body.position = testmap.getRandomSpawnPoint();
 		enemy.body.radius = 0.25f;

@@ -437,6 +437,7 @@ public:
             body.velocity.z = 0.0f;
         }
         body.update();
+        downRayCollision = { 0 };
     }
     void drawBoundingBox() {
         DrawBoundingBox(body.getBoundingBox(), BLACK);
@@ -511,7 +512,18 @@ static void UpdateLevel(void) {
         [](const Enemy& p) { return !p.body.alive; }),
         enemies.end());
 
-    
+    for (auto itA = enemies.begin(); itA != enemies.end(); itA++) {
+        Enemy& enemyA = *itA;
+        for (auto itB = enemies.begin(); itB != enemies.end(); itB++) {
+            if (itA == itB) continue;
+            Enemy& enemyB = *itB;
+            float invdist = 1.0f / Vector3Distance(enemyA.body.position, enemyB.body.position);
+            if (invdist > 1.0f) {
+                enemyA.body.velocity -= Vector3Scale(Vector3Normalize(enemyB.body.position - enemyA.body.position), invdist);
+            }
+        }
+        enemyA.update();
+    }
     for (Wall& wall : testmap.walls) {
         for (Enemy& enemy : enemies) {
             Ray downRay = enemy.getDownRay();
@@ -541,18 +553,7 @@ static void UpdateLevel(void) {
             }
         }
     }
-    for (auto itA = enemies.begin(); itA != enemies.end(); itA++) {
-        Enemy& enemyA = *itA;
-        for (auto itB = enemies.begin(); itB != enemies.end(); itB++) {
-            if (itA == itB) continue;
-            Enemy& enemyB = *itB;
-            float invdist = 1.0f / Vector3Distance(enemyA.body.position, enemyB.body.position);
-            if (invdist > 1.0f) {
-                enemyA.body.velocity -= Vector3Scale(Vector3Normalize(enemyB.body.position - enemyA.body.position), invdist);
-            }
-        }
-        enemyA.update();
-    }
+    
 }
 
 // Draw game level
@@ -573,7 +574,6 @@ static void DrawEntities(Camera camera) {
         }
     }*/
 
-    DrawRay(player.getForwardRay(),RED);
     if (player.target.hit) {
         DrawSphere(player.target.point, .5f, RED);
     }
@@ -589,6 +589,8 @@ static void DrawEntities(Camera camera) {
         //    SetSoundPosition(camera, snd_step, enemy.body.position, 20.0f);
         //    PlaySound(snd_step);
         //}
+        DrawRay(enemy.getDownRay(), RED);
+        DrawSphere(enemy.downRayCollision.point, 0.5f, RED);
         DrawBillboard(camera, (enemy.body.getCrouchState() ? tex_john_crouch : tex_john), enemy.body.position + Vector3{0.0f,STAND_HEIGHT / 2.0f,0.0f}, STAND_HEIGHT, WHITE);
     }
 
