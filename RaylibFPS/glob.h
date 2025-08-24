@@ -49,8 +49,10 @@ void LoadGlob() {
 	music_lose.looping = true;
 }
 
-void ClosestRayCollision(RayCollision& source, RayCollision compare) {
+bool ClosestRayCollision(RayCollision& source, RayCollision compare) {
 	if (compare.hit && (!source.hit || compare.distance < source.distance)) {
 		source = compare;
+		return true;
 	}
+	return false;
 }
