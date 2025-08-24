@@ -236,6 +236,7 @@ public:
         if (isClimbing) velocity.y = 0.0f;
         tryMove();
     }
+    // Returns body bounding box
     BoundingBox getBoundingBox() {
         return {
             Vector3Subtract(position,{0.5f,0.0f,0.5f}),
