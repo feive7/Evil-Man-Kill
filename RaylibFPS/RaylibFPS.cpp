@@ -50,7 +50,7 @@ int main() {
 	SetTargetFPS(60);
 
 	// Init Player
-	Player player = { 0 };
+	player = { 0 };
 
 	// Init player camera
 	Camera camera = { 0 };

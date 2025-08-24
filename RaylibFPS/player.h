@@ -249,9 +249,12 @@ public:
     float walkLerp = 0.0f;
     bool noclipping = false;
     Vector2 lean = { 0 };
+    RayCollision target;
 
     int deathTick;
-
+    Ray getForwardRay() {
+        return { body.getHeadPos(), body.getForward() };
+    }
     void update() {
         if (body.alive) {
             if (IsKeyPressed(KEY_V)) {
@@ -377,6 +380,9 @@ private:
         body.position.z = fmod(body.position.z, bounds.z);
     }
 };
+
+static Player player;
+
 class Enemy {
 public:
     Body body = { 0 };
@@ -566,6 +572,11 @@ static void DrawEntities(Camera camera) {
             }
         }
     }*/
+
+    DrawRay(player.getForwardRay(),RED);
+    if (player.target.hit) {
+        DrawSphere(player.target.point, .5f, RED);
+    }
 
     for (Projectile& ball : projectiles) {
         ball.draw();
