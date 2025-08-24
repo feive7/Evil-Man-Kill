@@ -16,7 +16,7 @@ void AddDebugLine(const char* text, bool reset = false) {
 	if (reset) { 
 		y = 5;
 	}
-	DrawText(text, 5, y, 20, BLACK);
+	DrawText(text, 5, y, 20, GREEN);
 	y += 20;
 }
 void AddDebugLine(const char* text, Vector3 vec3, bool reset = false) {
@@ -85,12 +85,12 @@ int main() {
 	//PlayMusicStream(music_main);
 
 	while (!WindowShouldClose()) {
-		if (!player.alive && musicToggle) {
+		if (!player.body.alive && musicToggle) {
 			StopMusicStream(music_main);
 			PlayMusicStream(music_lose);
 			musicToggle = false;
 		}
-		if (player.alive) {
+		if (player.body.alive) {
 			//UpdateMusicStream(music_main);
 		}
 		else {
@@ -127,14 +127,14 @@ int main() {
 		DrawCircle(screenWidth / 2, screenHeight / 2, 3.0f, GRAY);
 
 		if (debugEnabled) {
-			AddDebugLine("Player Position: %.2f, %.2f, %.2f", player.body.position, true);
-			AddDebugLine("Player Velocity: %.2f, %.2f, %.2f", player.body.velocity);
+			AddDebugLine("Player Position: %f, %f, %f", player.body.position, true);
+			AddDebugLine("Player Velocity: %f, %f, %f", player.body.velocity);
 			AddDebugLine("Player Speed: %.2f", Vector3Length(player.body.velocity));
 			AddDebugLine(TextFormat("Player OnGround: %i", player.body.isGrounded));
 			AddDebugLine("Player Height: %.2f", player.body.getHeight());
 		}
 
-		if (!player.alive) {
+		if (!player.body.alive) {
 			DrawRectangle(0, 0, screenWidth, screenHeight, { 255,0,0,120 });
 			const char* text = "You're Dead!!!!!!!!";
 			int textWidth = MeasureText(text, 40);

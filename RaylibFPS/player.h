@@ -81,6 +81,7 @@ public:
     Vector3 dir = { 0 };
     float movementSpeed = 20.0f;
     bool isGrounded = true;
+    bool isClimbing = false;
     bool isTouchingWall = false;
     bool isTouchingCeiling = false;
 
@@ -91,6 +92,8 @@ public:
     float standingHeight = 2.0f;
     float crouchingHeight = 1.0f;
     bool crouching = false;
+
+    bool alive = true;
 
     float radius = 1.0f;
 
@@ -154,6 +157,8 @@ public:
         float height = getHeight();
 
         bool grounded = false;
+        float bouncePower = 0.0f;
+        isClimbing = false;
         isTouchingWall = false;
         isTouchingCeiling = false;
 
@@ -166,19 +171,39 @@ public:
                     Vector2 normal = sect.getNormal();
                     newpos.x += normal.x * cDist;
                     newpos.z += normal.y * cDist;
-                    Vector2 velocityClip = ClipVelocityAgainstNormal({ newvel.x,newvel.z }, normal, true);
-                    newvel.x = velocityClip.x;
-                    newvel.z = velocityClip.y;
+                    if (wall.surfaceMaterial == SURFACE_BOUNCY) {
+                        newvel.x = -newvel.x;
+                        newvel.z = -newvel.y;
+                    }
+                    else if (wall.surfaceMaterial == SURFACE_LADDER) {
+                        Vector2 velocityClip = ClipVelocityAgainstNormal({ newvel.x,newvel.z }, normal, true);
+                        newvel.x = velocityClip.x;
+                        newvel.z = velocityClip.y;
+                        newvel.y = 4.0f;
+                    }
+                    else {
+                        Vector2 velocityClip = ClipVelocityAgainstNormal({ newvel.x,newvel.z }, normal, true);
+                        newvel.x = velocityClip.x;
+                        newvel.z = velocityClip.y;
+                    }
+                    touchWall(wall);
                     wallTouching = &wall;
                     isTouchingWall = true;
+                    printf("%f\n", lineDist);
                 }
             }
             if (CheckCollisionCircleQuad({ newpos.x,newpos.z }, radius, wall.points[0], wall.points[1], wall.points[2], wall.points[3])) { // Checking vertical collisions
                 if (newpos.y <= wall.z + wall.height && newpos.y > wall.z + wall.height - 1.0f && velocity.y <= 0) { // Hit top of wall
                     newpos.y = wall.z + wall.height;
                     grounded = true;
-                    newvel.y = 0.0f;
                     groundWall = &wall;
+                    if (wall.surfaceMaterial == SURFACE_BOUNCY) {
+                        newvel.y = -newvel.y;
+                    }
+                    else {
+                        newvel.y = 0.0f;
+                    }
+                    touchWall(wall);
                 }
                 else if (newpos.y + newHeight > wall.z && newpos.y + newHeight < wall.z + 1.0f) { // Hit bottom of wall
                     newvel.y = 0.0f;
@@ -186,20 +211,22 @@ public:
                         newpos.y = wall.z - height;
                     }
                     isTouchingCeiling = true;
+                    touchWall(wall);
                 }
             }
         }
         if (!isTouchingCeiling) {
             heightLerp = newHeightLerp;
         }
-
+        
         isGrounded = grounded;
         velocity = newvel;
         position = newpos;
     }
     void update() {
         float delta = GetFrameTime();
-        if (!isGrounded) velocity.y -= GRAVITY * delta;
+        if (!isGrounded && !isClimbing) velocity.y -= GRAVITY * delta;
+        if (isClimbing) velocity.y = 0.0f;
         tryMove();
     }
     BoundingBox getBoundingBox() {
@@ -208,20 +235,26 @@ public:
             Vector3Add(getHeadPos(),{0.5f,0.0f,0.5f}),
         };
     }
+private:
+    void touchWall(Wall& wall) {
+        switch (wall.surfaceMaterial) {
+        case SURFACE_REGULAR: break;
+        case SURFACE_LAVA: alive = false; break;
+        }
+    }
 };
 class Player {
 public:
     Body body;
     float headTimer = 0.0f;
     float walkLerp = 0.0f;
-    bool alive = true;
     bool noclipping = false;
     Vector2 lean = { 0 };
 
     int deathTick;
 
     void update() {
-        if (alive) {
+        if (body.alive) {
             if (IsKeyPressed(KEY_V)) {
                 noclipping = !noclipping;
             }
@@ -349,7 +382,6 @@ class Enemy {
 public:
     Body body = { 0 };
     Vector3* target = { 0 };
-    bool alive = true;
     bool reachedTarget = false;
 
     RayCollision downRayCollision = { 0 };
@@ -471,7 +503,7 @@ static void UpdateLevel(void) {
         [](const Projectile& p) { return !p.alive; }),
         projectiles.end());
     enemies.erase(std::remove_if(enemies.begin(), enemies.end(),
-        [](const Enemy& p) { return !p.alive; }),
+        [](const Enemy& p) { return !p.body.alive; }),
         enemies.end());
 
     

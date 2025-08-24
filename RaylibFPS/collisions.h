@@ -1,4 +1,10 @@
 #define TILEABLE_TEXTURE
+enum SURFACE_MATERIAL {
+    SURFACE_REGULAR, // No effects
+    SURFACE_BOUNCY, // Reverses velocity
+    SURFACE_LAVA, // Kills body
+    SURFACE_LADDER, // Pushes body upwards
+};
 float DistancePointToLine(Vector2 p, Vector2 a, Vector2 b) {
     // Vector from A to P
     Vector2 ap = { p.x - a.x, p.y - a.y };
@@ -90,10 +96,13 @@ struct Wall {
 
     Color tint = BLUE;
     
-    float rotation;
-    bool rotating;
+    int surfaceMaterial = SURFACE_REGULAR;
+    float rotation = 0.0f;
+    bool rotating = false;
 
     bool canSpawn;
+
+    bool touching;
 
     float area() const { // unused
         Vector2 a = points[0];
@@ -317,6 +326,7 @@ struct GameMap {
             if (col.hit && (!result.hit || col.distance < result.distance)) {
                 result = col;
             }
+
             for (int i = 0; i < 4; i++) {
                 p1 = { wall.points[i].x,wall.z,wall.points[i].y };
                 p2 = { wall.points[(i + 1) % 4].x,wall.z,wall.points[(i + 1) % 4].y };
