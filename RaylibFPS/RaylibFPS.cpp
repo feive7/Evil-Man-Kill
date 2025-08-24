@@ -117,6 +117,10 @@ int main() {
 		BeginShaderMode(shader_main);
 
 		testmap.draw();
+		if (player.targetWall != nullptr) {
+			player.targetWall->draw(true, GREEN);
+		}
+		DrawSphere(player.target.point, 0.5f, RED);
 		DrawEntities(camera);
 
 		EndShaderMode();

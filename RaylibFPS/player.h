@@ -260,6 +260,7 @@ public:
     bool noclipping = false;
     Vector2 lean = { 0 };
     RayCollision target = { 0 };
+    Wall* targetWall = nullptr;
 
     int deathTick = 0;
     // Get ray from player head through player direction vector
@@ -550,6 +551,7 @@ static void UpdateLevel(void) {
     }
     player.target = { 0 };
     Ray playerTargetRay = player.getForwardRay();
+    bool wallHit = false;
     for (Wall& wall : testmap.walls) {
         for (Enemy& enemy : enemies) {
             Ray downRay = enemy.getDownRay();
@@ -582,23 +584,34 @@ static void UpdateLevel(void) {
         Vector3 p2 = { wall.points[1].x,wall.z,wall.points[1].y };
         Vector3 p3 = { wall.points[2].x,wall.z,wall.points[2].y };
         Vector3 p4 = { wall.points[3].x,wall.z,wall.points[3].y };
-        ClosestRayCollision(player.target, GetRayCollisionQuad(playerTargetRay, p1, p2, p3, p4));
+        if(ClosestRayCollision(player.target, GetRayCollisionQuad(playerTargetRay, p1, p2, p3, p4))) {
+            player.targetWall = &wall;
+            wallHit = true;
+        }
 
         p1 = { wall.points[0].x,wall.z + wall.height,wall.points[0].y };
         p2 = { wall.points[1].x,wall.z + wall.height,wall.points[1].y };
         p3 = { wall.points[2].x,wall.z + wall.height,wall.points[2].y };
         p4 = { wall.points[3].x,wall.z + wall.height,wall.points[3].y };
-        ClosestRayCollision(player.target, GetRayCollisionQuad(playerTargetRay, p1, p2, p3, p4));
+        if (ClosestRayCollision(player.target, GetRayCollisionQuad(playerTargetRay, p1, p2, p3, p4))) {
+            player.targetWall = &wall;
+            wallHit = true;
+        }
 
         for (int i = 0; i < 4; i++) {
             p1 = { wall.points[i].x,wall.z,wall.points[i].y };
             p2 = { wall.points[(i + 1) % 4].x,wall.z,wall.points[(i + 1) % 4].y };
             p3 = { wall.points[(i + 1) % 4].x,wall.z + wall.height,wall.points[(i + 1) % 4].y };
             p4 = { wall.points[i].x,wall.z + wall.height,wall.points[i].y };
-            ClosestRayCollision(player.target, GetRayCollisionQuad(playerTargetRay, p1, p2, p3, p4));
+            if (ClosestRayCollision(player.target, GetRayCollisionQuad(playerTargetRay, p1, p2, p3, p4))) {
+                player.targetWall = &wall;
+                wallHit = true;
+            }
         }
     }
-    
+    if (!wallHit) {
+        player.targetWall = nullptr;
+    }
 }
 
 // Draw game level
@@ -619,9 +632,9 @@ static void DrawEntities(Camera camera) {
         }
     }*/
 
-    if (player.target.hit) {
+    /*if (player.target.hit) {
         DrawSphere(player.target.point, .5f, RED);
-    }
+    }*/
 
     for (Projectile& ball : projectiles) {
         ball.draw();
