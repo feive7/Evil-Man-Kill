@@ -81,6 +81,39 @@ static GameMap testmap = {
 			.z = -27.0f,
 			.height = 2.0f,
 			.tint = {255,0,0,255},
+			.surfaceMaterial = SURFACE_LAVA,
+			.canSpawn = 0,
+		},
+
+		{ // Cube.043
+			.points = {{-17.0f,17.0f},{-19.0f,17.0f},{-19.0f,-17.0f},{-17.0f,-17.0f}},
+			.z = 2.0f,
+			.height = 12.0f,
+			.tint = {255,255,255,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+		},
+
+		{ // Cube.044
+			.points = {{19.0f,17.0f},{17.0f,17.0f},{17.0f,-17.0f},{19.0f,-17.0f}},
+			.z = 2.0f,
+			.height = 12.0f,
+			.tint = {255,255,255,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+		},
+
+		{ // Cube.045
+			.points = {{19.0f,-19.0f},{19.0f,-17.0f},{-19.0f,-17.0f},{-19.0f,-19.0f}},
+			.z = 2.0f,
+			.height = 12.0f,
+			.tint = {255,255,255,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+		},
+
+		{ // Cube.046
+			.points = {{19.0f,17.0f},{19.0f,19.0f},{-19.0f,19.0f},{-19.0f,17.0f}},
+			.z = 2.0f,
+			.height = 12.0f,
+			.tint = {255,255,255,255},
 			.surfaceMaterial = SURFACE_REGULAR,
 		},
 
