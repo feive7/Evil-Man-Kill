@@ -144,6 +144,9 @@
     <ClInclude Include="player.h" />
     <ClInclude Include="testmap.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\shaders\main.fs" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
