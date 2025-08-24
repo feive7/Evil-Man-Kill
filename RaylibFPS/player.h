@@ -548,6 +548,8 @@ static void UpdateLevel(void) {
         }
         enemyA.update();
     }
+    player.target = { 0 };
+    Ray playerTargetRay = player.getForwardRay();
     for (Wall& wall : testmap.walls) {
         for (Enemy& enemy : enemies) {
             Ray downRay = enemy.getDownRay();
@@ -575,6 +577,25 @@ static void UpdateLevel(void) {
                 ClosestRayCollision(enemy.downRayCollision, GetRayCollisionQuad(downRay, p1, p2, p3, p4));
                 ClosestRayCollision(enemy.upRayCollision, GetRayCollisionQuad(upRay, p1, p2, p3, p4));
             }
+        }
+        Vector3 p1 = { wall.points[0].x,wall.z,wall.points[0].y };
+        Vector3 p2 = { wall.points[1].x,wall.z,wall.points[1].y };
+        Vector3 p3 = { wall.points[2].x,wall.z,wall.points[2].y };
+        Vector3 p4 = { wall.points[3].x,wall.z,wall.points[3].y };
+        ClosestRayCollision(player.target, GetRayCollisionQuad(playerTargetRay, p1, p2, p3, p4));
+
+        p1 = { wall.points[0].x,wall.z + wall.height,wall.points[0].y };
+        p2 = { wall.points[1].x,wall.z + wall.height,wall.points[1].y };
+        p3 = { wall.points[2].x,wall.z + wall.height,wall.points[2].y };
+        p4 = { wall.points[3].x,wall.z + wall.height,wall.points[3].y };
+        ClosestRayCollision(player.target, GetRayCollisionQuad(playerTargetRay, p1, p2, p3, p4));
+
+        for (int i = 0; i < 4; i++) {
+            p1 = { wall.points[i].x,wall.z,wall.points[i].y };
+            p2 = { wall.points[(i + 1) % 4].x,wall.z,wall.points[(i + 1) % 4].y };
+            p3 = { wall.points[(i + 1) % 4].x,wall.z + wall.height,wall.points[(i + 1) % 4].y };
+            p4 = { wall.points[i].x,wall.z + wall.height,wall.points[i].y };
+            ClosestRayCollision(player.target, GetRayCollisionQuad(playerTargetRay, p1, p2, p3, p4));
         }
     }
     
