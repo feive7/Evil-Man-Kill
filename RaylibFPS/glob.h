@@ -7,6 +7,7 @@ static Texture tile_2;
 static Texture tile_3;
 static Texture tile_4;
 static Texture tile_5;
+static Texture tile_6;
 
 static Shader shader_main;
 static int shader_main_viewpos_loc;
@@ -29,6 +30,7 @@ void LoadGlob() {
 	tile_3 = LoadTexture("assets/textures/tile_3.png");
 	tile_4 = LoadTexture("assets/textures/tile_4.png");
 	tile_5 = LoadTexture("assets/textures/tile_5.png");
+	tile_6 = LoadTexture("assets/textures/tile_6.png");
 
 	// Shaders
 	shader_main = LoadShader("assets/shaders/main.vs", "assets/shaders/main.fs");
