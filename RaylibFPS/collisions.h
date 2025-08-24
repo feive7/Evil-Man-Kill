@@ -100,9 +100,10 @@ struct Wall {
     float rotation = 0.0f;
     bool rotating = false;
 
-    bool canSpawn;
+    bool canSpawn = false;
 
-    bool touching;
+    bool touching = false;
+    bool interact = false;
 
     float area() const { // unused
         Vector2 a = points[0];
