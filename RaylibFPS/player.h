@@ -99,6 +99,7 @@ public:
 
     Vector2 lookRotation = { 0 };
 
+    // Get forward direction as Vector3
     Vector3 getForward() {
         float yaw = lookRotation.x;
         float pitch = lookRotation.y;
@@ -110,21 +111,26 @@ public:
 
         return Vector3Normalize(forward);
     }
+    // Get current total height
     float getHeight() {
         return Lerp(crouchingHeight, standingHeight, heightLerp);
     }
+    // Get real crouch state (for speed purposes)
     bool getCrouchState() {
         return getHeight() < STAND_HEIGHT;
     }
+    // Get Head position (factors in head offset)
     Vector3 getHeadPos() {
         return position + Vector3{ 0,getHeight() - HEAD_OFFSET,0};
     }
+    // Request jump
     void jump() {
         if (isGrounded && !isTouchingCeiling) {
             velocity.y = JUMP_FORCE;
             isGrounded = false;
         }
     }
+    // Set movement intention (Only enemies use this as player has their own movement function)
     void move(Vector3 direction) {
         float delta = GetFrameTime();
 
@@ -148,6 +154,7 @@ public:
         velocity.x = hvel.x * decel;
         velocity.z = hvel.z * decel;
     }
+    // Apply movement intention with collisions
     void tryMove() {
         float delta = GetFrameTime();
         Vector3 newpos = position + Vector3Scale(velocity, delta);
@@ -222,6 +229,7 @@ public:
         velocity = newvel;
         position = newpos;
     }
+    // Apply all passive movements (gravity, climbing, etc)
     void update() {
         float delta = GetFrameTime();
         if (!isGrounded && !isClimbing) velocity.y -= GRAVITY * delta;
@@ -235,6 +243,7 @@ public:
         };
     }
 private:
+    // Trigger wall effect
     void touchWall(Wall& wall) {
         switch (wall.surfaceMaterial) {
         case SURFACE_REGULAR: break;
@@ -252,9 +261,11 @@ public:
     RayCollision target = { 0 };
 
     int deathTick = 0;
+    // Get ray from player head through player direction vector
     Ray getForwardRay() {
         return { body.getHeadPos(), body.getForward() };
     }
+    // Handle player inputs and other states
     void update() {
         if (body.alive) {
             if (IsKeyPressed(KEY_V)) {
@@ -282,6 +293,7 @@ public:
         }
     }
 private:
+    // Update look rotation based on mouse inputs
     void updateLookRotation() {
         // Get mouse inputs
         Vector2 mouse_delta = GetMouseDelta();
@@ -303,6 +315,7 @@ private:
 
         body.lookRotation.y = Clamp(body.lookRotation.y, maxAngleDown, maxAngleUp);
     }
+    // Fly with disregard for collisions
     void noclip() {
         char sideway = (IsKeyDown(KEY_D) - IsKeyDown(KEY_A));
         char forward = (IsKeyDown(KEY_W) - IsKeyDown(KEY_S));
@@ -315,6 +328,7 @@ private:
 
         body.position += Vector3Scale(movement,speed);
     }
+    // Player custom movement
     void move() {
         // Get keyboard inputs
         bool jumpPressed = IsKeyPressed(KEY_SPACE);
@@ -375,6 +389,7 @@ private:
         lean.x = Lerp(lean.x, sideway * 0.02f, 10.0f * delta);
         lean.y = Lerp(lean.y, forward * 0.015f, 10.0f * delta);
     }
+    // Wrap player position
     void warp(Vector3 bounds) {
         body.position.x = fmod(body.position.x, bounds.x);
         body.position.y = fmod(body.position.y, bounds.y);
@@ -395,17 +410,21 @@ public:
 
     float walkTimer = 0.0f;
 
+    // Get ray from head down
     Ray getDownRay() {
         return { body.getHeadPos(), {0.0f,-1.0f,0.0f} };
     }
+    // Get ray from head up
     Ray getUpRay() {
         return { body.getHeadPos(), body.getForward() + Vector3{0,1.0f,0.0f} };
     }
+    // Update reachedTarget state
     void checkForTarget() {
         if (Vector3Distance(body.position, *target) < 1) {
             reachedTarget = true;
         }
     }
+    // Enemy AI and movement handler
     void update() {
         if (!reachedTarget) {
             bool overGround = downRayCollision.hit && downRayCollision.distance < 10; // Is above a ground
@@ -440,13 +459,16 @@ public:
         body.update();
         downRayCollision = { 0 };
     }
+    // Draw bounding box wires
     void drawBoundingBox() {
         DrawBoundingBox(body.getBoundingBox(), BLACK);
     }
 private:
+    // Move towards target
     void moveToTarget() {
         body.move(*target - body.position);
     }
+    // Move opposite to velocity
     void stopMove() {
         body.move(Vector3Negate(body.velocity));
     }
