@@ -143,6 +143,10 @@ int main() {
 			const char* scoreText = TextFormat("Score: %i", score);
 			int scoreWidth = MeasureText(scoreText, 20);
 			DrawText(scoreText, screenWidth / 2 - scoreWidth / 2, screenHeight / 2 + 20, 20, WHITE);
+
+			const char* respawn = TextFormat("Press 'r' to respawn", score);
+			int respawnWidth = MeasureText(respawn, 20);
+			DrawText(respawn, screenWidth / 2 - respawnWidth / 2, screenHeight / 2 + 60, 20, WHITE);
 		}
 		else {
 			if (!debugEnabled) {
