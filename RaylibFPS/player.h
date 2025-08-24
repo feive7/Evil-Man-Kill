@@ -120,7 +120,7 @@ public:
         return position + Vector3{ 0,getHeight() - HEAD_OFFSET,0};
     }
     void jump() {
-        if (isGrounded) {
+        if (isGrounded && !isTouchingCeiling) {
             velocity.y = JUMP_FORCE;
             isGrounded = false;
         }
