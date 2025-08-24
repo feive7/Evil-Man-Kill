@@ -260,6 +260,7 @@ public:
             if (IsKeyPressed(KEY_V)) {
                 noclipping = !noclipping;
             }
+            if (IsKeyPressed(KEY_K)) body.alive = false;
             updateLookRotation();
             if (noclipping) {
                 body.velocity = { 0.0f,0.0f,0.0f };
