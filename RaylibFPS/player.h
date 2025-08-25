@@ -131,8 +131,8 @@ public:
         if (isGrounded && !isTouchingCeiling) {
             velocity.y = JUMP_FORCE;
             isGrounded = false;
-            SetSoundPosition(camera, snd_step, position, 20.0f);
-            PlaySound(snd_step);
+            //SetSoundPosition(camera, snd_step, position, 20.0f);
+            //PlaySound(snd_step);
         }
     }
     // Set movement intention (Only enemies use this as player has their own movement function)
@@ -232,8 +232,8 @@ public:
             heightLerp = newHeightLerp;
         }
         if (grounded && !isGrounded) { // Body just landed so we play a sound
-            SetSoundPosition(camera, snd_step, position, 20.0f);
-            PlaySound(snd_step);
+            //SetSoundPosition(camera, snd_step, position, 20.0f);
+            //PlaySound(snd_land);
         }
         
         isGrounded = grounded;
