@@ -82,6 +82,7 @@ static Shader shader_debug_normals;
 static Sound snd_gunshot;
 static Sound snd_hit;
 static Sound snd_step;
+static Sound snd_land;
 
 static Music music_main;
 static Music music_lose;
@@ -143,6 +144,8 @@ void LoadGlob() {
 	snd_gunshot = LoadSoundFromCode(BITGUNSHOT_DATA, BITGUNSHOT_FRAME_COUNT, BITGUNSHOT_SAMPLE_RATE, BITGUNSHOT_SAMPLE_SIZE, BITGUNSHOT_CHANNELS);
 	snd_hit = LoadSoundFromCode(HIT01_DATA, HIT01_FRAME_COUNT, HIT01_SAMPLE_RATE, HIT01_SAMPLE_SIZE, HIT01_CHANNELS);
 	snd_step = LoadSoundFromCode(STEP_DATA, STEP_FRAME_COUNT, STEP_SAMPLE_RATE, STEP_SAMPLE_SIZE, STEP_CHANNELS);
+	snd_land = LoadSound("assets/audio/jumpland.wav");
+	//snd_land = LoadSoundFromCode(STEP_DATA, STEP_FRAME_COUNT, STEP_SAMPLE_RATE, STEP_SAMPLE_SIZE, STEP_CHANNELS);
 
 	// Music
 	music_main = LoadMusicStream("assets/audio/fight_looped.wav");
@@ -171,6 +174,7 @@ void UnloadGlob() {
 	UnloadSound(snd_gunshot);
 	UnloadSound(snd_hit);
 	UnloadSound(snd_step);
+	UnloadSound(snd_land);
 
 	// Music
 	UnloadMusicStream(music_main);
