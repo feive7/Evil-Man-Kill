@@ -1,3 +1,13 @@
+#include <assets/textures/tile_1.h>
+#include <assets/textures/tile_2.h>
+#include <assets/textures/tile_3.h>
+#include <assets/textures/tile_4.h>
+#include <assets/textures/tile_5.h>
+#include <assets/textures/tile_6.h>
+#include <assets/textures/npc_john.h>
+#include <assets/textures/npc_john_crouch.h>
+#include <assets/textures/npc_john_victory.h>
+
 // Global assets
 static Texture tex_john;
 static Texture tex_john_victory;
@@ -20,17 +30,36 @@ static Sound snd_step;
 static Music music_main;
 static Music music_lose;
 
+void ConvertImageToCode(const char* filename) {
+	Image img = LoadImage(filename);
+	std::string truefilename(GetFileNameWithoutExt(filename));
+	std::string filepath(GetDirectoryPath(filename));
+	std::string outfilename = filepath + "/" + truefilename + ".h";
+	ExportImageAsCode(img, outfilename.c_str());
+}
+Texture LoadTextureFromCode(void* data, int width, int height) {
+	Image img = {
+		.data = data,
+		.width = width,
+		.height = height,
+		.mipmaps = 1,
+		.format = 4,
+	};
+	Texture texture = LoadTextureFromImage(img);
+	return texture;
+}
+
 void LoadGlob() {
 	// Textures
-	tex_john = LoadTexture("assets/textures/npc_john.png");
-	tex_john_victory = LoadTexture("assets/textures/npc_john_victory.png");
-	tex_john_crouch = LoadTexture("assets/textures/npc_john_crouch.png");
-	tile_1 = LoadTexture("assets/textures/tile_1.png");
-	tile_2 = LoadTexture("assets/textures/tile_2.png");
-	tile_3 = LoadTexture("assets/textures/tile_3.png");
-	tile_4 = LoadTexture("assets/textures/tile_4.png");
-	tile_5 = LoadTexture("assets/textures/tile_5.png");
-	tile_6 = LoadTexture("assets/textures/tile_6.png");
+	tex_john = LoadTextureFromCode(NPC_JOHN_DATA, NPC_JOHN_WIDTH, NPC_JOHN_HEIGHT);
+	tex_john_victory = LoadTextureFromCode(NPC_JOHN_VICTORY_DATA, NPC_JOHN_VICTORY_WIDTH, NPC_JOHN_VICTORY_HEIGHT);
+	tex_john_crouch = LoadTextureFromCode(NPC_JOHN_CROUCH_DATA, NPC_JOHN_CROUCH_WIDTH, NPC_JOHN_CROUCH_HEIGHT);
+	tile_1 = LoadTextureFromCode(TILE_1_DATA, TILE_1_WIDTH, TILE_1_HEIGHT);
+	tile_2 = LoadTextureFromCode(TILE_2_DATA, TILE_2_WIDTH, TILE_2_HEIGHT);
+	tile_3 = LoadTextureFromCode(TILE_3_DATA, TILE_3_WIDTH, TILE_3_HEIGHT);
+	tile_4 = LoadTextureFromCode(TILE_4_DATA, TILE_4_WIDTH, TILE_4_HEIGHT);
+	tile_5 = LoadTextureFromCode(TILE_5_DATA, TILE_5_WIDTH, TILE_5_HEIGHT);
+	tile_6 = LoadTextureFromCode(TILE_6_DATA, TILE_6_WIDTH, TILE_6_HEIGHT);
 
 	// Shaders
 	shader_main = LoadShader("assets/shaders/main.vs", "assets/shaders/main.fs");
