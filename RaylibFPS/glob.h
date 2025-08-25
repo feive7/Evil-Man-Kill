@@ -9,6 +9,7 @@
 #include <assets/textures/npc_john_victory.h>
 #include <assets/audio/bitgunshot.h>
 #include <assets/audio/hit01.h>
+#include <assets/audio/step.h>
 
 #define MAIN_VERTEX_SHADER R"(#version 330
 
@@ -141,7 +142,7 @@ void LoadGlob() {
 	// Sounds
 	snd_gunshot = LoadSoundFromCode(BITGUNSHOT_DATA, BITGUNSHOT_FRAME_COUNT, BITGUNSHOT_SAMPLE_RATE, BITGUNSHOT_SAMPLE_SIZE, BITGUNSHOT_CHANNELS);
 	snd_hit = LoadSoundFromCode(HIT01_DATA, HIT01_FRAME_COUNT, HIT01_SAMPLE_RATE, HIT01_SAMPLE_SIZE, HIT01_CHANNELS);
-	snd_step = LoadSound("assets/audio/step.wav");
+	snd_step = LoadSoundFromCode(STEP_DATA, STEP_FRAME_COUNT, STEP_SAMPLE_RATE, STEP_SAMPLE_SIZE, STEP_CHANNELS);
 
 	// Music
 	music_main = LoadMusicStream("assets/audio/fight_looped.wav");
