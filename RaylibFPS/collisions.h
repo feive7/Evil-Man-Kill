@@ -273,10 +273,9 @@ struct Wall {
             points[i] = Vector2Rotate(points[i] - mid, angle) + mid;
         }
     }
-    void move(Vector3 movement) {
-        z += movement.y;
+    void move(Vector2 movement) {
         for (int i = 0; i < 4; i++) {
-            points[i] += {movement.x, movement.z};
+            points[i] += movement;
         }
     }
     BoundingBox getBoundingBox() {
