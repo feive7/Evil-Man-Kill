@@ -14,8 +14,6 @@ static GameMap testmap = {
 			.height = 7.0f,
 			.tint = {255,68,62,255},
 			.surfaceMaterial = SURFACE_REGULAR,
-			.rotation = 1.0f,
-			.rotating = true,
 		},
 
 		{ // Cube.032

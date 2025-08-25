@@ -97,8 +97,6 @@ struct Wall {
     Color tint = BLUE;
     
     int surfaceMaterial = SURFACE_REGULAR;
-    float rotation = 0.0f;
-    bool rotating = false;
     bool canSpawn = false;
     std::function<void(Wall*)> interactFunction = [](Wall* self){
         
@@ -354,9 +352,6 @@ struct GameMap {
         float delta = GetFrameTime();
         for (auto wallIt = walls.begin(); wallIt != walls.end(); wallIt++) {
             Wall& wall = *wallIt;
-            if (wall.rotating) {
-                wall.rotate(wall.rotation * delta);
-            }
             if (wall.interact) {
                 wall.interactFunction(&wall);
             }
