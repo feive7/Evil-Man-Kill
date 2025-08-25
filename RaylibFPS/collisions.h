@@ -99,10 +99,13 @@ struct Wall {
     int surfaceMaterial = SURFACE_REGULAR;
     float rotation = 0.0f;
     bool rotating = false;
-
     bool canSpawn = false;
+    std::function<void(Wall*)> interactFunction = [](Wall* self){
+        
+    };
 
     bool touching = false;
+
     bool interact = false;
 
     float area() const { // unused
@@ -272,6 +275,12 @@ struct Wall {
             points[i] = Vector2Rotate(points[i] - mid, angle) + mid;
         }
     }
+    void move(Vector3 movement) {
+        z += movement.y;
+        for (int i = 0; i < 4; i++) {
+            points[i] += {movement.x, movement.z};
+        }
+    }
     BoundingBox getBoundingBox() {
         BoundingBox bbox = {
             {INFINITY,z,INFINITY},
@@ -343,9 +352,13 @@ struct GameMap {
     }
     void update() {
         float delta = GetFrameTime();
-        for (Wall& wall : walls) {
+        for (auto wallIt = walls.begin(); wallIt != walls.end(); wallIt++) {
+            Wall& wall = *wallIt;
             if (wall.rotating) {
                 wall.rotate(wall.rotation * delta);
+            }
+            if (wall.interact) {
+                wall.interactFunction(&wall);
             }
         }
     }

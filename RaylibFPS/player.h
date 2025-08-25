@@ -16,6 +16,8 @@
 #define BOTTOM_HEIGHT    0.5f
 #define HEAD_OFFSET      0.5f // How far down the head is from height
 
+#define INTERACT_DISTANCE 2.0f
+
 #define NORMALIZE_INPUT  0
 
 static Vector2 sensitivity = { 0.005f, 0.005f };
@@ -270,10 +272,13 @@ public:
     // Handle player inputs and other states
     void update() {
         if (body.alive) {
-            if (IsKeyPressed(KEY_V)) {
-                noclipping = !noclipping;
-            }
+            if (IsKeyPressed(KEY_V)) noclipping = !noclipping;
             if (IsKeyPressed(KEY_K)) body.alive = false;
+            if (IsKeyPressed(KEY_E)) {
+                if (target.hit && targetWall != nullptr && target.distance <= INTERACT_DISTANCE) {
+                    targetWall->interact = true;
+                }
+            }
             updateLookRotation();
             if (noclipping) {
                 body.velocity = { 0.0f,0.0f,0.0f };

@@ -1,13 +1,5 @@
 static GameMap testmap = {
 	{ // Walls
-		{ // Button
-			.points = {{1.0f,-4.0f},{-1.0f,-4.0f},{-1.0f,-6.0f},{1.0f,-6.0f}},
-			.z = 0.0f,
-			.height = 2.0f,
-			.tint = {0,2,255,255},
-			.surfaceMaterial = SURFACE_REGULAR,
-		},
-
 		{ // Ceiling
 			.points = {{12.0f,12.0f},{-12.0f,12.0f},{-12.0f,-12.0f},{12.0f,-12.0f}},
 			.z = 6.0f,
@@ -28,8 +20,8 @@ static GameMap testmap = {
 
 		{ // Cube.032
 			.points = {{-10.0f,6.0f},{-12.0f,6.0f},{-12.0f,-6.0f},{-10.0f,-6.0f}},
-			.z = 3.0f,
-			.height = 3.0f,
+			.z = 4.0f,
+			.height = 2.0f,
 			.tint = {255,255,255,255},
 			.surfaceMaterial = SURFACE_REGULAR,
 		},
@@ -130,10 +122,18 @@ static GameMap testmap = {
 			.surfaceMaterial = SURFACE_REGULAR,
 		},
 
+		{ // Cube.052
+			.points = {{-12.0f,6.0f},{-24.0f,6.0f},{-24.0f,-6.0f},{-12.0f,-6.0f}},
+			.z = -10.0f,
+			.height = 2.0f,
+			.tint = {255,255,255,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+		},
+
 		{ // Cube.057
 			.points = {{12.0f,6.0f},{10.0f,6.0f},{10.0f,-6.0f},{12.0f,-6.0f}},
-			.z = 3.0f,
-			.height = 3.0f,
+			.z = -8.0f,
+			.height = 14.0f,
 			.tint = {255,255,255,255},
 			.surfaceMaterial = SURFACE_REGULAR,
 		},
@@ -168,6 +168,41 @@ static GameMap testmap = {
 			.height = 14.0f,
 			.tint = {255,255,255,255},
 			.surfaceMaterial = SURFACE_REGULAR,
+		},
+
+		{ // Door
+			.points = {{-10.0f,6.0f},{-12.0f,6.0f},{-12.0f,-6.0f},{-10.0f,-6.0f}},
+			.z = -8.0f,
+			.height = 12.0f,
+			.tint = {0,0,255,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+			.interactFunction = [](Wall* self) {
+				static int tick = 0;
+				static int sequence = 0;
+
+				// Sequence action
+				if (sequence == 0) { // opening sequence
+					self->z += 0.1f; // Move up
+				}
+				else if (sequence == 1) {
+					// Wait
+				}
+				else if (sequence == 2) {
+					self->z -= 0.1f; // Move down
+				}
+
+				// Update sequence
+				if (tick > 80) {
+					sequence++;
+					tick = 0;
+				}
+				if (sequence > 2) {
+					sequence = 0;
+					self->interact = false;
+					self->z -= 0.1f;
+				}
+				tick++;
+			}
 		},
 
 	},
