@@ -333,7 +333,7 @@ struct Wall {
 struct GameMap {
     std::vector<Wall> walls;
     void draw() {
-        rlSetTexture(tile_4.id);
+        rlSetTexture(TILE_4.id);
         rlBegin(RL_QUADS);
         for (Wall wall : walls) {
             wall.draw();

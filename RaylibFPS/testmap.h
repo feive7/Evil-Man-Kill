@@ -1,28 +1,43 @@
 static GameMap testmap = {
 	{ // Walls
 		{ // Cube.053
-			.points = {{6.0f,6.0f},{-6.0f,6.0f},{-6.0f,-6.0f},{6.0f,-6.0f}},
+			.points = {{20.0f,20.0f},{-20.0f,20.0f},{-20.0f,-20.0f},{20.0f,-20.0f}},
 			.z = -2.0f,
 			.height = 2.0f,
-			.tint = {0,102,0,255},
+			.tint = {255,255,255,255},
 			.surfaceMaterial = SURFACE_REGULAR,
 		},
 
 		{ // Cube.054
-			.points = {{16.0f,5.0f},{6.0f,5.0f},{6.0f,-5.0f},{16.0f,-5.0f}},
-			.z = -2.0f,
+			.points = {{-17.9f,18.0f},{-18.1f,18.0f},{-18.1f,-18.0f},{-17.9f,-18.0f}},
+			.z = 0.0f,
 			.height = 2.0f,
-			.tint = {0,255,255,255},
+			.tint = {255,255,255,255},
 			.surfaceMaterial = SURFACE_REGULAR,
-			.tickFunction = [](Wall* self) {
-				static const Vector3 keyPoints[] = {
-					{11,-2,11},
-					{-11,-2,11},
-					{-11,-2,-11},
-					{11,-2,-11},
-				};
-				self->keyFrameMove(keyPoints, 4);
-			}
+		},
+
+		{ // Cube.055
+			.points = {{18.0f,17.9f},{18.0f,18.1f},{-18.0f,18.1f},{-18.0f,17.9f}},
+			.z = -0.0f,
+			.height = 2.0f,
+			.tint = {255,255,255,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+		},
+
+		{ // Cube.056
+			.points = {{-18.0f,-17.9f},{-18.0f,-18.1f},{18.0f,-18.1f},{18.0f,-17.9f}},
+			.z = -0.0f,
+			.height = 2.0f,
+			.tint = {255,255,255,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+		},
+
+		{ // Cube.062
+			.points = {{17.9f,-18.0f},{18.1f,-18.0f},{18.1f,18.0f},{17.9f,18.0f}},
+			.z = -0.0f,
+			.height = 2.0f,
+			.tint = {255,255,255,255},
+			.surfaceMaterial = SURFACE_REGULAR,
 		},
 
 	},

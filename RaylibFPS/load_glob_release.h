@@ -103,12 +103,12 @@ void LoadGlob() {
 	tex_john = LoadTextureFromCode(NPC_JOHN_DATA, NPC_JOHN_WIDTH, NPC_JOHN_HEIGHT);
 	tex_john_victory = LoadTextureFromCode(NPC_JOHN_VICTORY_DATA, NPC_JOHN_VICTORY_WIDTH, NPC_JOHN_VICTORY_HEIGHT);
 	tex_john_crouch = LoadTextureFromCode(NPC_JOHN_CROUCH_DATA, NPC_JOHN_CROUCH_WIDTH, NPC_JOHN_CROUCH_HEIGHT);
-	tile_1 = LoadTextureFromCode(TILE_1_DATA, TILE_1_WIDTH, TILE_1_HEIGHT);
-	tile_2 = LoadTextureFromCode(TILE_2_DATA, TILE_2_WIDTH, TILE_2_HEIGHT);
-	tile_3 = LoadTextureFromCode(TILE_3_DATA, TILE_3_WIDTH, TILE_3_HEIGHT);
-	tile_4 = LoadTextureFromCode(TILE_4_DATA, TILE_4_WIDTH, TILE_4_HEIGHT);
-	tile_5 = LoadTextureFromCode(TILE_5_DATA, TILE_5_WIDTH, TILE_5_HEIGHT);
-	tile_6 = LoadTextureFromCode(TILE_6_DATA, TILE_6_WIDTH, TILE_6_HEIGHT);
+	TILE_1 = LoadTextureFromCode(TILE_1_DATA, TILE_1_WIDTH, TILE_1_HEIGHT);
+	TILE_2 = LoadTextureFromCode(TILE_2_DATA, TILE_2_WIDTH, TILE_2_HEIGHT);
+	TILE_3 = LoadTextureFromCode(TILE_3_DATA, TILE_3_WIDTH, TILE_3_HEIGHT);
+	TILE_4 = LoadTextureFromCode(TILE_4_DATA, TILE_4_WIDTH, TILE_4_HEIGHT);
+	TILE_5 = LoadTextureFromCode(TILE_5_DATA, TILE_5_WIDTH, TILE_5_HEIGHT);
+	TILE_6 = LoadTextureFromCode(TILE_6_DATA, TILE_6_WIDTH, TILE_6_HEIGHT);
 
 	// Shaders
 	shader_main = LoadShaderFromMemory(MAIN_VERTEX_SHADER, MAIN_FRAGMENT_SHADER);

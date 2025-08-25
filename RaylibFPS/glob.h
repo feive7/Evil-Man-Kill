@@ -2,12 +2,12 @@
 static Texture tex_john;
 static Texture tex_john_victory;
 static Texture tex_john_crouch;
-static Texture tile_1;
-static Texture tile_2;
-static Texture tile_3;
-static Texture tile_4;
-static Texture tile_5;
-static Texture tile_6;
+static Texture TILE_1;
+static Texture TILE_2;
+static Texture TILE_3;
+static Texture TILE_4;
+static Texture TILE_5;
+static Texture TILE_6;
 
 static Shader shader_main;
 static int shader_main_viewpos_loc;
@@ -32,12 +32,12 @@ void UnloadGlob() {
 	UnloadTexture(tex_john);
 	UnloadTexture(tex_john_victory);
 	UnloadTexture(tex_john_crouch);
-	UnloadTexture(tile_1);
-	UnloadTexture(tile_2);
-	UnloadTexture(tile_3);
-	UnloadTexture(tile_4);
-	UnloadTexture(tile_5);
-	UnloadTexture(tile_6);
+	UnloadTexture(TILE_1);
+	UnloadTexture(TILE_2);
+	UnloadTexture(TILE_3);
+	UnloadTexture(TILE_4);
+	UnloadTexture(TILE_5);
+	UnloadTexture(TILE_6);
 
 	// Shaders
 	UnloadShader(shader_main);
