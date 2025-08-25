@@ -290,7 +290,7 @@ struct Wall {
 
         Vector3 target = points[nPoint];
         Vector2 c = center();
-        Vector3 pos = { c.x, z + height / 2.0f, c.y };
+        Vector3 pos = { c.x, z, c.y };
 
         // Step size (movement speed per tick)
         float speed = 0.1f;
