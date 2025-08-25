@@ -49,6 +49,32 @@ void LoadGlob() {
 	music_lose.looping = true;
 }
 
+void UnloadGlob() {
+	// Textures
+	UnloadTexture(tex_john);
+	UnloadTexture(tex_john_victory);
+	UnloadTexture(tex_john_crouch);
+	UnloadTexture(tile_1);
+	UnloadTexture(tile_2);
+	UnloadTexture(tile_3);
+	UnloadTexture(tile_4);
+	UnloadTexture(tile_5);
+	UnloadTexture(tile_6);
+
+	// Shaders
+	UnloadShader(shader_main);
+	UnloadShader(shader_debug_normals);
+
+	// Sounds
+	UnloadSound(snd_gunshot);
+	UnloadSound(snd_hit);
+	UnloadSound(snd_step);
+
+	// Music
+	UnloadMusicStream(music_main);
+	UnloadMusicStream(music_lose);
+}
+
 bool ClosestRayCollision(RayCollision& source, RayCollision compare) {
 	if (compare.hit && (!source.hit || compare.distance < source.distance)) {
 		source = compare;

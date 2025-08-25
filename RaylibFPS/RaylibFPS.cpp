@@ -160,6 +160,8 @@ int main() {
 		EndDrawing();
 	}
 
+	UnloadGlob();
+
 	CloseAudioDevice();
 
 	CloseWindow();
