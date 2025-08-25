@@ -7,6 +7,9 @@
 #include <assets/textures/npc_john.h>
 #include <assets/textures/npc_john_crouch.h>
 #include <assets/textures/npc_john_victory.h>
+#include <assets/audio/bitgunshot.h>
+#include <assets/audio/hit01.h>
+
 #define MAIN_VERTEX_SHADER R"(#version 330
 
 in vec3 vertexPosition;
@@ -89,6 +92,13 @@ void ConvertImageToCode(const char* filename) {
 	std::string outfilename = filepath + "/" + truefilename + ".h";
 	ExportImageAsCode(img, outfilename.c_str());
 }
+void ConvertWaveToCode(const char* filename) {
+	Wave wav = LoadWave(filename);
+	std::string truefilename(GetFileNameWithoutExt(filename));
+	std::string filepath(GetDirectoryPath(filename));
+	std::string outfilename = filepath + "/" + truefilename + ".h";
+	ExportWaveAsCode(wav, outfilename.c_str());
+}
 Texture LoadTextureFromCode(void* data, int width, int height) {
 	Image img = {
 		.data = data,
@@ -100,7 +110,17 @@ Texture LoadTextureFromCode(void* data, int width, int height) {
 	Texture texture = LoadTextureFromImage(img);
 	return texture;
 }
-
+Sound LoadSoundFromCode(void* data, unsigned int frameCount, unsigned int sampleRate, unsigned int sampleSize, unsigned int channels) {
+	Wave wav = {
+		.frameCount = frameCount,
+		.sampleRate = sampleRate,
+		.sampleSize = sampleSize,
+		.channels = channels,
+		.data = data,
+	};
+	Sound sound = LoadSoundFromWave(wav);
+	return sound;
+}
 void LoadGlob() {
 	// Textures
 	tex_john = LoadTextureFromCode(NPC_JOHN_DATA, NPC_JOHN_WIDTH, NPC_JOHN_HEIGHT);
@@ -119,8 +139,8 @@ void LoadGlob() {
 	shader_debug_normals = LoadShader("assets/shaders/normal.vs", "assets/shaders/normal.fs");
 
 	// Sounds
-	snd_gunshot = LoadSound("assets/audio/8bitgunshot.wav");
-	snd_hit = LoadSound("assets/audio/hit01.wav");
+	snd_gunshot = LoadSoundFromCode(BITGUNSHOT_DATA, BITGUNSHOT_FRAME_COUNT, BITGUNSHOT_SAMPLE_RATE, BITGUNSHOT_SAMPLE_SIZE, BITGUNSHOT_CHANNELS);
+	snd_hit = LoadSoundFromCode(HIT01_DATA, HIT01_FRAME_COUNT, HIT01_SAMPLE_RATE, HIT01_SAMPLE_SIZE, HIT01_CHANNELS);
 	snd_step = LoadSound("assets/audio/step.wav");
 
 	// Music
