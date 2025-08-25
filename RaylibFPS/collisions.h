@@ -93,7 +93,7 @@ struct Wall {
     Vector2 points[4];
     float z;
     float height;
-
+    Texture* texture = &TILE_4;
     Color tint = BLUE;
     
     int surfaceMaterial = SURFACE_REGULAR;
@@ -333,9 +333,9 @@ struct Wall {
 struct GameMap {
     std::vector<Wall> walls;
     void draw() {
-        rlSetTexture(TILE_4.id);
         rlBegin(RL_QUADS);
         for (Wall wall : walls) {
+            rlSetTexture(wall.texture->id);
             wall.draw();
         }
         rlEnd();

@@ -8,6 +8,13 @@ static Texture TILE_3;
 static Texture TILE_4;
 static Texture TILE_5;
 static Texture TILE_6;
+static Texture FENCE_1;
+static Texture CARDBOARD;
+static Texture PLASTER;
+static Texture MARBLE;
+static Texture WOOD;
+static Texture WOODFLOOR;
+static Texture FABRIC;
 
 static Shader shader_main;
 static int shader_main_viewpos_loc;
@@ -38,6 +45,13 @@ void UnloadGlob() {
 	UnloadTexture(TILE_4);
 	UnloadTexture(TILE_5);
 	UnloadTexture(TILE_6);
+	UnloadTexture(FENCE_1);
+	UnloadTexture(CARDBOARD);
+	UnloadTexture(PLASTER);
+	UnloadTexture(MARBLE);
+	UnloadTexture(WOOD);
+	UnloadTexture(WOODFLOOR);
+	UnloadTexture(FABRIC);
 
 	// Shaders
 	UnloadShader(shader_main);
