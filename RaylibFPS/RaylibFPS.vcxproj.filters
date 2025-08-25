@@ -35,6 +35,12 @@
     <ClInclude Include="glob.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="load_glob_debug.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="load_glob_release.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\shaders\main.fs">

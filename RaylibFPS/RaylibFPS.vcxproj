@@ -141,6 +141,8 @@
     <ClInclude Include="collisions.h" />
     <ClInclude Include="customdebug.h" />
     <ClInclude Include="glob.h" />
+    <ClInclude Include="load_glob_debug.h" />
+    <ClInclude Include="load_glob_release.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="testmap.h" />
   </ItemGroup>
