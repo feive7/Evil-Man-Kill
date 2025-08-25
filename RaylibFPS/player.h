@@ -203,8 +203,7 @@ public:
             if (CheckCollisionCircleQuad({ newpos.x,newpos.z }, radius, wall.points[0], wall.points[1], wall.points[2], wall.points[3])) { // Checking vertical collisions
                 if (newpos.y <= wall.z + wall.height && newpos.y > wall.z + wall.height - 1.0f && velocity.y <= 0) { // Hit top of wall
                     newpos.y = wall.z + wall.height;
-                    newpos.x += wall.deltaMovement.x;
-                    newpos.z += wall.deltaMovement.y;
+                    newpos += wall.deltaMovement;
                     grounded = true;
                     groundWall = &wall;
                     if (wall.surfaceMaterial == SURFACE_BOUNCY) {
