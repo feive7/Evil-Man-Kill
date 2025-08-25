@@ -106,6 +106,8 @@ struct Wall {
 
     bool interact = false;
 
+    Vector2 deltaMovement;
+
     float area() const { // unused
         Vector2 a = points[0];
         Vector2 b = points[1];
@@ -351,6 +353,7 @@ struct GameMap {
         float delta = GetFrameTime();
         for (auto wallIt = walls.begin(); wallIt != walls.end(); wallIt++) {
             Wall& wall = *wallIt;
+            wall.move(wall.deltaMovement);
             if (wall.interact) {
                 wall.interactFunction(&wall);
             }
