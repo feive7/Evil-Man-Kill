@@ -99,7 +99,7 @@ public:
 
     float radius = 1.0f;
 
-    Vector2 lookRotation = { 0 };
+    Vector2 lookRotation = { PI, 0.0f };
 
     // Get forward direction as Vector3
     Vector3 getForward() {
