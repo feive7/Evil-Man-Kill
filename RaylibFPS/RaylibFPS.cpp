@@ -110,7 +110,7 @@ int main() {
 
 		BeginDrawing();
 
-		ClearBackground(RAYWHITE);
+		ClearBackground(BLACK);
 
 		BeginMode3D(camera);
 
