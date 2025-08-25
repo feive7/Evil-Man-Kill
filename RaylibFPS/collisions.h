@@ -283,6 +283,28 @@ struct Wall {
             points[i] += movement;
         }
     }
+
+    void keyFrameMove(const Vector2* points, int pointCount) {
+        static int nPoint = 0;
+
+        Vector2 target = points[nPoint];
+        Vector2 pos = center();
+
+        // Step size (movement speed per tick)
+        float speed = 0.6f;
+
+        // Direction vector to target
+        Vector2 dir = Vector2Normalize(Vector2Subtract(target, pos));
+
+        // Move towards target
+        move(Vector2Scale(dir, speed));
+
+        // Check if close enough to switch target
+        if (Vector2Distance(pos, target) < speed * 1.5f) {
+            nPoint = (nPoint + 1) % pointCount; // loop to next point
+        }
+    }
+    
     BoundingBox getBoundingBox() {
         BoundingBox bbox = {
             {INFINITY,z,INFINITY},
