@@ -22,6 +22,7 @@
 
 static Vector2 sensitivity = { 0.005f, 0.005f };
 static int score = 0;
+static Camera camera = { 0 };
 
 static void SetSoundPosition(Camera listener, Sound sound, Vector3 position, float maxDist) {
     // Calculate direction vector and distance between listener and sound source
@@ -130,6 +131,8 @@ public:
         if (isGrounded && !isTouchingCeiling) {
             velocity.y = JUMP_FORCE;
             isGrounded = false;
+            SetSoundPosition(camera, snd_step, position, 20.0f);
+            PlaySound(snd_step);
         }
     }
     // Set movement intention (Only enemies use this as player has their own movement function)
@@ -206,6 +209,7 @@ public:
                     newpos += wall.deltaMovement;
                     grounded = true;
                     groundWall = &wall;
+                    
                     if (wall.surfaceMaterial == SURFACE_BOUNCY) {
                         newvel.y = -newvel.y;
                     }
@@ -226,6 +230,10 @@ public:
         }
         if (!isTouchingCeiling) {
             heightLerp = newHeightLerp;
+        }
+        if (grounded && !isGrounded) { // Body just landed so we play a sound
+            SetSoundPosition(camera, snd_step, position, 20.0f);
+            PlaySound(snd_step);
         }
         
         isGrounded = grounded;

@@ -54,7 +54,6 @@ int main() {
 	player = { 0 };
 
 	// Init player camera
-	Camera camera = { 0 };
 	camera.fovy = 60.0f;
 	camera.projection = CAMERA_PERSPECTIVE;
 	camera.position = player.body.getHeadPos();
