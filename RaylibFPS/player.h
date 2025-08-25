@@ -16,7 +16,7 @@
 #define BOTTOM_HEIGHT    0.5f
 #define HEAD_OFFSET      0.5f // How far down the head is from height
 
-#define INTERACT_DISTANCE 2.0f
+#define INTERACT_DISTANCE 3.0f
 
 #define NORMALIZE_INPUT  0
 
