@@ -101,7 +101,9 @@ struct Wall {
     std::function<void(Wall*)> interactFunction = [](Wall* self){
         
     };
+    std::function<void(Wall*)> tickFunction = [](Wall* self) {
 
+    };
     bool touching = false;
 
     bool interact = false;
@@ -276,6 +278,7 @@ struct Wall {
         }
     }
     void move(Vector2 movement) {
+        deltaMovement = movement;
         for (int i = 0; i < 4; i++) {
             points[i] += movement;
         }
@@ -353,10 +356,11 @@ struct GameMap {
         float delta = GetFrameTime();
         for (auto wallIt = walls.begin(); wallIt != walls.end(); wallIt++) {
             Wall& wall = *wallIt;
-            wall.move(wall.deltaMovement);
+            wall.tickFunction(&wall);
             if (wall.interact) {
                 wall.interactFunction(&wall);
             }
+            //wall.move(wall.deltaMovement);
         }
     }
     Vector3 getRandomSpawnPoint() {
