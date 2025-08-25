@@ -108,7 +108,7 @@ struct Wall {
 
     bool interact = false;
 
-    Vector2 deltaMovement;
+    Vector3 deltaMovement;
 
     float area() const { // unused
         Vector2 a = points[0];
@@ -277,30 +277,32 @@ struct Wall {
             points[i] = Vector2Rotate(points[i] - mid, angle) + mid;
         }
     }
-    void move(Vector2 movement) {
+    void move(Vector3 movement) {
         deltaMovement = movement;
+        z += movement.y;
         for (int i = 0; i < 4; i++) {
-            points[i] += movement;
+            points[i] += {movement.x, movement.z};
         }
     }
 
-    void keyFrameMove(const Vector2* points, int pointCount) {
+    void keyFrameMove(const Vector3* points, int pointCount) {
         static int nPoint = 0;
 
-        Vector2 target = points[nPoint];
-        Vector2 pos = center();
+        Vector3 target = points[nPoint];
+        Vector2 c = center();
+        Vector3 pos = { c.x, z + height / 2.0f, c.y };
 
         // Step size (movement speed per tick)
-        float speed = 0.6f;
+        float speed = 0.1f;
 
         // Direction vector to target
-        Vector2 dir = Vector2Normalize(Vector2Subtract(target, pos));
+        Vector3 dir = Vector3Normalize(Vector3Subtract(target, pos));
 
         // Move towards target
-        move(Vector2Scale(dir, speed));
+        move(Vector3Scale(dir, speed));
 
         // Check if close enough to switch target
-        if (Vector2Distance(pos, target) < speed * 1.5f) {
+        if (Vector3Distance(pos, target) < speed * 1.5f) {
             nPoint = (nPoint + 1) % pointCount; // loop to next point
         }
     }
