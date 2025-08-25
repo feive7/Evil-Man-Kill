@@ -7,6 +7,58 @@
 #include <assets/textures/npc_john.h>
 #include <assets/textures/npc_john_crouch.h>
 #include <assets/textures/npc_john_victory.h>
+#define MAIN_VERTEX_SHADER R"(#version 330
+
+in vec3 vertexPosition;
+in vec2 vertexTexCoord;
+in vec3 vertexNormal;
+in vec4 vertexColor;
+
+uniform mat4 mvp;
+uniform mat4 matModel;
+uniform mat4 matNormal;
+
+out vec3 fragPosition;
+out vec2 fragTexCoord;
+out vec4 fragColor;
+out vec3 fragNormal;
+
+void main() {
+	fragPosition = vec3(matModel * vec4(vertexPosition, 1.0));
+	fragTexCoord = vertexTexCoord;
+	fragColor = vertexColor;
+	fragNormal = normalize(vec3(matNormal * vec4(vertexNormal, 1.0)));
+
+	gl_Position = mvp * vec4(vertexPosition, 1.0);
+})"
+#define MAIN_FRAGMENT_SHADER R"(#version 330
+
+// Input vertex attributes (from vertex shader)
+in vec2 fragTexCoord;
+in vec4 fragColor;
+in vec3 fragPosition;
+in vec3 fragNormal;
+
+// Input uniform values
+uniform sampler2D texture0;
+uniform vec4 colDiffuse;
+uniform vec3 viewPos;
+
+// Output fragment color
+out vec4 finalColor;
+
+// NOTE: Add your custom variables here
+void main() {
+    vec4 texelColor = texture(texture0, fragTexCoord);
+    
+    if(texelColor.a < 0.9) discard;
+
+    float NdotL = dot(viewPos - fragPosition, fragNormal) / length(viewPos - fragPosition) * 2.5;
+    //float NdotL = 1.0;
+
+    finalColor = texelColor * colDiffuse * fragColor;
+    finalColor.rgb *= NdotL;
+})"
 
 // Global assets
 static Texture tex_john;
@@ -62,7 +114,7 @@ void LoadGlob() {
 	tile_6 = LoadTextureFromCode(TILE_6_DATA, TILE_6_WIDTH, TILE_6_HEIGHT);
 
 	// Shaders
-	shader_main = LoadShader("assets/shaders/main.vs", "assets/shaders/main.fs");
+	shader_main = LoadShaderFromMemory(MAIN_VERTEX_SHADER, MAIN_FRAGMENT_SHADER);
 	shader_main_viewpos_loc = GetShaderLocation(shader_main, "viewPos");
 	shader_debug_normals = LoadShader("assets/shaders/normal.vs", "assets/shaders/normal.fs");
 
