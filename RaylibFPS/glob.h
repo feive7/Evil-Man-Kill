@@ -18,6 +18,7 @@ static Texture FABRIC;
 
 static Shader shader_main;
 static int shader_main_viewpos_loc;
+static int shader_main_viewtarget_loc;
 static Shader shader_debug_normals;
 
 static Sound snd_gunshot;

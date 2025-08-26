@@ -41,6 +41,8 @@ int main() {
 	const int screenWidth = 800;
 	const int screenHeight = 450;
 	
+	SetConfigFlags(FLAG_MSAA_4X_HINT);
+
 	InitWindow(screenWidth, screenHeight, "FPS");
 
 	InitAudioDevice();
@@ -114,13 +116,13 @@ int main() {
 		BeginMode3D(camera);
 
 		SetShaderValue(shader_main, shader_main_viewpos_loc, &camera.position, RL_SHADER_UNIFORM_VEC3);
+		SetShaderValue(shader_main, shader_main_viewtarget_loc, &camera.target, RL_SHADER_UNIFORM_VEC3);
 		BeginShaderMode(shader_main);
 
 		testmap.draw();
 		DrawEntities(camera);
 
 		EndShaderMode();
-
 		DrawCircle3D(player.body.position, player.body.radius, { 1.0f, 0.0f, 0.0f }, 90.0f, GRAY); // Draw player as a circle on the ground
 		EndMode3D();
 
