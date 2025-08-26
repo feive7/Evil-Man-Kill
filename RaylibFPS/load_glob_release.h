@@ -7,6 +7,11 @@
 #include <assets/textures/npc_john.h>
 #include <assets/textures/npc_john_crouch.h>
 #include <assets/textures/npc_john_victory.h>
+#include <assets/textures/noise_1.h>
+#include <assets/textures/brick.h>
+#include <assets/textures/metal.h>
+#include <assets/textures/marble.h>
+#include <assets/textures/plaster.h>
 #include <assets/audio/bitgunshot.h>
 #include <assets/audio/hit01.h>
 #include <assets/audio/step.h>
@@ -46,21 +51,27 @@ in vec3 fragNormal;
 uniform sampler2D texture0;
 uniform vec4 colDiffuse;
 uniform vec3 viewPos;
+uniform vec3 viewTarget;
 
 // Output fragment color
 out vec4 finalColor;
-
+float fakelight(vec3 normal, vec3 direction) {
+    float matcap = -dot(normal,direction);
+    return matcap * 0.5 + 0.453;
+}
 // NOTE: Add your custom variables here
 void main() {
     vec4 texelColor = texture(texture0, fragTexCoord);
-    
     if(texelColor.a < 0.9) discard;
 
-    float NdotL = dot(viewPos - fragPosition, fragNormal) / length(viewPos - fragPosition) * 2.5;
-    //float NdotL = 1.0;
+    // Direction from fragment to camera
+    vec3 toView = normalize(viewTarget - viewPos);
+
+    // Dot only based on angle (no distance factor)
+    float light = fakelight(fragNormal, toView);
 
     finalColor = texelColor * colDiffuse * fragColor;
-    finalColor.rgb *= NdotL;
+    finalColor.rgb *= light;
 })"
 void ConvertImageToCode(const char* filename) {
 	Image img = LoadImage(filename);
@@ -109,11 +120,21 @@ void LoadGlob() {
 	TILE_4 = LoadTextureFromCode(TILE_4_DATA, TILE_4_WIDTH, TILE_4_HEIGHT);
 	TILE_5 = LoadTextureFromCode(TILE_5_DATA, TILE_5_WIDTH, TILE_5_HEIGHT);
 	TILE_6 = LoadTextureFromCode(TILE_6_DATA, TILE_6_WIDTH, TILE_6_HEIGHT);
+	NOISE_1 = LoadTextureFromCode(NOISE_1_DATA, NOISE_1_WIDTH, NOISE_1_HEIGHT);
+	BRICK = LoadTextureFromCode(BRICK_DATA, BRICK_WIDTH, BRICK_HEIGHT);
+	METAL = LoadTextureFromCode(METAL_DATA, METAL_WIDTH, METAL_HEIGHT);
+	MARBLE = LoadTextureFromCode(MARBLE_DATA, MARBLE_WIDTH, MARBLE_HEIGHT);
+	PLASTER = LoadTextureFromCode(PLASTER_DATA, PLASTER_WIDTH, PLASTER_HEIGHT);
+
+	GenTextureMipmaps(&BRICK);
+	GenTextureMipmaps(&METAL);
+	SetTextureFilter(BRICK, RL_TEXTURE_FILTER_TRILINEAR);
+	SetTextureFilter(METAL, RL_TEXTURE_FILTER_TRILINEAR);
 
 	// Shaders
 	shader_main = LoadShaderFromMemory(MAIN_VERTEX_SHADER, MAIN_FRAGMENT_SHADER);
 	shader_main_viewpos_loc = GetShaderLocation(shader_main, "viewPos");
-	shader_debug_normals = LoadShader("assets/shaders/normal.vs", "assets/shaders/normal.fs");
+	shader_main_viewtarget_loc = GetShaderLocation(shader_main, "viewTarget");
 
 	// Sounds
 	snd_gunshot = LoadSoundFromCode(BITGUNSHOT_DATA, BITGUNSHOT_FRAME_COUNT, BITGUNSHOT_SAMPLE_RATE, BITGUNSHOT_SAMPLE_SIZE, BITGUNSHOT_CHANNELS);

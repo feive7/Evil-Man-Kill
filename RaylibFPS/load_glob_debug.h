@@ -11,7 +11,7 @@ void LoadGlob() {
 	TILE_6 = LoadTexture("assets/textures/tile_6.png");
 	FENCE_1 = LoadTexture("assets/textures/fence_1.png");
 	CARDBOARD = LoadTexture("assets/textures/cardboard.jpg");
-	PLASTER = LoadTexture("assets/textures/plaster_wall.jpg");
+	PLASTER = LoadTexture("assets/textures/plaster.jpg");
 	MARBLE = LoadTexture("assets/textures/marble.jpg");
 	WOOD = LoadTexture("assets/textures/wood_base.jpg");
 	WOODFLOOR = LoadTexture("assets/textures/wood_floor.jpg");
