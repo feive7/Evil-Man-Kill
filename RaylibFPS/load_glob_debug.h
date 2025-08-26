@@ -16,10 +16,20 @@ void LoadGlob() {
 	WOOD = LoadTexture("assets/textures/wood_base.jpg");
 	WOODFLOOR = LoadTexture("assets/textures/wood_floor.jpg");
 	FABRIC = LoadTexture("assets/textures/fabric.jpg");
+	GRASS = LoadTexture("assets/textures/grass.jpg");
+	METAL = LoadTexture("assets/textures/metal.jpg");
+	BRICK = LoadTexture("assets/textures/brick.png");
+	NOISE_1 = LoadTexture("assets/textures/noise_1.png");
+
+	GenTextureMipmaps(&BRICK);
+	GenTextureMipmaps(&METAL);
+	SetTextureFilter(BRICK, RL_TEXTURE_FILTER_TRILINEAR);
+	SetTextureFilter(METAL, RL_TEXTURE_FILTER_TRILINEAR);
 
 	// Shaders
 	shader_main = LoadShader("assets/shaders/main.vs", "assets/shaders/main.fs");
 	shader_main_viewpos_loc = GetShaderLocation(shader_main, "viewPos");
+	shader_main_viewtarget_loc = GetShaderLocation(shader_main, "viewTarget");
 	shader_debug_normals = LoadShader("assets/shaders/normal.vs", "assets/shaders/normal.fs");
 
 	// Sounds

@@ -15,6 +15,10 @@ static Texture MARBLE;
 static Texture WOOD;
 static Texture WOODFLOOR;
 static Texture FABRIC;
+static Texture GRASS;
+static Texture METAL;
+static Texture BRICK;
+static Texture NOISE_1;
 
 static Shader shader_main;
 static int shader_main_viewpos_loc;
@@ -53,6 +57,10 @@ void UnloadGlob() {
 	UnloadTexture(WOOD);
 	UnloadTexture(WOODFLOOR);
 	UnloadTexture(FABRIC);
+	UnloadTexture(GRASS);
+	UnloadTexture(METAL);
+	UnloadTexture(BRICK);
+	UnloadTexture(NOISE_1);
 
 	// Shaders
 	UnloadShader(shader_main);
