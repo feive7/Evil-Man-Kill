@@ -11,6 +11,12 @@
 #include <customdebug.h>
 
 //#define ENABLE_JOHNS
+// Debug toggle
+#ifdef _DEBUG
+bool debugEnabled = true;
+#else
+bool debugEnabled = false;
+#endif
 
 void AddDebugLine(const char* text, bool reset = false) {
 	static int y = 5;
@@ -77,9 +83,6 @@ int main() {
 	
 	// Load assets
 	LoadGlob();
-
-	// Debug toggle
-	bool debugEnabled = false;
 
 	// Music toggle
 	bool musicToggle = true;
