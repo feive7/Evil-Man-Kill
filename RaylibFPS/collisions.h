@@ -284,7 +284,6 @@ struct Wall {
             points[i] += {movement.x, movement.z};
         }
     }
-
     void keyFrameMove(const Vector3* points, int pointCount) {
         static int nPoint = 0;
 
@@ -306,7 +305,41 @@ struct Wall {
             nPoint = (nPoint + 1) % pointCount; // loop to next point
         }
     }
-    
+
+    bool f_wait() {
+        static float time = 0.0f;
+        if (time < 1000.0f) {
+            time += GetFrameTime();
+            return true;
+        }
+        else {
+            time = 0.0f;
+            return false;
+        }
+    }
+    bool f_open() {
+        static const float zInit = z;
+        if (z < zInit + height) {
+            move({ 0.0f,0.1f,0.0f });
+            return false;
+        }
+        else {
+            z = zInit + height;
+            return true;
+        }
+    }
+    bool f_close() {
+        static const float zInit = z;
+        if (z > zInit - height) {
+            move({ 0.0f,-0.1f,0.0f });
+            return false;
+        }
+        else {
+            z = zInit - height;
+            return true;
+        }
+    }
+
     BoundingBox getBoundingBox() {
         BoundingBox bbox = {
             {INFINITY,z,INFINITY},
@@ -330,6 +363,24 @@ struct Wall {
         return randomPoint;
     }
 };
+inline void f_door(Wall& wall) {
+    static char sequence = 0;
+    static int tick = 0;
+    if (sequence == 0) {
+        if (wall.f_open()) sequence++;
+    }
+    else if (sequence == 1) {
+        tick++;
+        if (tick > 100) sequence++;
+    }
+    else if (sequence == 2) {
+        if (wall.f_close()) {
+            sequence = 0;
+            tick = 0;
+            wall.interact = false;
+        }
+    }
+}
 struct GameMap {
     std::vector<Wall> walls;
     void draw() {
