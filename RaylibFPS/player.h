@@ -72,6 +72,12 @@ public:
             alive = false;
         }
     }
+    BoundingBox getBoundingBox() {
+        return {
+            Vector3Subtract(position,{radius,radius,radius}),
+            Vector3Add(position,{radius,radius,radius}),
+        };
+    }
     void draw() {
         DrawSphere(position, radius, BLACK);
     }
@@ -120,7 +126,7 @@ public:
     }
     // Get real crouch state (for speed purposes)
     bool getCrouchState() {
-        return getHeight() < STAND_HEIGHT;
+        return getHeight() < standingHeight;
     }
     // Get Head position (factors in head offset)
     Vector3 getHeadPos() {
@@ -164,7 +170,7 @@ public:
         float delta = GetFrameTime();
         Vector3 newpos = position + Vector3Scale(velocity, delta);
         Vector3 newvel = velocity;
-        float newHeightLerp = Lerp(heightLerp, (crouching ? CROUCH_HEIGHT : STAND_HEIGHT), 20.0f * delta);
+        float newHeightLerp = Lerp(heightLerp, (crouching ? CROUCH_HEIGHT : standingHeight), 20.0f * delta);
         float newHeight = Lerp(crouchingHeight, standingHeight, newHeightLerp);
         float height = getHeight();
 
@@ -425,6 +431,7 @@ public:
     RayCollision upRayCollision = { 0 };
 
     float walkTimer = 0.0f;
+    float standHeight = STAND_HEIGHT;
 
     // Get ray from head down
     Ray getDownRay() {
@@ -466,7 +473,7 @@ public:
             else {
                 body.crouching = false;
             }
-            //checkForTarget();
+            checkForTarget();
         }
         else {
             body.velocity.x = 0.0f;
@@ -539,9 +546,27 @@ static void UpdateCameraAngle(Camera* camera, Player player) {
 
 // Update game level
 static void UpdateLevel(void) {
+    BoundingBox p = player.body.getBoundingBox();
+    for (auto itA = enemies.begin(); itA != enemies.end(); itA++) {
+        Enemy& enemyA = *itA;
+        BoundingBox a = enemyA.body.getBoundingBox();
+        for (Projectile& projectile : projectiles) {
+            BoundingBox b = projectile.getBoundingBox();
+            if (CheckCollisionBoxes(a, b)) {
+                enemyA.body.alive = false;
+                projectile.alive = false;
+                PlaySound(snd_hit);
+                score++;
+            }
+        }
+        if (CheckCollisionBoxes(a, p)) {
+            player.body.alive = false;
+        }
+    }
     for (Projectile& projectile : projectiles) {
         projectile.update();
     }
+
 
     // Remove dead projectiles in one pass
     projectiles.erase(std::remove_if(projectiles.begin(), projectiles.end(),
@@ -663,7 +688,15 @@ static void DrawEntities(Camera camera) {
         //DrawRay(enemy.getDownRay(), RED);
         //DrawSphere(enemy.downRayCollision.point, 0.5f, RED);
         //enemy.drawBoundingBox();
-        DrawBillboard(camera, (enemy.body.getCrouchState() ? tex_john_crouch : tex_john), enemy.body.position + Vector3{0.0f,STAND_HEIGHT / 2.0f,0.0f}, STAND_HEIGHT, WHITE);
+        if (enemy.reachedTarget) {
+            DrawBillboard(camera, tex_john_victory, enemy.body.position + Vector3{ 0.0f,enemy.body.standingHeight / 2.0f,0.0f }, enemy.body.standingHeight, WHITE);
+        }
+        else if (enemy.body.getCrouchState()) {
+            DrawBillboard(camera, tex_john_crouch, enemy.body.position + Vector3{ 0.0f,enemy.body.standingHeight / 2.0f,0.0f }, enemy.body.standingHeight, WHITE);
+        }
+        else {
+            DrawBillboard(camera, tex_john, enemy.body.position + Vector3{ 0.0f,enemy.body.standingHeight / 2.0f,0.0f }, enemy.body.standingHeight, WHITE);
+        }
     }
 
     /*const Vector3 towerSize = { 16.0f, 32.0f, 16.0f };
