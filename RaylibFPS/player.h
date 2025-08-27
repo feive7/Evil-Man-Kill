@@ -89,6 +89,7 @@ public:
     Vector3 velocity = { 0 };
     Vector3 dir = { 0 };
     float movementSpeed = 20.0f;
+    float friction = FRICTION;
     bool isGrounded = true;
     bool isClimbing = false;
     bool isTouchingWall = false;
@@ -148,7 +149,7 @@ public:
         Vector3 desiredDir = Vector3ClampValue(direction, 0, 1);
         dir = Vector3Lerp(dir, desiredDir, CONTROL * delta);
 
-        float decel = (isGrounded ? FRICTION : AIR_DRAG);
+        float decel = (isGrounded ? friction : AIR_DRAG);
         Vector3 hvel = { velocity.x, 0.0f, velocity.z };
 
         float hvelLength = Vector3Length(hvel); // Magnitude
@@ -220,7 +221,11 @@ public:
                     if (wall.surfaceMaterial == SURFACE_BOUNCY) {
                         newvel.y = -newvel.y;
                     }
+                    else if (wall.surfaceMaterial == SURFACE_ICE) {
+                        friction = 1.0f;
+                    }
                     else {
+                        friction = FRICTION;
                         newvel.y = 0.0f;
                     }
                     touchWall(wall);
@@ -375,7 +380,7 @@ private:
         Vector3 desiredDir = { input.x * right.x + input.y * front.x, 0.0f, input.x * right.z + input.y * front.z, };
         body.dir = Vector3Lerp(body.dir, desiredDir, CONTROL * delta);
 
-        float decel = (body.isGrounded ? FRICTION : AIR_DRAG);
+        float decel = (body.isGrounded ? body.friction : AIR_DRAG);
         Vector3 hvel = { body.velocity.x * decel, 0.0f, body.velocity.z * decel };
 
         float hvelLength = Vector3Length(hvel); // Magnitude

@@ -4,6 +4,7 @@ enum SURFACE_MATERIAL {
     SURFACE_BOUNCY, // Reverses velocity
     SURFACE_LAVA, // Kills body
     SURFACE_LADDER, // Pushes body upwards
+    SURFACE_ICE, // No ground friction
 };
 float DistancePointToLine(Vector2 p, Vector2 a, Vector2 b) {
     // Vector from A to P
