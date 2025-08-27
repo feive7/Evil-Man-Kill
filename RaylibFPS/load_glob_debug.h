@@ -23,8 +23,10 @@ void LoadGlob() {
 
 	GenTextureMipmaps(&BRICK);
 	GenTextureMipmaps(&METAL);
+	GenTextureMipmaps(&TILE_4);
 	SetTextureFilter(BRICK, RL_TEXTURE_FILTER_TRILINEAR);
 	SetTextureFilter(METAL, RL_TEXTURE_FILTER_TRILINEAR);
+	SetTextureFilter(TILE_4, RL_TEXTURE_FILTER_TRILINEAR);
 
 	// Shaders
 	shader_main = LoadShader("assets/shaders/main.vs", "assets/shaders/main.fs");
