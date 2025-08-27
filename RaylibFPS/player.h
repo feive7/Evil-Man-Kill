@@ -207,6 +207,7 @@ public:
                     touchWall(wall);
                     wallTouching = &wall;
                     isTouchingWall = true;
+                    wall.touching = true;
                 }
             }
             if (CheckCollisionCircleQuad({ newpos.x,newpos.z }, radius, wall.points[0], wall.points[1], wall.points[2], wall.points[3])) { // Checking vertical collisions
@@ -223,6 +224,7 @@ public:
                         newvel.y = 0.0f;
                     }
                     touchWall(wall);
+                    wall.touching = true;
                 }
                 else if (newpos.y + newHeight > wall.z && newpos.y + newHeight < wall.z + 1.0f) { // Hit bottom of wall
                     newvel.y = 0.0f;
@@ -231,6 +233,7 @@ public:
                     }
                     isTouchingCeiling = true;
                     touchWall(wall);
+                    wall.touching = true;
                 }
             }
         }
