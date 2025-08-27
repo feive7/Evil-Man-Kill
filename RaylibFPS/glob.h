@@ -13,7 +13,7 @@ static Texture CARDBOARD;
 static Texture PLASTER;
 static Texture MARBLE;
 static Texture WOOD;
-static Texture WOODFLOOR;
+static Texture WOOD_FLOOR;
 static Texture FABRIC;
 static Texture GRASS;
 static Texture METAL;
@@ -55,7 +55,7 @@ void UnloadGlob() {
 	UnloadTexture(PLASTER);
 	UnloadTexture(MARBLE);
 	UnloadTexture(WOOD);
-	UnloadTexture(WOODFLOOR);
+	UnloadTexture(WOOD_FLOOR);
 	UnloadTexture(FABRIC);
 	UnloadTexture(GRASS);
 	UnloadTexture(METAL);
