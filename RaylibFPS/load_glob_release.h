@@ -12,6 +12,11 @@
 #include <assets/textures/metal.h>
 #include <assets/textures/marble.h>
 #include <assets/textures/plaster.h>
+#include <assets/textures/cardboard.h>
+#include <assets/textures/wood.h>
+#include <assets/textures/wood_floor.h>
+#include <assets/textures/fabric.h>
+#include <assets/textures/grass.h>
 #include <assets/audio/bitgunshot.h>
 #include <assets/audio/hit01.h>
 #include <assets/audio/step.h>
@@ -125,6 +130,11 @@ void LoadGlob() {
 	METAL = LoadTextureFromCode(METAL_DATA, METAL_WIDTH, METAL_HEIGHT);
 	MARBLE = LoadTextureFromCode(MARBLE_DATA, MARBLE_WIDTH, MARBLE_HEIGHT);
 	PLASTER = LoadTextureFromCode(PLASTER_DATA, PLASTER_WIDTH, PLASTER_HEIGHT);
+	CARDBOARD = LoadTextureFromCode(CARDBOARD_DATA, CARDBOARD_WIDTH, CARDBOARD_HEIGHT);
+	WOOD = LoadTextureFromCode(WOOD_DATA, WOOD_WIDTH, WOOD_HEIGHT);
+	WOOD_FLOOR = LoadTextureFromCode(WOOD_FLOOR_DATA, WOOD_FLOOR_WIDTH, WOOD_FLOOR_HEIGHT);
+	FABRIC = LoadTextureFromCode(FABRIC_DATA, FABRIC_WIDTH, FABRIC_HEIGHT);
+	GRASS = LoadTextureFromCode(GRASS_DATA, GRASS_WIDTH, GRASS_HEIGHT);
 
 	GenTextureMipmaps(&BRICK);
 	GenTextureMipmaps(&METAL);
