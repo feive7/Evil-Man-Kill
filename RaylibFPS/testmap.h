@@ -514,27 +514,21 @@ static GameMap testmap = {
 		},
 
 		{ // Cube.115
-			.points = {{28.09f,40.15f},{27.81f,39.86f},{32.4f,35.27f},{32.69f,35.55f}},
-			.z = -0.1f,
-			.height = 6.48f,
-			.texture = &NOISE_1,
-			.tint = {45,3,0,255},
+			.points = {{146.25f,121.77f},{144.25f,121.77f},{144.25f,119.77f},{146.25f,119.77f}},
+			.z = -2.0f,
+			.height = 2.0f,
+			.tint = {255,255,255,255},
 			.surfaceMaterial = SURFACE_REGULAR,
-			.interactFunction = [](Wall* self) {
-
-			}
 		},
 
 		{ // Cube.116
-			.points = {{35.51f,32.72f},{35.23f,32.44f},{39.83f,27.84f},{40.11f,28.12f}},
-			.z = -0.1f,
-			.height = 6.48f,
+			.points = {{264.0f,215.77f},{244.0f,215.77f},{244.0f,25.77f},{264.0f,25.77f}},
+			.z = -1.9f,
+			.height = 2.0f,
 			.texture = &NOISE_1,
-			.tint = {45,3,0,255},
+			.tint = {3,0,255,255},
 			.surfaceMaterial = SURFACE_REGULAR,
-			.interactFunction = [](Wall* self) {
-
-			}
+			.canSpawn = true,
 		},
 
 		{ // Cube.117
@@ -830,24 +824,6 @@ static GameMap testmap = {
 			.z = -2.0f,
 			.height = 2.0f,
 			.texture = &MARBLE,
-			.tint = {255,255,255,255},
-			.surfaceMaterial = SURFACE_REGULAR,
-		},
-
-		{ // Cube.150
-			.points = {{43.8f,216.36f},{23.8f,216.36f},{23.8f,45.0f},{43.8f,25.0f}},
-			.z = 17.1f,
-			.height = 1.0f,
-			.texture = &METAL,
-			.tint = {255,255,255,255},
-			.surfaceMaterial = SURFACE_REGULAR,
-		},
-
-		{ // Cube.150
-			.points = {{43.75f,216.36f},{43.75f,24.36f},{265.75f,24.36f},{265.75f,216.36f}},
-			.z = 17.1f,
-			.height = 1.0f,
-			.texture = &METAL,
 			.tint = {255,255,255,255},
 			.surfaceMaterial = SURFACE_REGULAR,
 		},
@@ -1230,6 +1206,18 @@ static GameMap testmap = {
 			.surfaceMaterial = SURFACE_REGULAR,
 		},
 
+		{ // left door
+			.points = {{35.51f,32.72f},{35.23f,32.44f},{39.83f,27.84f},{40.11f,28.12f}},
+			.z = -0.1f,
+			.height = 6.48f,
+			.texture = &NOISE_1,
+			.tint = {45,3,0,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+			.interactFunction = [](Wall* self) {
+
+			}
+		},
+
 		{ // Pylons
 			.points = {{20.75f,20.46f},{20.46f,20.75f},{20.18f,20.46f},{20.46f,20.18f}},
 			.z = 0.0f,
@@ -1327,6 +1315,18 @@ static GameMap testmap = {
 			.texture = &NOISE_1,
 			.tint = {255,0,0,255},
 			.surfaceMaterial = SURFACE_REGULAR,
+		},
+
+		{ // right door
+			.points = {{28.09f,40.15f},{27.81f,39.86f},{32.4f,35.27f},{32.69f,35.55f}},
+			.z = -0.1f,
+			.height = 6.48f,
+			.texture = &NOISE_1,
+			.tint = {45,3,0,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+			.interactFunction = [](Wall* self) {
+
+			}
 		},
 
 	},
