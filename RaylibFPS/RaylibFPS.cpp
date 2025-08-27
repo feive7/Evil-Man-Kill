@@ -132,7 +132,8 @@ int main() {
 		DrawCircle(screenWidth / 2, screenHeight / 2, 3.0f, GRAY);
 
 		if (debugEnabled) {
-			AddDebugLine("Player Position: %f, %f, %f", player.body.position, true);
+			AddDebugLine("FPS: %i", GetFPS(), true);
+			AddDebugLine("Player Position: %f, %f, %f", player.body.position);
 			AddDebugLine("Player Velocity: %f, %f, %f", player.body.velocity);
 			AddDebugLine("Player Speed: %.2f", Vector3Length(player.body.velocity));
 			AddDebugLine("Player Look Rotation: %.2f, %.2f", player.body.lookRotation);
