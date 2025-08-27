@@ -195,8 +195,8 @@ public:
                     }
                     else if (wall.surfaceMaterial == SURFACE_LADDER) {
                         Vector2 velocityClip = ClipVelocityAgainstNormal({ newvel.x,newvel.z }, normal, true);
-                        newvel.x = velocityClip.x;
-                        newvel.z = velocityClip.y;
+                        newvel.x = 0;
+                        newvel.z = 0;
                         newvel.y = 4.0f;
                     }
                     else {
