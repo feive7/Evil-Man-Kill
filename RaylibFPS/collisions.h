@@ -447,6 +447,7 @@ struct GameMap {
                 options.push_back({point.x,wall.z+wall.height,point.y});
             }
         }
+        if (options.size() == 0) options.push_back({ 0,0,0 });
         int idx = GetRandomValue(0, options.size()-1);
         return options[idx] + Vector3{ GetRandomValue(-100,100) / 100.0f,0.0f,GetRandomValue(-100,100) / 100.0f };
     }
