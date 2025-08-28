@@ -440,11 +440,14 @@ struct GameMap {
         }
     }
     Vector3 getRandomSpawnPoint() {
+        std::vector<Vector3> options;
         for (Wall& wall : walls) {
             if (wall.canSpawn) {
-                return wall.getRandomPoint();
+                Vector2 point = wall.center();
+                options.push_back({point.x,wall.z+wall.height,point.y});
             }
         }
-        return { 0,0,0 };
+        int idx = GetRandomValue(0, options.size()-1);
+        return options[idx] + Vector3{ GetRandomValue(-100,100) / 100.0f,0.0f,GetRandomValue(-100,100) / 100.0f };
     }
 };

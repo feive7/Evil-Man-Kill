@@ -441,6 +441,11 @@ public:
     float walkTimer = 0.0f;
     float standHeight = STAND_HEIGHT;
 
+    Node* currentNode = nullptr;
+    Node* targetNode = nullptr;
+    std::vector<Node*> path;
+    int currentPath = 0;
+
     // Get ray from head down
     Ray getDownRay() {
         return { body.getHeadPos(), {0.0f,-1.0f,0.0f} };
@@ -455,41 +460,79 @@ public:
             reachedTarget = true;
         }
     }
-    // Enemy AI and movement handler
-    void update() {
-        if (!reachedTarget) {
-            bool overGround = downRayCollision.hit && downRayCollision.distance < 10; // Is above a ground
-            bool inAir = !body.isGrounded; // Is in air
-            if (overGround && inAir) { // above ground
-                // stop moving to land on ground
-                stopMove();
+    // Old AI mover
+    void stupidPathFind() {
+        bool overGround = downRayCollision.hit && downRayCollision.distance < 10; // Is above a ground
+        bool inAir = !body.isGrounded; // Is in air
+        if (overGround && inAir) { // above ground
+            // stop moving to land on ground
+            stopMove();
+        }
+        if (overGround && !inAir) { // on ground
+            moveToTarget();
+        }
+        if (!overGround && !inAir && body.position.y <= target->y) {
+            body.jump();
+        }
+        if (body.isTouchingWall && body.wallTouching != nullptr) {
+            if (body.position.y < body.wallTouching->z) {
+                body.crouching = true;
             }
-            if (overGround && !inAir) { // on ground
-                moveToTarget();
-            }
-            if (!overGround && !inAir && body.position.y <= target->y) {
+            else if (body.wallTouching->z < body.position.y - 1.0f) {
                 body.jump();
             }
-            if (body.isTouchingWall && body.wallTouching != nullptr) {
-                if (body.position.y < body.wallTouching->z) {
-                    body.crouching = true;
-                }
-                else if (body.wallTouching->z < body.position.y - 1.0f) {
+        }
+        else {
+            body.crouching = false;
+        }
+    }
+
+    void smartPathFind() {
+        currentNode = FindClosestNode(body.position);
+        targetNode = FindClosestNode(*target);
+        path = bfs(currentNode, targetNode);
+    }
+    // Enemy tick function
+    void update() {
+        if (currentNode == nullptr) {
+            currentNode = FindClosestNode(body.position);
+            targetNode = FindClosestNode(*target);
+            smartPathFind(); // fills path
+        }
+
+        if (!reachedTarget) {
+            if (!path.empty()) {
+                Vector3 targetPosition = path.front()->point;
+
+                body.move(Vector3Normalize(targetPosition - body.position));
+                if (body.isTouchingWall) {
                     body.jump();
+                }
+                if (Vector3Distance(body.position, targetPosition) < 0.5f) {
+                    // reached this node, remove it
+                    smartPathFind();
+                    path.erase(path.begin());
+
+                    if (path.empty()) {
+                        printf("John Stopped (reached goal)\n");
+                        stopMove();
+                        //reachedTarget = true;
+                    }
                 }
             }
             else {
-                body.crouching = false;
+                body.move(Vector3Normalize(*target - body.position));
             }
-            checkForTarget();
         }
         else {
             body.velocity.x = 0.0f;
             body.velocity.z = 0.0f;
         }
+
         body.update();
         downRayCollision = { 0 };
     }
+
     // Draw bounding box wires
     void drawBoundingBox() {
         DrawBoundingBox(body.getBoundingBox(), BLACK);
@@ -568,7 +611,7 @@ static void UpdateLevel(void) {
             }
         }
         if (CheckCollisionBoxes(a, p)) {
-            player.body.alive = false;
+            //player.body.alive = false;
         }
     }
     for (Projectile& projectile : projectiles) {
@@ -596,6 +639,9 @@ static void UpdateLevel(void) {
         }
         enemyA.update();
     }
+
+    
+
     player.target = { 0 };
     Ray playerTargetRay = player.getForwardRay();
     bool wallHit = false;
@@ -696,6 +742,8 @@ static void DrawEntities(Camera camera) {
         //DrawRay(enemy.getDownRay(), RED);
         //DrawSphere(enemy.downRayCollision.point, 0.5f, RED);
         //enemy.drawBoundingBox();
+        //DrawSphere(enemy.currentNode->point, 0.5f, GREEN);
+        //DrawSphere(enemy.targetNode->point, 0.5f, RED);
         if (enemy.reachedTarget) {
             DrawBillboard(camera, tex_john_victory, enemy.body.position + Vector3{ 0.0f,enemy.body.standingHeight / 2.0f,0.0f }, enemy.body.standingHeight, WHITE);
         }

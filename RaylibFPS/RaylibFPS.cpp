@@ -5,12 +5,13 @@
 #include <raymath.h>
 #include <rlgl.h>
 #include <glob.h>
+#include <pathfinding.h>
 #include <collisions.h>
 #include <testmap.h>
 #include <player.h>
 #include <customdebug.h>
 
-//#define ENABLE_JOHNS
+#define ENABLE_JOHNS
 // Debug toggle
 #ifdef _DEBUG
 bool debugEnabled = true;
@@ -43,6 +44,8 @@ void AddDebugLine(const char* text, size_t val, bool reset = false) {
 }
 
 int main() {
+	InitNodes();
+
 	// Init Window
 	const int screenWidth = 1600;
 	const int screenHeight = 900;
