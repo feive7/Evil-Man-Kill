@@ -749,13 +749,13 @@ static void DrawEntities(Camera camera) {
         //DrawSphere(enemy.currentNode->point, 0.5f, GREEN);
         //DrawSphere(enemy.targetNode->point, 0.5f, RED);
         if (enemy.reachedTarget) {
-            DrawBillboard(camera, tex_john_victory, enemy.body.position + Vector3{ 0.0f,enemy.body.standingHeight / 2.0f,0.0f }, enemy.body.standingHeight, WHITE);
+            DrawBillboard(camera, npc_john_victory, enemy.body.position + Vector3{ 0.0f,enemy.body.standingHeight / 2.0f,0.0f }, enemy.body.standingHeight, WHITE);
         }
         else if (enemy.body.getCrouchState()) {
-            DrawBillboard(camera, tex_john_crouch, enemy.body.position + Vector3{ 0.0f,enemy.body.standingHeight / 2.0f,0.0f }, enemy.body.standingHeight, WHITE);
+            DrawBillboard(camera, npc_john_crouch, enemy.body.position + Vector3{ 0.0f,enemy.body.standingHeight / 2.0f,0.0f }, enemy.body.standingHeight, WHITE);
         }
         else {
-            DrawBillboard(camera, tex_john, enemy.body.position + Vector3{ 0.0f,enemy.body.standingHeight / 2.0f,0.0f }, enemy.body.standingHeight, WHITE);
+            DrawBillboard(camera, npc_john, enemy.body.position + Vector3{ 0.0f,enemy.body.standingHeight / 2.0f,0.0f }, enemy.body.standingHeight, WHITE);
         }
     }
 
