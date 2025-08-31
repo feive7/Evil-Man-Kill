@@ -140,12 +140,14 @@
   <ItemGroup>
     <ClInclude Include="collisions.h" />
     <ClInclude Include="customdebug.h" />
+    <ClInclude Include="GameMap.h" />
     <ClInclude Include="glob.h" />
     <ClInclude Include="pathfinding.h" />
     <ClInclude Include="load_glob_debug.h" />
     <ClInclude Include="load_glob_release.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="testmap.h" />
+    <ClInclude Include="thing.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\shaders\main.fs" />
