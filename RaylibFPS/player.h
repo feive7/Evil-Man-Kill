@@ -284,7 +284,7 @@ private:
 class Player {
 public:
     Body body;
-    Item equipped;
+    Item equipped = item_drumstick;
     float headTimer = 0.0f;
     float walkLerp = 0.0f;
     bool noclipping = false;
