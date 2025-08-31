@@ -27,9 +27,12 @@ void LoadGlob() {
 	GenTextureMipmaps(&TEX_BRICK);
 	GenTextureMipmaps(&TEX_METAL);
 	GenTextureMipmaps(&TEX_TILE_4);
+	GenTextureMipmaps(&TEX_ITEM_DRUMSTICK);
 	SetTextureFilter(TEX_BRICK, RL_TEXTURE_FILTER_TRILINEAR);
 	SetTextureFilter(TEX_METAL, RL_TEXTURE_FILTER_TRILINEAR);
 	SetTextureFilter(TEX_TILE_4, RL_TEXTURE_FILTER_TRILINEAR);
+	SetTextureFilter(TEX_ITEM_DRUMSTICK, RL_TEXTURE_FILTER_TRILINEAR);
+	SetTextureWrap(TEX_ITEM_DRUMSTICK, TEXTURE_WRAP_CLAMP);
 
 	// Shaders
 	shader_main = LoadShader("assets/shaders/main.vs", "assets/shaders/main.fs");
