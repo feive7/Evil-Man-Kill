@@ -84,3 +84,5 @@ bool ClosestRayCollision(RayCollision& source, RayCollision compare) {
 	}
 	return false;
 }
+
+static Camera camera = { 0 };

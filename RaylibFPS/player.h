@@ -23,7 +23,7 @@
 
 static Vector2 sensitivity = { 0.005f, 0.005f };
 static int score = 0;
-static Camera camera = { 0 };
+
 
 static void SetSoundPosition(Camera listener, Sound sound, Vector3 position, float maxDist) {
     // Calculate direction vector and distance between listener and sound source
