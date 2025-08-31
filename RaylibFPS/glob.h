@@ -19,6 +19,7 @@ static Texture GRASS;
 static Texture METAL;
 static Texture BRICK;
 static Texture NOISE_1;
+static Texture obj_barrel;
 
 static Shader shader_main;
 static int shader_main_viewpos_loc;
@@ -61,6 +62,7 @@ void UnloadGlob() {
 	UnloadTexture(METAL);
 	UnloadTexture(BRICK);
 	UnloadTexture(NOISE_1);
+	UnloadTexture(obj_barrel);
 
 	// Shaders
 	UnloadShader(shader_main);
