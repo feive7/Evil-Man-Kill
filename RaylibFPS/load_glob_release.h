@@ -116,9 +116,9 @@ Sound LoadSoundFromCode(void* data, unsigned int frameCount, unsigned int sample
 }
 void LoadGlob() {
 	// Textures
-	tex_john = LoadTextureFromCode(NPC_JOHN_DATA, NPC_JOHN_WIDTH, NPC_JOHN_HEIGHT);
-	tex_john_victory = LoadTextureFromCode(NPC_JOHN_VICTORY_DATA, NPC_JOHN_VICTORY_WIDTH, NPC_JOHN_VICTORY_HEIGHT);
-	tex_john_crouch = LoadTextureFromCode(NPC_JOHN_CROUCH_DATA, NPC_JOHN_CROUCH_WIDTH, NPC_JOHN_CROUCH_HEIGHT);
+	npc_john = LoadTextureFromCode(NPC_JOHN_DATA, NPC_JOHN_WIDTH, NPC_JOHN_HEIGHT);
+	npc_john_victory = LoadTextureFromCode(NPC_JOHN_VICTORY_DATA, NPC_JOHN_VICTORY_WIDTH, NPC_JOHN_VICTORY_HEIGHT);
+	npc_john_crouch = LoadTextureFromCode(NPC_JOHN_CROUCH_DATA, NPC_JOHN_CROUCH_WIDTH, NPC_JOHN_CROUCH_HEIGHT);
 	TILE_1 = LoadTextureFromCode(TILE_1_DATA, TILE_1_WIDTH, TILE_1_HEIGHT);
 	TILE_2 = LoadTextureFromCode(TILE_2_DATA, TILE_2_WIDTH, TILE_2_HEIGHT);
 	TILE_3 = LoadTextureFromCode(TILE_3_DATA, TILE_3_WIDTH, TILE_3_HEIGHT);

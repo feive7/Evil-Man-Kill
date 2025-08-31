@@ -1,7 +1,7 @@
 // Global assets
-static Texture tex_john;
-static Texture tex_john_victory;
-static Texture tex_john_crouch;
+static Texture npc_john;
+static Texture npc_john_victory;
+static Texture npc_john_crouch;
 static Texture TILE_1;
 static Texture TILE_2;
 static Texture TILE_3;
@@ -41,9 +41,9 @@ static Music music_lose;
 
 void UnloadGlob() {
 	// Textures
-	UnloadTexture(tex_john);
-	UnloadTexture(tex_john_victory);
-	UnloadTexture(tex_john_crouch);
+	UnloadTexture(npc_john);
+	UnloadTexture(npc_john_victory);
+	UnloadTexture(npc_john_crouch);
 	UnloadTexture(TILE_1);
 	UnloadTexture(TILE_2);
 	UnloadTexture(TILE_3);

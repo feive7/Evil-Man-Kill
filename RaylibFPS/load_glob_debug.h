@@ -1,8 +1,8 @@
 void LoadGlob() {
 	// Textures
-	tex_john = LoadTexture("assets/textures/npc_john.png");
-	tex_john_victory = LoadTexture("assets/textures/npc_john_victory.png");
-	tex_john_crouch = LoadTexture("assets/textures/npc_john_crouch.png");
+	npc_john = LoadTexture("assets/textures/npc_john.png");
+	npc_john_victory = LoadTexture("assets/textures/npc_john_victory.png");
+	npc_john_crouch = LoadTexture("assets/textures/npc_john_crouch.png");
 	TILE_1 = LoadTexture("assets/textures/tile_1.png");
 	TILE_2 = LoadTexture("assets/textures/tile_2.png");
 	TILE_3 = LoadTexture("assets/textures/tile_3.png");
