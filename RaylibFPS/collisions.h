@@ -358,8 +358,8 @@ struct Wall {
     Vector3 getRandomPoint() {
         Vector3 randomPoint = { 0 };
         BoundingBox boundingBox = getBoundingBox();
-        randomPoint.x = GetRandomValue(boundingBox.min.x, boundingBox.max.x);
-        randomPoint.z = GetRandomValue(boundingBox.min.z, boundingBox.max.z);
+        randomPoint.x = (float)GetRandomValue(boundingBox.min.x, boundingBox.max.x);
+        randomPoint.z = (float)GetRandomValue(boundingBox.min.z, boundingBox.max.z);
         randomPoint.y = z + height;
         return randomPoint;
     }

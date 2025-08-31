@@ -42,6 +42,9 @@ void AddDebugLine(const char* text, int val, bool reset = false) {
 void AddDebugLine(const char* text, size_t val, bool reset = false) {
 	AddDebugLine(TextFormat(text, val), reset);
 }
+void AddDebugLine(const char* text, std::string string, bool reset = false) {
+	AddDebugLine(TextFormat(text, string.c_str()), reset);
+}
 
 int main() {
 	InitNodes();
@@ -63,6 +66,7 @@ int main() {
 
 	// Init Player
 	player = { 0 };
+	player.equipped = item_drumstick;
 
 	// Init player camera
 	camera.fovy = 60.0f;
@@ -133,6 +137,7 @@ int main() {
 		EndMode3D();
 
 		DrawCircle(screenWidth / 2, screenHeight / 2, 3.0f, GRAY);
+		player.equipped.drawOnScreen();
 
 		if (debugEnabled) {
 			AddDebugLine("FPS: %i", GetFPS(), true);
@@ -143,6 +148,7 @@ int main() {
 			AddDebugLine(TextFormat("Player Touching Ceiling: %i", player.body.isTouchingCeiling));
 			AddDebugLine(TextFormat("Player OnGround: %i", player.body.isGrounded));
 			AddDebugLine("Player Height: %.2f", player.body.getHeight());
+			AddDebugLine("Player Equipped: %s", player.equipped.name);
 		}
 
 		if (!player.body.alive) {

@@ -1,3 +1,5 @@
+#include <items.h>
+
 // Global assets
 static Texture TEX_NPC_JOHN;
 static Texture TEX_JOHN_VICTORY;
@@ -35,6 +37,12 @@ static Sound snd_land;
 
 static Music music_main;
 static Music music_lose;
+
+// Global objects
+static Item item_drumstick = {
+	.name = "Drumstick",
+	.texture = &TEX_ITEM_DRUMSTICK,
+};
 
 #ifdef _DEBUG
 #include <load_glob_debug.h>
