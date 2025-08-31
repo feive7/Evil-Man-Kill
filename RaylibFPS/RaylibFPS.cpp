@@ -6,12 +6,12 @@
 #include <rlgl.h>
 #include <glob.h>
 #include <pathfinding.h>
-#include <collisions.h>
+#include <GameMap.h>
 #include <testmap.h>
 #include <player.h>
 #include <customdebug.h>
 
-#define ENABLE_JOHNS
+//#define ENABLE_JOHNS
 // Debug toggle
 #ifdef _DEBUG
 bool debugEnabled = true;
