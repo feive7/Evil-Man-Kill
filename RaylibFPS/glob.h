@@ -20,6 +20,7 @@ static Texture METAL;
 static Texture BRICK;
 static Texture NOISE_1;
 static Texture obj_barrel;
+static Texture obj_tree;
 
 static Shader shader_main;
 static int shader_main_viewpos_loc;
@@ -63,6 +64,7 @@ void UnloadGlob() {
 	UnloadTexture(BRICK);
 	UnloadTexture(NOISE_1);
 	UnloadTexture(obj_barrel);
+	UnloadTexture(obj_tree);
 
 	// Shaders
 	UnloadShader(shader_main);

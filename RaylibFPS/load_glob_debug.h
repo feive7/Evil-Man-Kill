@@ -21,6 +21,7 @@ void LoadGlob() {
 	BRICK = LoadTexture("assets/textures/brick.png");
 	NOISE_1 = LoadTexture("assets/textures/noise_1.png");
 	obj_barrel = LoadTexture("assets/textures/obj_barrel.png");
+	obj_tree = LoadTexture("assets/textures/obj_tree.png");
 
 	GenTextureMipmaps(&BRICK);
 	GenTextureMipmaps(&METAL);
