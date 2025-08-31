@@ -21,6 +21,7 @@ static Texture BRICK;
 static Texture NOISE_1;
 static Texture obj_barrel;
 static Texture obj_tree;
+static Texture item_drumstick;
 
 static Shader shader_main;
 static int shader_main_viewpos_loc;
@@ -65,6 +66,7 @@ void UnloadGlob() {
 	UnloadTexture(NOISE_1);
 	UnloadTexture(obj_barrel);
 	UnloadTexture(obj_tree);
+	UnloadTexture(item_drumstick);
 
 	// Shaders
 	UnloadShader(shader_main);
