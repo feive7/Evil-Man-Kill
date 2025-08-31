@@ -15,6 +15,7 @@
 #define STAND_HEIGHT     2.0f
 #define BOTTOM_HEIGHT    0.5f
 #define HEAD_OFFSET      0.5f // How far down the head is from height
+#define STEP_HEIGHT      0.5f // How far the player can tp to the top of a wall
 
 #define INTERACT_DISTANCE 3.0f
 
@@ -190,7 +191,10 @@ public:
                     Vector2 normal = sect.getNormal();
                     newpos.x += normal.x * cDist;
                     newpos.z += normal.y * cDist;
-                    if (wall.surfaceMaterial == SURFACE_BOUNCY) {
+                    if (newpos.y >= wall.z + wall.height - STEP_HEIGHT && isGrounded) {
+                        newpos.y = wall.z + wall.height;
+                    }
+                    else if (wall.surfaceMaterial == SURFACE_BOUNCY) {
                         newvel.x = -newvel.x;
                         newvel.z = -newvel.y;
                     }
