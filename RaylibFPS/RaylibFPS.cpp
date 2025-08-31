@@ -66,7 +66,6 @@ int main() {
 
 	// Init Player
 	player = { 0 };
-	player.equipped = item_drumstick;
 
 	// Init player camera
 	camera.fovy = 60.0f;
