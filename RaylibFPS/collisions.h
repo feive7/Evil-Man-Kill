@@ -364,21 +364,3 @@ struct Wall {
         return randomPoint;
     }
 };
-inline void f_door(Wall& wall) {
-    static char sequence = 0;
-    static int tick = 0;
-    if (sequence == 0) {
-        if (wall.f_open()) sequence++;
-    }
-    else if (sequence == 1) {
-        tick++;
-        if (tick > 100) sequence++;
-    }
-    else if (sequence == 2) {
-        if (wall.f_close()) {
-            sequence = 0;
-            tick = 0;
-            wall.interact = false;
-        }
-    }
-}
