@@ -19,10 +19,16 @@ static GameMap testmap = {
 
 	},
 	{ // Things
-		{ // Empty
+		{ // Empty.001
 			.position = {-0.0f,0.0f,6.0f},
 			.size = 2.0,
-			.texture = &tex_john,
+			.texture = &obj_barrel,
+		},
+
+		{ // Empty.002
+			.position = {1.751f,0.0f,6.0f},
+			.size = 2.0,
+			.texture = &npc_john,
 		},
 
 	},
