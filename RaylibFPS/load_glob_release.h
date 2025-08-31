@@ -1,22 +1,22 @@
-#include <assets/textures/tile_1.h>
-#include <assets/textures/tile_2.h>
-#include <assets/textures/tile_3.h>
-#include <assets/textures/tile_4.h>
-#include <assets/textures/tile_5.h>
-#include <assets/textures/tile_6.h>
+#include <assets/textures/TILE_1.h>
+#include <assets/textures/TILE_2.h>
+#include <assets/textures/TILE_3.h>
+#include <assets/textures/TILE_4.h>
+#include <assets/textures/TILE_5.h>
+#include <assets/textures/TILE_6.h>
 #include <assets/textures/npc_john.h>
 #include <assets/textures/npc_john_crouch.h>
 #include <assets/textures/npc_john_victory.h>
-#include <assets/textures/noise_1.h>
-#include <assets/textures/brick.h>
-#include <assets/textures/metal.h>
-#include <assets/textures/marble.h>
-#include <assets/textures/plaster.h>
-#include <assets/textures/cardboard.h>
-#include <assets/textures/wood.h>
-#include <assets/textures/wood_floor.h>
-#include <assets/textures/fabric.h>
-#include <assets/textures/grass.h>
+#include <assets/textures/NOISE_1.h>
+#include <assets/textures/BRICK.h>
+#include <assets/textures/METAL.h>
+#include <assets/textures/MARBLE.h>
+#include <assets/textures/PLASTER.h>
+#include <assets/textures/CARDBOARD.h>
+#include <assets/textures/WOOD.h>
+#include <assets/textures/WOOD_floor.h>
+#include <assets/textures/FABRIC.h>
+#include <assets/textures/GRASS.h>
 #include <assets/audio/bitgunshot.h>
 #include <assets/audio/hit01.h>
 #include <assets/audio/step.h>
@@ -116,30 +116,30 @@ Sound LoadSoundFromCode(void* data, unsigned int frameCount, unsigned int sample
 }
 void LoadGlob() {
 	// Textures
-	npc_john = LoadTextureFromCode(NPC_JOHN_DATA, NPC_JOHN_WIDTH, NPC_JOHN_HEIGHT);
-	npc_john_victory = LoadTextureFromCode(NPC_JOHN_VICTORY_DATA, NPC_JOHN_VICTORY_WIDTH, NPC_JOHN_VICTORY_HEIGHT);
-	npc_john_crouch = LoadTextureFromCode(NPC_JOHN_CROUCH_DATA, NPC_JOHN_CROUCH_WIDTH, NPC_JOHN_CROUCH_HEIGHT);
-	TILE_1 = LoadTextureFromCode(TILE_1_DATA, TILE_1_WIDTH, TILE_1_HEIGHT);
-	TILE_2 = LoadTextureFromCode(TILE_2_DATA, TILE_2_WIDTH, TILE_2_HEIGHT);
-	TILE_3 = LoadTextureFromCode(TILE_3_DATA, TILE_3_WIDTH, TILE_3_HEIGHT);
-	TILE_4 = LoadTextureFromCode(TILE_4_DATA, TILE_4_WIDTH, TILE_4_HEIGHT);
-	TILE_5 = LoadTextureFromCode(TILE_5_DATA, TILE_5_WIDTH, TILE_5_HEIGHT);
-	TILE_6 = LoadTextureFromCode(TILE_6_DATA, TILE_6_WIDTH, TILE_6_HEIGHT);
-	NOISE_1 = LoadTextureFromCode(NOISE_1_DATA, NOISE_1_WIDTH, NOISE_1_HEIGHT);
-	BRICK = LoadTextureFromCode(BRICK_DATA, BRICK_WIDTH, BRICK_HEIGHT);
-	METAL = LoadTextureFromCode(METAL_DATA, METAL_WIDTH, METAL_HEIGHT);
-	MARBLE = LoadTextureFromCode(MARBLE_DATA, MARBLE_WIDTH, MARBLE_HEIGHT);
-	PLASTER = LoadTextureFromCode(PLASTER_DATA, PLASTER_WIDTH, PLASTER_HEIGHT);
-	CARDBOARD = LoadTextureFromCode(CARDBOARD_DATA, CARDBOARD_WIDTH, CARDBOARD_HEIGHT);
-	WOOD = LoadTextureFromCode(WOOD_DATA, WOOD_WIDTH, WOOD_HEIGHT);
-	WOOD_FLOOR = LoadTextureFromCode(WOOD_FLOOR_DATA, WOOD_FLOOR_WIDTH, WOOD_FLOOR_HEIGHT);
-	FABRIC = LoadTextureFromCode(FABRIC_DATA, FABRIC_WIDTH, FABRIC_HEIGHT);
-	GRASS = LoadTextureFromCode(GRASS_DATA, GRASS_WIDTH, GRASS_HEIGHT);
+	TEX_NPC_JOHN = LoadTextureFromCode(NPC_JOHN_DATA, NPC_JOHN_WIDTH, NPC_JOHN_HEIGHT);
+	TEX_JOHN_VICTORY = LoadTextureFromCode(NPC_JOHN_VICTORY_DATA, NPC_JOHN_VICTORY_WIDTH, NPC_JOHN_VICTORY_HEIGHT);
+	TEX_NPC_JOHN_CROUCH = LoadTextureFromCode(NPC_JOHN_CROUCH_DATA, NPC_JOHN_CROUCH_WIDTH, NPC_JOHN_CROUCH_HEIGHT);
+	TEX_TILE_1 = LoadTextureFromCode(TILE_1_DATA, TILE_1_WIDTH, TILE_1_HEIGHT);
+	TEX_TILE_2 = LoadTextureFromCode(TILE_2_DATA, TILE_2_WIDTH, TILE_2_HEIGHT);
+	TEX_TILE_3 = LoadTextureFromCode(TILE_3_DATA, TILE_3_WIDTH, TILE_3_HEIGHT);
+	TEX_TILE_4 = LoadTextureFromCode(TILE_4_DATA, TILE_4_WIDTH, TILE_4_HEIGHT);
+	TEX_TILE_5 = LoadTextureFromCode(TILE_5_DATA, TILE_5_WIDTH, TILE_5_HEIGHT);
+	TEX_TILE_6 = LoadTextureFromCode(TILE_6_DATA, TILE_6_WIDTH, TILE_6_HEIGHT);
+	TEX_NOISE_1 = LoadTextureFromCode(NOISE_1_DATA, NOISE_1_WIDTH, NOISE_1_HEIGHT);
+	TEX_BRICK = LoadTextureFromCode(BRICK_DATA, BRICK_WIDTH, BRICK_HEIGHT);
+	TEX_METAL = LoadTextureFromCode(METAL_DATA, METAL_WIDTH, METAL_HEIGHT);
+	TEX_MARBLE = LoadTextureFromCode(MARBLE_DATA, MARBLE_WIDTH, MARBLE_HEIGHT);
+	TEX_PLASTER = LoadTextureFromCode(PLASTER_DATA, PLASTER_WIDTH, PLASTER_HEIGHT);
+	TEX_CARDBOARD = LoadTextureFromCode(CARDBOARD_DATA, CARDBOARD_WIDTH, CARDBOARD_HEIGHT);
+	TEX_WOOD = LoadTextureFromCode(WOOD_DATA, WOOD_WIDTH, WOOD_HEIGHT);
+	TEX_WOOD_FLOOR = LoadTextureFromCode(WOOD_FLOOR_DATA, WOOD_FLOOR_WIDTH, WOOD_FLOOR_HEIGHT);
+	TEX_FABRIC = LoadTextureFromCode(FABRIC_DATA, FABRIC_WIDTH, FABRIC_HEIGHT);
+	TEX_GRASS = LoadTextureFromCode(GRASS_DATA, GRASS_WIDTH, GRASS_HEIGHT);
 
-	GenTextureMipmaps(&BRICK);
-	GenTextureMipmaps(&METAL);
-	SetTextureFilter(BRICK, RL_TEXTURE_FILTER_TRILINEAR);
-	SetTextureFilter(METAL, RL_TEXTURE_FILTER_TRILINEAR);
+	GenTextureMipmaps(&TEX_BRICK);
+	GenTextureMipmaps(&TEX_METAL);
+	SetTextureFilter(TEX_BRICK, RL_TEXTURE_FILTER_TRILINEAR);
+	SetTextureFilter(TEX_METAL, RL_TEXTURE_FILTER_TRILINEAR);
 
 	// Shaders
 	shader_main = LoadShaderFromMemory(MAIN_VERTEX_SHADER, MAIN_FRAGMENT_SHADER);

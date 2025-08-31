@@ -94,7 +94,7 @@ struct Wall {
     Vector2 points[4];
     float z;
     float height;
-    Texture* texture = &TILE_4;
+    Texture* texture = &TEX_TILE_4;
     Color tint = BLUE;
     
     int surfaceMaterial = SURFACE_REGULAR;
