@@ -84,7 +84,7 @@ class Wall:
         cpp += FormatText("\t\t\t.z = %f,\n", self.z)
         cpp += FormatText("\t\t\t.height = %f,\n", self.height)
 
-        if self.texture: cpp += FormatText("\t\t\t.texture = &%,\n", self.texture.upper())
+        if self.texture: cpp += FormatText("\t\t\t.texture = &TEX_%,\n", self.texture.upper())
 
         cpp += FormatText("\t\t\t.tint = {%,%,%,%},\n", self.color)
         if self.surfaceMaterial: cpp += FormatText("\t\t\t.surfaceMaterial = SURFACE_%,\n", self.surfaceMaterial.upper())
@@ -97,6 +97,7 @@ class Wall:
             cpp += "\t\t\t},\n"
 
         return cpp + "\t\t},\n"
+
 
 # ---------------- Export Logic ----------------
 def ObjectToStructs(obj):
@@ -112,10 +113,22 @@ def ObjectToStructs(obj):
     print(f"{obj.name} generated {len(walls)} walls")
     return walls
 
-def export_to_file(filepath, map_name, walls):
+def EmptyToStruct(empty):
+    pos = empty.location
+    size = empty.empty_display_size
+    texture = os.path.splitext(empty.data.name)[0]
+    cpp_struct = FormatText("{ // %\n", empty.name)
+    cpp_struct += FormatText("\t\t\t.position = {%f,%f,%f},\n", -pos.x, pos.z, pos.y)
+    cpp_struct += FormatText("\t\t\t.size = %f,\n", size)
+    cpp_struct += FormatText("\t\t\t.texture = &TEX_%,\n", texture.upper())
+    cpp_struct += "\t\t},\n"
+    return cpp_struct
+
+def export_to_file(filepath, map_name, walls, things):
     with open(filepath, "w") as f:
         f.write(f"static GameMap {map_name} = {{\n")
         f.write("\t{ // Walls\n" + ''.join(f"\t\t{s.export()}\n" for s in walls) + "\t},\n")
+        f.write("\t{ // Things\n" + ''.join(f"\t\t{s}\n" for s in things) + "\t},\n")
         f.write("};")
 
 # ---------------- Operator ----------------
@@ -179,12 +192,15 @@ class EXPORT_OT_walls_to_cpp(bpy.types.Operator):
 
     def execute(self, context):
         walls = []
+        things = []
         for obj in bpy.data.objects:
-            if obj and obj.visible_get() and obj.type == 'MESH':
-                walls.extend(ObjectToStructs(obj))
-
-        export_to_file(self.filepath, self.map_name, walls)
-        self.report({'INFO'}, f"Exported {len(walls)} walls to {self.filepath}")
+            if obj and obj.visible_get():
+                if obj.type == 'MESH':
+                    walls.extend(ObjectToStructs(obj))
+                elif obj.type == 'EMPTY':
+                    things.append(EmptyToStruct(obj))
+        export_to_file(self.filepath, self.map_name, walls, things)
+        self.report({'INFO'}, f"Exported {len(walls)} walls and {len(things)} things to {self.filepath}")
         return {"FINISHED"}
 
 # ---------------- Registration ----------------
