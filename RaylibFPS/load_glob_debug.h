@@ -20,17 +20,23 @@ void LoadGlob() {
 	TEX_METAL = LoadTexture("assets/textures/metal.jpg");
 	TEX_BRICK = LoadTexture("assets/textures/brick.png");
 	TEX_NOISE_1 = LoadTexture("assets/textures/noise_1.png");
+	TEX_GRAVEL = LoadTexture("assets/textures/gravel.png");
 	TEX_OBJ_BARREL = LoadTexture("assets/textures/obj_barrel.png");
 	TEX_OBJ_TREE = LoadTexture("assets/textures/obj_tree.png");
+	TEX_OBJ_TREE_1 = LoadTexture("assets/textures/obj_tree_1.png");
 	TEX_ITEM_DRUMSTICK = LoadTexture("assets/textures/item_drumstick.png");
 
 	GenTextureMipmaps(&TEX_BRICK);
 	GenTextureMipmaps(&TEX_METAL);
 	GenTextureMipmaps(&TEX_TILE_4);
+	GenTextureMipmaps(&TEX_GRAVEL);
+	GenTextureMipmaps(&TEX_OBJ_TREE_1);
 	GenTextureMipmaps(&TEX_ITEM_DRUMSTICK);
 	SetTextureFilter(TEX_BRICK, RL_TEXTURE_FILTER_TRILINEAR);
 	SetTextureFilter(TEX_METAL, RL_TEXTURE_FILTER_TRILINEAR);
 	SetTextureFilter(TEX_TILE_4, RL_TEXTURE_FILTER_TRILINEAR);
+	SetTextureFilter(TEX_GRAVEL, RL_TEXTURE_FILTER_TRILINEAR);
+	SetTextureFilter(TEX_OBJ_TREE_1, RL_TEXTURE_FILTER_TRILINEAR);
 	SetTextureFilter(TEX_ITEM_DRUMSTICK, RL_TEXTURE_FILTER_TRILINEAR);
 	SetTextureWrap(TEX_ITEM_DRUMSTICK, TEXTURE_WRAP_CLAMP);
 

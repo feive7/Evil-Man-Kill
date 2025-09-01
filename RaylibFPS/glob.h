@@ -21,8 +21,10 @@ static Texture TEX_GRASS;
 static Texture TEX_METAL;
 static Texture TEX_BRICK;
 static Texture TEX_NOISE_1;
+static Texture TEX_GRAVEL;
 static Texture TEX_OBJ_BARREL;
 static Texture TEX_OBJ_TREE;
+static Texture TEX_OBJ_TREE_1;
 static Texture TEX_ITEM_DRUMSTICK;
 
 static Shader shader_main;
@@ -72,8 +74,10 @@ void UnloadGlob() {
 	UnloadTexture(TEX_METAL);
 	UnloadTexture(TEX_BRICK);
 	UnloadTexture(TEX_NOISE_1);
+	UnloadTexture(TEX_GRAVEL);
 	UnloadTexture(TEX_OBJ_BARREL);
 	UnloadTexture(TEX_OBJ_TREE);
+	UnloadTexture(TEX_OBJ_TREE_1);
 	UnloadTexture(TEX_ITEM_DRUMSTICK);
 
 	// Shaders
