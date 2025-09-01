@@ -255,6 +255,15 @@ static GameMap testmap = {
 			.surfaceMaterial = SURFACE_REGULAR,
 		},
 
+		{ // Cube.028
+			.points = {{-37.32f,4.52f},{-37.32f,4.68f},{-37.48f,4.68f},{-37.48f,4.52f}},
+			.z = 0.0f,
+			.height = 1.0f,
+			.texture = &TEX_NOISE_1,
+			.tint = {0,0,0,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+		},
+
 		{ // Cube.029
 			.points = {{64.35f,34.08f},{64.26f,34.36f},{54.27f,31.12f},{54.36f,30.83f}},
 			.z = 0.0f,
@@ -372,6 +381,87 @@ static GameMap testmap = {
 			.surfaceMaterial = SURFACE_REGULAR,
 		},
 
+		{ // Cube.042
+			.points = {{-42.52f,4.52f},{-42.52f,4.68f},{-42.68f,4.68f},{-42.68f,4.52f}},
+			.z = 0.0f,
+			.height = 1.0f,
+			.texture = &TEX_NOISE_1,
+			.tint = {0,0,0,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+		},
+
+		{ // Cube.043
+			.points = {{-42.52f,-0.68f},{-42.52f,-0.52f},{-42.68f,-0.52f},{-42.68f,-0.68f}},
+			.z = 0.0f,
+			.height = 1.0f,
+			.texture = &TEX_NOISE_1,
+			.tint = {0,0,0,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+		},
+
+		{ // Cube.044
+			.points = {{-37.32f,-0.68f},{-37.32f,-0.52f},{-37.48f,-0.52f},{-37.48f,-0.68f}},
+			.z = 0.0f,
+			.height = 1.0f,
+			.texture = &TEX_NOISE_1,
+			.tint = {0,0,0,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+		},
+
+		{ // Cube.045
+			.points = {{-39.0f,-5.15f},{-39.0f,-4.85f},{-41.0f,-4.85f},{-41.0f,-5.15f}},
+			.z = -0.2f,
+			.height = 20.2f,
+			.texture = &TEX_PLASTER,
+			.tint = {255,255,255,255},
+			.surfaceMaterial = SURFACE_LADDER,
+		},
+
+		{ // Cube.046
+			.points = {{-41.35f,-4.85f},{-41.35f,-4.55f},{-41.65f,-4.55f},{-41.65f,-4.85f}},
+			.z = 0.0f,
+			.height = 20.0f,
+			.texture = &TEX_METAL,
+			.tint = {255,255,255,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+		},
+
+		{ // Cube.047
+			.points = {{-38.35f,-4.85f},{-38.35f,-4.55f},{-38.65f,-4.55f},{-38.65f,-4.85f}},
+			.z = 0.0f,
+			.height = 20.0f,
+			.texture = &TEX_METAL,
+			.tint = {255,255,255,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+		},
+
+		{ // Cube.048
+			.points = {{-39.0f,-4.85f},{-39.0f,-1.25f},{-41.0f,-1.25f},{-41.0f,-4.85f}},
+			.z = 19.7f,
+			.height = 0.3f,
+			.texture = &TEX_PLASTER,
+			.tint = {255,255,255,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+		},
+
+		{ // Cube.049
+			.points = {{-41.0f,-4.85f},{-41.0f,-4.55f},{-41.35f,-4.55f},{-41.35f,-4.85f}},
+			.z = 19.7f,
+			.height = 0.3f,
+			.texture = &TEX_METAL,
+			.tint = {255,255,255,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+		},
+
+		{ // Cube.050
+			.points = {{-38.65f,-4.85f},{-38.65f,-4.55f},{-39.0f,-4.55f},{-39.0f,-4.85f}},
+			.z = 19.7f,
+			.height = 0.3f,
+			.texture = &TEX_METAL,
+			.tint = {255,255,255,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+		},
+
 		{ // door
 			.points = {{56.42f,24.25f},{56.48f,24.26f},{55.39f,27.59f},{55.34f,27.57f}},
 			.z = 0.0f,
@@ -414,7 +504,7 @@ static GameMap testmap = {
 			.points = {{67.25f,24.35f},{64.16f,33.86f},{54.27f,30.64f},{57.36f,21.13f}},
 			.z = -0.1f,
 			.height = 0.2f,
-			.texture = &TEX_WOOD,
+			.texture = &TEX_WOOD_FLOOR,
 			.tint = {255,122,43,255},
 			.surfaceMaterial = SURFACE_REGULAR,
 		},
@@ -851,6 +941,51 @@ static GameMap testmap = {
 			.surfaceMaterial = SURFACE_REGULAR,
 		},
 
+		{ // Plane.001
+			.points = {{-37.0f,-1.0f},{-37.0f,5.0f},{-43.0f,5.0f},{-43.0f,-1.0f}},
+			.z = 1.0f,
+			.height = 0.1f,
+			.texture = &TEX_FABRIC,
+			.tint = {10,10,10,255},
+			.surfaceMaterial = SURFACE_BOUNCY,
+		},
+
+		{ // Plane.001
+			.points = {{-37.9f,-1.5f},{-37.0f,-1.0f},{-43.0f,-1.0f},{-42.1f,-1.5f}},
+			.z = 1.0f,
+			.height = 0.1f,
+			.texture = &TEX_FABRIC,
+			.tint = {10,10,10,255},
+			.surfaceMaterial = SURFACE_BOUNCY,
+		},
+
+		{ // Plane.001
+			.points = {{-36.5f,-0.1f},{-36.5f,4.1f},{-37.0f,5.0f},{-37.0f,-1.0f}},
+			.z = 1.0f,
+			.height = 0.1f,
+			.texture = &TEX_FABRIC,
+			.tint = {10,10,10,255},
+			.surfaceMaterial = SURFACE_BOUNCY,
+		},
+
+		{ // Plane.001
+			.points = {{-37.0f,5.0f},{-37.9f,5.5f},{-42.1f,5.5f},{-43.0f,5.0f}},
+			.z = 1.0f,
+			.height = 0.1f,
+			.texture = &TEX_FABRIC,
+			.tint = {10,10,10,255},
+			.surfaceMaterial = SURFACE_BOUNCY,
+		},
+
+		{ // Plane.001
+			.points = {{-43.0f,-1.0f},{-43.0f,5.0f},{-43.5f,4.1f},{-43.5f,-0.1f}},
+			.z = 1.0f,
+			.height = 0.1f,
+			.texture = &TEX_FABRIC,
+			.tint = {10,10,10,255},
+			.surfaceMaterial = SURFACE_BOUNCY,
+		},
+
 		{ // Plane.002
 			.points = {{-32.22f,-60.52f},{-29.15f,-57.95f},{-36.87f,-48.75f},{-39.93f,-51.33f}},
 			.z = 5.75f,
@@ -875,6 +1010,114 @@ static GameMap testmap = {
 			.height = 0.5f,
 			.texture = &TEX_WOOD,
 			.tint = {105,30,11,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+		},
+
+		{ // Plane.005
+			.points = {{-43.5f,-0.1f},{-43.5f,4.1f},{-43.98f,4.23f},{-43.98f,-0.23f}},
+			.z = 1.0f,
+			.height = 0.1f,
+			.texture = &TEX_NOISE_1,
+			.tint = {0,0,255,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+		},
+
+		{ // Plane.005
+			.points = {{-42.23f,-1.98f},{-42.1f,-1.5f},{-43.0f,-1.0f},{-43.35f,-1.35f}},
+			.z = 1.0f,
+			.height = 0.1f,
+			.texture = &TEX_NOISE_1,
+			.tint = {0,0,255,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+		},
+
+		{ // Plane.005
+			.points = {{-42.1f,5.5f},{-42.23f,5.98f},{-43.35f,5.35f},{-43.0f,5.0f}},
+			.z = 1.0f,
+			.height = 0.1f,
+			.texture = &TEX_NOISE_1,
+			.tint = {0,0,255,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+		},
+
+		{ // Plane.005
+			.points = {{-37.77f,-1.98f},{-37.9f,-1.5f},{-42.1f,-1.5f},{-42.23f,-1.98f}},
+			.z = 1.0f,
+			.height = 0.1f,
+			.texture = &TEX_NOISE_1,
+			.tint = {0,0,255,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+		},
+
+		{ // Plane.005
+			.points = {{-37.0f,5.0f},{-36.65f,5.35f},{-37.77f,5.98f},{-37.9f,5.5f}},
+			.z = 1.0f,
+			.height = 0.1f,
+			.texture = &TEX_NOISE_1,
+			.tint = {0,0,255,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+		},
+
+		{ // Plane.005
+			.points = {{-37.9f,5.5f},{-37.77f,5.98f},{-42.23f,5.98f},{-42.1f,5.5f}},
+			.z = 1.0f,
+			.height = 0.1f,
+			.texture = &TEX_NOISE_1,
+			.tint = {0,0,255,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+		},
+
+		{ // Plane.005
+			.points = {{-36.65f,-1.35f},{-37.0f,-1.0f},{-37.9f,-1.5f},{-37.77f,-1.98f}},
+			.z = 1.0f,
+			.height = 0.1f,
+			.texture = &TEX_NOISE_1,
+			.tint = {0,0,255,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+		},
+
+		{ // Plane.005
+			.points = {{-43.0f,5.0f},{-43.35f,5.35f},{-43.98f,4.23f},{-43.5f,4.1f}},
+			.z = 1.0f,
+			.height = 0.1f,
+			.texture = &TEX_NOISE_1,
+			.tint = {0,0,255,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+		},
+
+		{ // Plane.005
+			.points = {{-36.02f,-0.23f},{-36.02f,4.23f},{-36.5f,4.1f},{-36.5f,-0.1f}},
+			.z = 1.0f,
+			.height = 0.1f,
+			.texture = &TEX_NOISE_1,
+			.tint = {0,0,255,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+		},
+
+		{ // Plane.005
+			.points = {{-43.35f,-1.35f},{-43.0f,-1.0f},{-43.5f,-0.1f},{-43.98f,-0.23f}},
+			.z = 1.0f,
+			.height = 0.1f,
+			.texture = &TEX_NOISE_1,
+			.tint = {0,0,255,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+		},
+
+		{ // Plane.005
+			.points = {{-36.02f,-0.23f},{-36.5f,-0.1f},{-37.0f,-1.0f},{-36.65f,-1.35f}},
+			.z = 1.0f,
+			.height = 0.1f,
+			.texture = &TEX_NOISE_1,
+			.tint = {0,0,255,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+		},
+
+		{ // Plane.005
+			.points = {{-36.5f,4.1f},{-36.02f,4.23f},{-36.65f,5.35f},{-37.0f,5.0f}},
+			.z = 1.0f,
+			.height = 0.1f,
+			.texture = &TEX_NOISE_1,
+			.tint = {0,0,255,255},
 			.surfaceMaterial = SURFACE_REGULAR,
 		},
 
@@ -2662,20 +2905,8 @@ static GameMap testmap = {
 
 	},
 	{ // Things
-		{ // Empty
-			.position = {-16.468f,0.0f,13.73f},
-			.size = 10.0f,
-			.texture = &TEX_OBJ_TREE_1,
-		},
-
 		{ // Empty.001
 			.position = {-28.795f,0.0f,-27.087f},
-			.size = 10.0f,
-			.texture = &TEX_OBJ_TREE_1,
-		},
-
-		{ // Empty.002
-			.position = {-37.141f,0.0f,1.686f},
 			.size = 10.0f,
 			.texture = &TEX_OBJ_TREE_1,
 		},
@@ -2958,24 +3189,6 @@ static GameMap testmap = {
 
 		{ // Empty.055
 			.position = {4.333f,0.0f,13.04f},
-			.size = 10.0f,
-			.texture = &TEX_OBJ_TREE_1,
-		},
-
-		{ // Empty.056
-			.position = {-28.88f,0.0f,17.569f},
-			.size = 10.0f,
-			.texture = &TEX_OBJ_TREE_1,
-		},
-
-		{ // Empty.057
-			.position = {-40.957f,0.0f,-15.341f},
-			.size = 10.0f,
-			.texture = &TEX_OBJ_TREE_1,
-		},
-
-		{ // Empty.058
-			.position = {-47.901f,0.0f,12.437f},
 			.size = 10.0f,
 			.texture = &TEX_OBJ_TREE_1,
 		},
