@@ -291,6 +291,7 @@ public:
     Vector2 lean = { 0 };
     RayCollision target = { 0 };
     Wall* targetWall = nullptr;
+    Vector2 screenLean = { 0.0f,0.0f };
 
     int deathTick = 0;
     // Get ray from player head through player direction vector
@@ -308,6 +309,7 @@ public:
                 }
             }
             updateLookRotation();
+            updateScreenLean();
             if (noclipping) {
                 body.velocity = { 0.0f,0.0f,0.0f };
                 noclip();
@@ -327,7 +329,28 @@ public:
             deathTick++;
         }
     }
+    // Draw 2D stuff on the screen like items
+    void drawScreen() {
+        float SW = (float)GetScreenWidth();
+        float SH = (float)GetScreenHeight();
+        float scale = (float)GetScreenHeight() / equipped.texture->height;
+        DrawTextureEx(*equipped.texture, { SW - equipped.texture->width * scale + screenLean.x, 0.0f + screenLean.y }, 0.0f, scale, WHITE);
+    }
 private:
+    // Update lean for drawing items
+    void updateScreenLean() {
+        Vector2 newLean = { 0 };
+        
+        Vector2 vel2D = { body.velocity.x, body.velocity.z };
+        vel2D = Vector2Rotate(vel2D, body.lookRotation.x);
+
+        newLean.x = -vel2D.x;
+        newLean.y = body.velocity.y;
+        newLean.y = Clamp(newLean.y, -50.0f, 50.0f);
+        newLean.y += 50.0f;
+
+        screenLean = Vector2Lerp(newLean, screenLean, 0.5f);
+    }
     // Update look rotation based on mouse inputs
     void updateLookRotation() {
         // Get mouse inputs
