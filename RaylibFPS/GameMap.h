@@ -11,7 +11,7 @@ struct GameMap {
             wall.draw();
         }
         rlEnd();
-        for (Thing thing : things) {
+        for (const Thing thing : things) {
             DrawBillboard(camera, *thing.texture, thing.position + Vector3{0.0f,thing.size/2.0f,0.0f}, thing.size, WHITE);
         }
 
