@@ -50,8 +50,8 @@ int main() {
 	InitNodes();
 
 	// Init Window
-	const int screenWidth = 1600;
-	const int screenHeight = 900;
+	const int screenWidth = 800;
+	const int screenHeight = 450;
 	
 	SetConfigFlags(FLAG_MSAA_4X_HINT);
 
@@ -120,7 +120,7 @@ int main() {
 
 		BeginDrawing();
 
-		ClearBackground(BLACK);
+		ClearBackground(testmap.skyColor);
 
 		BeginMode3D(camera);
 
@@ -136,7 +136,7 @@ int main() {
 		EndMode3D();
 
 		DrawCircle(screenWidth / 2, screenHeight / 2, 3.0f, GRAY);
-		player.equipped.drawOnScreen();
+		player.drawScreen();
 
 		if (debugEnabled) {
 			AddDebugLine("FPS: %i", GetFPS(), true);

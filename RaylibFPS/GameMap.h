@@ -2,6 +2,7 @@
 #include <thing.h>
 #include <collisions.h>
 struct GameMap {
+    Color skyColor;
     std::vector<Wall> walls;
     std::vector<Thing> things;
     void draw() {
