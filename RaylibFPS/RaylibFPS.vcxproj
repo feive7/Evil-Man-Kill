@@ -143,6 +143,7 @@
     <ClInclude Include="GameMap.h" />
     <ClInclude Include="glob.h" />
     <ClInclude Include="items.h" />
+    <ClInclude Include="node_tree.h" />
     <ClInclude Include="pathfinding.h" />
     <ClInclude Include="load_glob_debug.h" />
     <ClInclude Include="load_glob_release.h" />

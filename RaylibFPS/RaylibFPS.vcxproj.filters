@@ -53,6 +53,9 @@
     <ClInclude Include="items.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="node_tree.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\shaders\main.fs">
