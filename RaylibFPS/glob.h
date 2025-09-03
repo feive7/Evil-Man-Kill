@@ -16,6 +16,7 @@ static Texture TEX_PLASTER;
 static Texture TEX_MARBLE;
 static Texture TEX_WOOD;
 static Texture TEX_WOOD_FLOOR;
+static Texture TEX_STONE;
 static Texture TEX_FABRIC;
 static Texture TEX_GRASS;
 static Texture TEX_METAL;
@@ -69,6 +70,7 @@ void UnloadGlob() {
 	UnloadTexture(TEX_MARBLE);
 	UnloadTexture(TEX_WOOD);
 	UnloadTexture(TEX_WOOD_FLOOR);
+	UnloadTexture(TEX_STONE);
 	UnloadTexture(TEX_FABRIC);
 	UnloadTexture(TEX_GRASS);
 	UnloadTexture(TEX_METAL);

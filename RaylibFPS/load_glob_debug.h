@@ -15,6 +15,7 @@ void LoadGlob() {
 	TEX_MARBLE = LoadTexture("assets/textures/marble.jpg");
 	TEX_WOOD = LoadTexture("assets/textures/wood.jpg");
 	TEX_WOOD_FLOOR = LoadTexture("assets/textures/wood_floor.jpg");
+	TEX_STONE = LoadTexture("assets/textures/stone.jpg");
 	TEX_FABRIC = LoadTexture("assets/textures/fabric.jpg");
 	TEX_GRASS = LoadTexture("assets/textures/grass.jpg");
 	TEX_METAL = LoadTexture("assets/textures/metal.jpg");
