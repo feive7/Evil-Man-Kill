@@ -11,6 +11,8 @@ bl_info = {
 import bpy
 import os
 import mathutils
+from math import atan2
+import re
 
 # ---------------- Settings ----------------
 surface_materials = {"regular", "bouncy", "lava", "mud", "ladder"}
@@ -37,6 +39,28 @@ def getPolyNormal(mesh, poly):
     verts = [mesh.vertices[v].co for v in poly.vertices]
     return mathutils.geometry.normal(verts)
 
+def argsort(seq):
+    #http://stackoverflow.com/questions/3382352/equivalent-of-numpy-argsort-in-basic-python/3382369#3382369
+    #by unutbu
+    #https://stackoverflow.com/questions/3382352/equivalent-of-numpy-argsort-in-basic-python 
+    # from Boris Gorelik
+    return sorted(range(len(seq)), key=seq.__getitem__)
+
+def rotational_sort(list_of_xy_coords, clockwise=True):
+    centre_of_rotation_xy_coord = [0,0]
+    for p in list_of_xy_coords:
+        centre_of_rotation_xy_coord[0] += p[0]
+        centre_of_rotation_xy_coord[1] += p[1]
+    centre_of_rotation_xy_coord[0] /= len(list_of_xy_coords)
+    centre_of_rotation_xy_coord[1] /= len(list_of_xy_coords)
+    cx,cy=centre_of_rotation_xy_coord
+    angles = [atan2(x-cx, y-cy) for x,y,z in list_of_xy_coords]
+    indices = argsort(angles)
+    if clockwise:
+        return [list_of_xy_coords[i] for i in indices]
+    else:
+        return [list_of_xy_coords[i] for i in indices[::-1]]
+    
 # ---------------- Wall Class ----------------
 class Wall:
     def __init__(self):
@@ -48,6 +72,7 @@ class Wall:
         self.color = []
         self.surfaceMaterial = "regular" 
         self.canSpawn = False
+        self.hide = False
         self.tickFunction = ""
         self.attributes = {}
 
@@ -57,7 +82,10 @@ class Wall:
         matrix = obj.matrix_world
 
         verts_world = [matrix @ mesh.vertices[i].co for i in poly.vertices]
-        self.points = [(-round(v.x, 2), round(v.y, 2), round(v.z, 2)) for v in verts_world]
+        unsorted_points = [(-round(v.x, 2), round(v.y, 2), round(v.z, 2)) for v in verts_world]
+        center = obj.location
+        
+        self.points = rotational_sort(unsorted_points,False)
 
         all_z = [matrix @ v.co for v in mesh.vertices]
         z_vals = [v.z for v in all_z]
@@ -69,7 +97,7 @@ class Wall:
 
         self.canSpawn = obj.game_props.can_spawn
         self.surfaceMaterial = obj.game_props.surface_material
-        
+        self.hide = obj.display_type == 'WIRE'
         
         if obj.game_props.script_file: self.tickFunction = bpy.data.texts[obj.game_props.script_file].as_string()
 
@@ -90,6 +118,7 @@ class Wall:
         if self.surfaceMaterial: cpp += FormatText("\t\t\t.surfaceMaterial = SURFACE_%,\n", self.surfaceMaterial.upper())
 
         if self.canSpawn: cpp += "\t\t\t.canSpawn = true,\n"
+        if self.hide: cpp += "\t\t\t.hide = true,\n"
 
         if self.tickFunction: 
             cpp += "\t\t\t.tickFunction = [](Wall* self) {\n"
@@ -116,7 +145,7 @@ def ObjectToStructs(obj):
 def EmptyToStruct(empty):
     pos = empty.location
     size = empty.empty_display_size
-    texture = os.path.splitext(empty.data.name)[0]
+    texture = re.match(r'.+?(?=\.)', empty.data.name)[0]
     cpp_struct = FormatText("{ // %\n", empty.name)
     cpp_struct += FormatText("\t\t\t.position = {%f,%f,%f},\n", -pos.x, pos.z, pos.y)
     cpp_struct += FormatText("\t\t\t.size = %f,\n", size)
@@ -127,6 +156,7 @@ def EmptyToStruct(empty):
 def export_to_file(filepath, map_name, walls, things):
     with open(filepath, "w") as f:
         f.write(f"static GameMap {map_name} = {{\n")
+        f.write("\t{ // Sky Color\n" + FormatText("\t\t%,%,%,255,\n", FormatColor(bpy.context.scene.world.color)) + "\t},\n")
         f.write("\t{ // Walls\n" + ''.join(f"\t\t{s.export()}\n" for s in walls) + "\t},\n")
         f.write("\t{ // Things\n" + ''.join(f"\t\t{s}\n" for s in things) + "\t},\n")
         f.write("};")
