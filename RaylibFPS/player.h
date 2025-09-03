@@ -464,7 +464,7 @@ public:
     bool reachedTarget = false;
 
     RayCollision downRayCollision = { 0 };
-    RayCollision upRayCollision = { 0 };
+    RayCollision targetRayCollision = { 0 };
 
     float walkTimer = 0.0f;
     float standHeight = STAND_HEIGHT;
@@ -479,8 +479,8 @@ public:
         return { body.getHeadPos(), {0.0f,-1.0f,0.0f} };
     }
     // Get ray from head up
-    Ray getUpRay() {
-        return { body.getHeadPos(), body.getForward() + Vector3{0,1.0f,0.0f} };
+    Ray getTargetRay() {
+        return { body.getHeadPos(), *target - body.getHeadPos() };
     }
     // Update reachedTarget state
     void checkForTarget() {
@@ -514,7 +514,7 @@ public:
             body.crouching = false;
         }
     }
-
+    // New AI pathfinding using map nodes
     void smartPathFind() {
         currentNode = FindClosestNode(body.position);
         targetNode = FindClosestNode(*target);
@@ -529,27 +529,15 @@ public:
         }
 
         if (!reachedTarget) {
-            if (!path.empty()) {
-                Vector3 targetPosition = path.front()->point;
-
-                body.move(Vector3Normalize(targetPosition - body.position));
-                if (body.isTouchingWall) {
-                    body.jump();
-                }
-                if (Vector3Distance(body.position, targetPosition) < 0.5f) {
-                    // reached this node, remove it
+            if (path.size() > 1 && Vector3Distance(targetRayCollision.point,*target) > 2.0f) {
+                Vector3 targetPos = path[1]->point;
+                body.move(targetPos - body.position);
+                if (Vector3Distance(targetPos, body.position) < 2.0f) {
                     smartPathFind();
-                    path.erase(path.begin());
-
-                    if (path.empty()) {
-                        printf("John Stopped (reached goal)\n");
-                        stopMove();
-                        //reachedTarget = true;
-                    }
                 }
             }
             else {
-                body.move(Vector3Normalize(*target - body.position));
+                stupidPathFind();
             }
         }
         else {
@@ -559,6 +547,7 @@ public:
 
         body.update();
         downRayCollision = { 0 };
+        targetRayCollision = { 0 };
     }
 
     // Draw bounding box wires
@@ -676,21 +665,21 @@ static void UpdateLevel(void) {
     for (Wall& wall : testmap.walls) {
         for (Enemy& enemy : enemies) {
             Ray downRay = enemy.getDownRay();
-            Ray upRay = enemy.getUpRay();
+            Ray targetRay = enemy.getTargetRay();
 
             Vector3 p1 = { wall.points[0].x,wall.z,wall.points[0].y };
             Vector3 p2 = { wall.points[1].x,wall.z,wall.points[1].y };
             Vector3 p3 = { wall.points[2].x,wall.z,wall.points[2].y };
             Vector3 p4 = { wall.points[3].x,wall.z,wall.points[3].y };
             ClosestRayCollision(enemy.downRayCollision, GetRayCollisionQuad(downRay, p1, p2, p3, p4));
-            ClosestRayCollision(enemy.upRayCollision, GetRayCollisionQuad(upRay, p1, p2, p3, p4));
+            ClosestRayCollision(enemy.targetRayCollision, GetRayCollisionQuad(targetRay, p1, p2, p3, p4));
 
             p1 = { wall.points[0].x,wall.z + wall.height,wall.points[0].y };
             p2 = { wall.points[1].x,wall.z + wall.height,wall.points[1].y };
             p3 = { wall.points[2].x,wall.z + wall.height,wall.points[2].y };
             p4 = { wall.points[3].x,wall.z + wall.height,wall.points[3].y };
             ClosestRayCollision(enemy.downRayCollision, GetRayCollisionQuad(downRay, p1, p2, p3, p4));
-            ClosestRayCollision(enemy.upRayCollision, GetRayCollisionQuad(upRay, p1, p2, p3, p4));
+            ClosestRayCollision(enemy.targetRayCollision, GetRayCollisionQuad(targetRay, p1, p2, p3, p4));
 
             for (int i = 0; i < 4; i++) {
                 p1 = { wall.points[i].x,wall.z,wall.points[i].y };
@@ -698,7 +687,7 @@ static void UpdateLevel(void) {
                 p3 = { wall.points[(i + 1) % 4].x,wall.z + wall.height,wall.points[(i + 1) % 4].y };
                 p4 = { wall.points[i].x,wall.z + wall.height,wall.points[i].y };
                 ClosestRayCollision(enemy.downRayCollision, GetRayCollisionQuad(downRay, p1, p2, p3, p4));
-                ClosestRayCollision(enemy.upRayCollision, GetRayCollisionQuad(upRay, p1, p2, p3, p4));
+                ClosestRayCollision(enemy.targetRayCollision, GetRayCollisionQuad(targetRay, p1, p2, p3, p4));
             }
         }
         Vector3 p1 = { wall.points[0].x,wall.z,wall.points[0].y };

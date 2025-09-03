@@ -11,7 +11,7 @@
 #include <player.h>
 #include <customdebug.h>
 
-//#define ENABLE_JOHNS
+#define ENABLE_JOHNS
 // Debug toggle
 #ifdef _DEBUG
 bool debugEnabled = true;
