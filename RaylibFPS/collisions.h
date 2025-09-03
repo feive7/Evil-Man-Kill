@@ -99,6 +99,7 @@ struct Wall {
     
     int surfaceMaterial = SURFACE_REGULAR;
     bool canSpawn = false;
+    bool hide = false;
     std::function<void(Wall*)> interactFunction = [](Wall* self){
         
     };
@@ -124,6 +125,7 @@ struct Wall {
         return Vector2Scale(sum, 0.25f);
     }
     void draw(bool tintOverride = false, Color newTint = WHITE) {
+        if (hide) return;
         if (tintOverride) {
             rlColor4ub(newTint.r, newTint.g, newTint.b, newTint.a);
         }
