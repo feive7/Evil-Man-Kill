@@ -1,16 +1,24 @@
 #include <items.h>
 
 // Global assets
+
+// NPC Textures
 static Texture TEX_NPC_JOHN;
 static Texture TEX_JOHN_VICTORY;
 static Texture TEX_NPC_JOHN_CROUCH;
+
+// Debug tiles
 static Texture TEX_TILE_1;
 static Texture TEX_TILE_2;
 static Texture TEX_TILE_3;
 static Texture TEX_TILE_4;
 static Texture TEX_TILE_5;
 static Texture TEX_TILE_6;
+
+// Fence Textures
 static Texture TEX_FENCE_1;
+
+// Toon Textures
 static Texture TEX_CARDBOARD;
 static Texture TEX_PLASTER;
 static Texture TEX_MARBLE;
@@ -19,13 +27,19 @@ static Texture TEX_WOOD_FLOOR;
 static Texture TEX_STONE;
 static Texture TEX_FABRIC;
 static Texture TEX_GRASS;
+
+// Realistic Textures
 static Texture TEX_METAL;
 static Texture TEX_BRICK;
 static Texture TEX_NOISE_1;
 static Texture TEX_GRAVEL;
+
+// Object Textures
 static Texture TEX_OBJ_BARREL;
 static Texture TEX_OBJ_TREE;
 static Texture TEX_OBJ_TREE_1;
+
+// Item Textures
 static Texture TEX_ITEM_DRUMSTICK;
 
 static Shader shader_main;
