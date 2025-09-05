@@ -100,9 +100,6 @@ struct Wall {
     int surfaceMaterial = SURFACE_REGULAR;
     bool canSpawn = false;
     bool hide = false;
-    std::function<void(Wall*)> interactFunction = [](Wall* self){
-        
-    };
     std::function<void(Wall*)> tickFunction = [](Wall* self) {
 
     };
