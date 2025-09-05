@@ -1,15 +1,23 @@
 void LoadGlob() {
 	// Textures
+
+	// NPC Textures
 	TEX_NPC_JOHN = LoadTexture("assets/textures/npc_john.png");
 	TEX_JOHN_VICTORY = LoadTexture("assets/textures/npc_john_victory.png");
 	TEX_NPC_JOHN_CROUCH = LoadTexture("assets/textures/npc_john_crouch.png");
+
+	// Debug Tiles
 	TEX_TILE_1 = LoadTexture("assets/textures/tile_1.png");
 	TEX_TILE_2 = LoadTexture("assets/textures/tile_2.png");
 	TEX_TILE_3 = LoadTexture("assets/textures/tile_3.png");
 	TEX_TILE_4 = LoadTexture("assets/textures/tile_4.png");
 	TEX_TILE_5 = LoadTexture("assets/textures/tile_5.png");
 	TEX_TILE_6 = LoadTexture("assets/textures/tile_6.png");
+
+	// Fence Textures
 	TEX_FENCE_1 = LoadTexture("assets/textures/fence_1.png");
+
+	// Toon Textures
 	TEX_CARDBOARD = LoadTexture("assets/textures/cardboard.jpg");
 	TEX_PLASTER = LoadTexture("assets/textures/plaster.jpg");
 	TEX_MARBLE = LoadTexture("assets/textures/marble.jpg");
@@ -17,14 +25,24 @@ void LoadGlob() {
 	TEX_WOOD_FLOOR = LoadTexture("assets/textures/wood_floor.jpg");
 	TEX_STONE = LoadTexture("assets/textures/stone.jpg");
 	TEX_FABRIC = LoadTexture("assets/textures/fabric.jpg");
+
+	// Realistic Textures
 	TEX_GRASS = LoadTexture("assets/textures/grass.jpg");
 	TEX_METAL = LoadTexture("assets/textures/metal.jpg");
 	TEX_BRICK = LoadTexture("assets/textures/brick.png");
 	TEX_NOISE_1 = LoadTexture("assets/textures/noise_1.png");
 	TEX_GRAVEL = LoadTexture("assets/textures/gravel.png");
+
+	// DOOM Textures
+	TEX_DOOM_FLOOR_1 = LoadTexture("assets/textures/doom_floor_1.png");
+	TEX_DOOM_WALL_1 = LoadTexture("assets/textures/doom_wall_1.png");
+	
+	// Object Textures
 	TEX_OBJ_BARREL = LoadTexture("assets/textures/obj_barrel.png");
 	TEX_OBJ_TREE = LoadTexture("assets/textures/obj_tree.png");
 	TEX_OBJ_TREE_1 = LoadTexture("assets/textures/obj_tree_1.png");
+
+	// Item Textures
 	TEX_ITEM_DRUMSTICK = LoadTexture("assets/textures/item_drumstick.png");
 
 	GenTextureMipmaps(&TEX_BRICK);
