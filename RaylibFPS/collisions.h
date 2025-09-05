@@ -103,9 +103,11 @@ struct Wall {
     std::function<void(Wall*)> tickFunction = [](Wall* self) {
 
     };
-    bool touching = false;
 
-    bool interact = false;
+    // Wall flags. These will stay on until set false using tickFunction.
+    bool touching = false; // Is being touched by body
+    bool interact = false; // Did player press E
+    bool shot = false; // Was hit by projectile
 
     Vector3 deltaMovement;
 
