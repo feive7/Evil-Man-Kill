@@ -402,40 +402,46 @@ private:
 
         float delta = GetFrameTime();
 
-        Vector3 front = { sin(body.lookRotation.x), 0.f, cos(body.lookRotation.x) };
-        Vector3 right = { cos(-body.lookRotation.x), 0.f, sin(-body.lookRotation.x) };
+        // Basis vectors from look rotation
+        Vector3 front = { sinf(body.lookRotation.x), 0.f, cosf(body.lookRotation.x) };
+        Vector3 right = { cosf(-body.lookRotation.x), 0.f, sinf(-body.lookRotation.x) };
 
-        Vector3 desiredDir = { input.x * right.x + input.y * front.x, 0.0f, input.x * right.z + input.y * front.z, };
-        body.dir = Vector3Lerp(body.dir, desiredDir, CONTROL * delta);
+        // Desired movement direction
+        Vector3 desiredDir = {
+            input.x * right.x + input.y * front.x,
+            0.0f,
+            input.x * right.z + input.y * front.z
+        };
 
-        float decel = (body.isGrounded ? body.friction : AIR_DRAG);
+        // Smooth direction using time-independent exponential smoothing
+        float dirLerp = 1.0f - expf(-CONTROL * delta);
+        if (dirLerp < 0.0001f) dirLerp = 0.0001f;
+        body.dir = Vector3Lerp(body.dir, desiredDir, dirLerp);
+
+        // Friction / drag as exponential decay
+        float factor = (body.isGrounded ? body.friction : AIR_DRAG);
+        float decel = powf(factor, fmaxf(delta * 60.0f, 0.001f));
         Vector3 hvel = { body.velocity.x * decel, 0.0f, body.velocity.z * decel };
 
-        float hvelLength = Vector3Length(hvel); // Magnitude
-        if (hvelLength < (body.movementSpeed * 0.01f)) hvel = { 0 };
+        // Kill tiny velocities
+        float hvelLength = Vector3Length(hvel);
+        if (hvelLength < (body.movementSpeed * 0.00001f)) hvel = { 0 };
 
-        // This is what creates strafing
+        // Strafing math
         float speed = Vector3DotProduct(hvel, body.dir);
 
-        // Whenever the amount of acceleration to add is clamped by the maximum acceleration constant,
-        // a Player can make the speed faster by bringing the direction closer to horizontal velocity angle
-        // More info here: https://youtu.be/v3zT3Z5apaM?t=165
+        // Accelerate toward max speed
         float maxSpeed = (body.getCrouchState() ? CROUCH_SPEED : body.movementSpeed);
-        float accel = Clamp(maxSpeed - speed, 0.f, MAX_ACCEL * delta);
+        float accelRate = MAX_ACCEL;
+        float accel = Clamp(maxSpeed - speed, 0.f, accelRate * delta);
         hvel.x += body.dir.x * accel;
         hvel.z += body.dir.z * accel;
 
+        // Apply to velocity
         body.velocity.x = hvel.x;
         body.velocity.z = hvel.z;
 
-        // Fancy collision system against the floor
-        //if (body.position.y <= 0.0f) {
-        //    body.position.y = 0.0f;
-        //    body.velocity.y = 0.0f;
-        //    body.isGrounded = true; // Enable jumping
-        //}
-
-
+        // Head bobbing
         if (body.isGrounded && ((forward != 0) || (sideway != 0))) {
             headTimer += delta * 3.0f;
             walkLerp = Lerp(walkLerp, 1.0f, 10.0f * delta);
@@ -444,9 +450,11 @@ private:
             walkLerp = Lerp(walkLerp, 0.0f, 10.0f * delta);
         }
 
+        // Leaning
         lean.x = Lerp(lean.x, sideway * 0.02f, 10.0f * delta);
         lean.y = Lerp(lean.y, forward * 0.015f, 10.0f * delta);
     }
+
     // Wrap player position
     void warp(Vector3 bounds) {
         body.position.x = fmod(body.position.x, bounds.x);
