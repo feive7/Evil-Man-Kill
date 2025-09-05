@@ -52,14 +52,6 @@ struct GameMap {
         }
         return result;
     }
-    void update() {
-        float delta = GetFrameTime();
-        for (auto wallIt = walls.begin(); wallIt != walls.end(); wallIt++) {
-            Wall& wall = *wallIt;
-            wall.tickFunction(&wall);
-            //wall.move(wall.deltaMovement);
-        }
-    }
     Vector3 getRandomSpawnPoint() {
         std::vector<Vector3> options;
         for (Wall& wall : walls) {

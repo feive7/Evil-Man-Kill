@@ -726,6 +726,7 @@ static void UpdateLevel(void) {
                 wallHit = true;
             }
         }
+        wall.tickFunction(&wall);
     }
     if (!wallHit) {
         player.targetWall = nullptr;
