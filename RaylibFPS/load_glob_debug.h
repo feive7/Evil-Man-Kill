@@ -33,10 +33,6 @@ void LoadGlob() {
 	TEX_NOISE_1 = LoadTexture("assets/textures/noise_1.png");
 	TEX_GRAVEL = LoadTexture("assets/textures/gravel.png");
 
-	// DOOM Textures
-	TEX_DOOM_FLOOR_1 = LoadTexture("assets/textures/doom_floor_1.png");
-	TEX_DOOM_WALL_1 = LoadTexture("assets/textures/doom_wall_1.png");
-	
 	// Object Textures
 	TEX_OBJ_BARREL = LoadTexture("assets/textures/obj_barrel.png");
 	TEX_OBJ_TREE = LoadTexture("assets/textures/obj_tree.png");

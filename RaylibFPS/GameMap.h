@@ -57,9 +57,6 @@ struct GameMap {
         for (auto wallIt = walls.begin(); wallIt != walls.end(); wallIt++) {
             Wall& wall = *wallIt;
             wall.tickFunction(&wall);
-            if (wall.interact) {
-                wall.interactFunction(&wall);
-            }
             //wall.move(wall.deltaMovement);
         }
     }
