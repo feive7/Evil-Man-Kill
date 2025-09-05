@@ -108,7 +108,6 @@ int main() {
 			UpdateMusicStream(music_lose);
 		}
 
-		testmap.update();
 		player.update();
 
 		if (IsKeyPressed(KEY_F3)) debugEnabled = !debugEnabled;
