@@ -35,9 +35,12 @@ def FormatText(string, *replacements):
             string = string.replace("%", repl, 1)
     return string
 
-def getPolyNormal(mesh, poly):
-    verts = [mesh.vertices[v].co for v in poly.vertices]
-    return mathutils.geometry.normal(verts)
+def getPolyNormal(obj, poly):
+    mesh = obj.data
+    mat = obj.matrix_world
+    normal = poly.normal
+    fixed = (mat.inverted_safe().transposed().to_3x3() @ normal).normalized()
+    return fixed
 
 def argsort(seq):
     #http://stackoverflow.com/questions/3382352/equivalent-of-numpy-argsort-in-basic-python/3382369#3382369
@@ -134,7 +137,7 @@ def ObjectToStructs(obj):
     walls = []
 
     for poly in mesh.polygons:
-        if round(getPolyNormal(mesh, poly).z) == -1 and len(poly.vertices) == 4:
+        if round(getPolyNormal(obj, poly).z) == -1 and len(poly.vertices) == 4:
             wall = Wall()
             wall.fromPoly(obj, poly)
             walls.append(wall)
