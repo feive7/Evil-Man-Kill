@@ -2,7 +2,7 @@ void LoadGlob() {
 	// Textures
 
 	// NPC Textures
-	TEX_NPC_JOHN = LoadTexture("assets/textures/npc_john.png");
+	TEX_NPC_JOHN = LoadTexture("assets/textures/npc_perfect_cell.png");
 	TEX_JOHN_VICTORY = LoadTexture("assets/textures/npc_john_victory.png");
 	TEX_NPC_JOHN_CROUCH = LoadTexture("assets/textures/npc_john_crouch.png");
 
