@@ -230,7 +230,7 @@ class EXPORT_OT_walls_to_cpp(bpy.types.Operator):
             if obj and obj.visible_get():
                 if obj.type == 'MESH':
                     walls.extend(ObjectToStructs(obj))
-                elif obj.type == 'EMPTY':
+                elif obj.type == 'EMPTY' and obj.data:
                     things.append(EmptyToStruct(obj))
         export_to_file(self.filepath, self.map_name, walls, things)
         self.report({'INFO'}, f"Exported {len(walls)} walls and {len(things)} things to {self.filepath}")
