@@ -8,10 +8,13 @@
 #include <pathfinding.h>
 #include <GameMap.h>
 #include <testmap.h>
+#include <projectile.h>
+#include <body.h>
 #include <player.h>
+#include <NPC.h>
 #include <customdebug.h>
 
-//#define ENABLE_JOHNS
+#define ENABLE_JOHNS
 // Debug toggle
 #ifdef _DEBUG
 bool debugEnabled = true;
@@ -19,31 +22,230 @@ bool debugEnabled = true;
 bool debugEnabled = false;
 #endif
 
-void AddDebugLine(const char* text, bool reset = false) {
-	static int y = 5;
-	if (reset) { 
-		y = 5;
-	}
-	DrawText(text, 5, y, 20, GREEN);
-	y += 20;
+// Update camera
+static void UpdateCameraAngle(Camera* camera, Player player) {
+    float delta = GetFrameTime();
+
+    camera->position = player.body.getHeadPos();
+
+    const Vector3 up = { 0.0f, 1.0f, 0.0f };
+    const Vector3 targetOffset = { 0.0f, 0.0f, -1.0f };
+
+    // Left and right
+    Vector3 yaw = Vector3RotateByAxisAngle(targetOffset, up, player.body.lookRotation.x);
+
+    // Up and down
+    Vector3 right = Vector3Normalize(Vector3CrossProduct(yaw, up));
+
+    // Rotate view vector around right axis
+    float pitchAngle = -player.body.lookRotation.y - player.lean.y;
+    pitchAngle = Clamp(pitchAngle, -PI / 2 + 0.0001f, PI / 2 - 0.0001f); // Clamp angle so it doesn't go past straight up or straight down
+    Vector3 pitch = Vector3RotateByAxisAngle(yaw, right, pitchAngle);
+
+    // Update camera based on body state
+    if (player.body.crouching) {
+        camera->fovy = Lerp(camera->fovy, 55.0f, 5.0f * delta);
+    }
+    else {
+        camera->fovy = Lerp(camera->fovy, 60.0f, 5.0f * delta);
+    }
+
+    // Head animation
+    // Rotate up direction around forward axis
+    float headSin = sin(player.headTimer * PI);
+    float headCos = cos(player.headTimer * PI);
+    const float stepRotation = 0.01f;
+    camera->up = Vector3RotateByAxisAngle(up, pitch, headSin * stepRotation + player.lean.x);
+
+    // Camera BOB
+    const float bobSide = 0.1f;
+    const float bobUp = 0.15f;
+    Vector3 bobbing = Vector3Scale(right, headSin * bobSide);
+    bobbing.y = fabsf(headCos * bobUp);
+
+    camera->position = Vector3Add(camera->position, Vector3Scale(bobbing, player.walkLerp));
+    camera->target = Vector3Add(camera->position, pitch);
 }
-void AddDebugLine(const char* text, Vector3 vec3, bool reset = false) {
-	AddDebugLine(TextFormat(text, vec3.x, vec3.y, vec3.z), reset);
+
+// Update game level
+static void UpdateLevel(void) {
+    BoundingBox p = player.body.getBoundingBox();
+    for (auto itA = enemies.begin(); itA != enemies.end(); itA++) {
+        Enemy& enemyA = *itA;
+        BoundingBox a = enemyA.body.getBoundingBox();
+        for (Projectile& projectile : projectiles) {
+            BoundingBox b = projectile.getBoundingBox();
+            if (CheckCollisionBoxes(a, b)) {
+                enemyA.body.alive = false;
+                projectile.alive = false;
+                PlaySound(snd_hit);
+                score++;
+            }
+        }
+        if (CheckCollisionBoxes(a, p)) {
+            //player.body.alive = false;
+        }
+    }
+    for (Projectile& projectile : projectiles) {
+        projectile.update();
+    }
+
+
+    // Remove dead projectiles in one pass
+    projectiles.erase(std::remove_if(projectiles.begin(), projectiles.end(),
+        [](const Projectile& p) { return !p.alive; }),
+        projectiles.end());
+    enemies.erase(std::remove_if(enemies.begin(), enemies.end(),
+        [](const Enemy& p) { return !p.body.alive; }),
+        enemies.end());
+
+    for (auto itA = enemies.begin(); itA != enemies.end(); itA++) {
+        Enemy& enemyA = *itA;
+        for (auto itB = enemies.begin(); itB != enemies.end(); itB++) {
+            if (itA == itB) continue;
+            Enemy& enemyB = *itB;
+            float invdist = 1.0f / Vector3Distance(enemyA.body.position, enemyB.body.position);
+            if (invdist > 1.0f) {
+                enemyA.body.velocity -= Vector3Scale(Vector3Normalize(enemyB.body.position - enemyA.body.position), invdist);
+            }
+        }
+        enemyA.update();
+    }
+
+
+
+    player.target = { 0 };
+    Ray playerTargetRay = player.getForwardRay();
+    bool wallHit = false;
+    for (Wall& wall : testmap.walls) {
+        for (Enemy& enemy : enemies) {
+            Ray downRay = enemy.getDownRay();
+            Ray targetRay = enemy.getTargetRay();
+
+            Vector3 p1 = { wall.points[0].x,wall.z,wall.points[0].y };
+            Vector3 p2 = { wall.points[1].x,wall.z,wall.points[1].y };
+            Vector3 p3 = { wall.points[2].x,wall.z,wall.points[2].y };
+            Vector3 p4 = { wall.points[3].x,wall.z,wall.points[3].y };
+            ClosestRayCollision(enemy.downRayCollision, GetRayCollisionQuad(downRay, p1, p2, p3, p4));
+            ClosestRayCollision(enemy.targetRayCollision, GetRayCollisionQuad(targetRay, p1, p2, p3, p4));
+
+            p1 = { wall.points[0].x,wall.z + wall.height,wall.points[0].y };
+            p2 = { wall.points[1].x,wall.z + wall.height,wall.points[1].y };
+            p3 = { wall.points[2].x,wall.z + wall.height,wall.points[2].y };
+            p4 = { wall.points[3].x,wall.z + wall.height,wall.points[3].y };
+            ClosestRayCollision(enemy.downRayCollision, GetRayCollisionQuad(downRay, p1, p2, p3, p4));
+            ClosestRayCollision(enemy.targetRayCollision, GetRayCollisionQuad(targetRay, p1, p2, p3, p4));
+
+            for (int i = 0; i < 4; i++) {
+                p1 = { wall.points[i].x,wall.z,wall.points[i].y };
+                p2 = { wall.points[(i + 1) % 4].x,wall.z,wall.points[(i + 1) % 4].y };
+                p3 = { wall.points[(i + 1) % 4].x,wall.z + wall.height,wall.points[(i + 1) % 4].y };
+                p4 = { wall.points[i].x,wall.z + wall.height,wall.points[i].y };
+                ClosestRayCollision(enemy.downRayCollision, GetRayCollisionQuad(downRay, p1, p2, p3, p4));
+                ClosestRayCollision(enemy.targetRayCollision, GetRayCollisionQuad(targetRay, p1, p2, p3, p4));
+            }
+        }
+        Vector3 p1 = { wall.points[0].x,wall.z,wall.points[0].y };
+        Vector3 p2 = { wall.points[1].x,wall.z,wall.points[1].y };
+        Vector3 p3 = { wall.points[2].x,wall.z,wall.points[2].y };
+        Vector3 p4 = { wall.points[3].x,wall.z,wall.points[3].y };
+        if (ClosestRayCollision(player.target, GetRayCollisionQuad(playerTargetRay, p1, p2, p3, p4))) {
+            player.targetWall = &wall;
+            wallHit = true;
+        }
+
+        p1 = { wall.points[0].x,wall.z + wall.height,wall.points[0].y };
+        p2 = { wall.points[1].x,wall.z + wall.height,wall.points[1].y };
+        p3 = { wall.points[2].x,wall.z + wall.height,wall.points[2].y };
+        p4 = { wall.points[3].x,wall.z + wall.height,wall.points[3].y };
+        if (ClosestRayCollision(player.target, GetRayCollisionQuad(playerTargetRay, p1, p2, p3, p4))) {
+            player.targetWall = &wall;
+            wallHit = true;
+        }
+
+        for (int i = 0; i < 4; i++) {
+            p1 = { wall.points[i].x,wall.z,wall.points[i].y };
+            p2 = { wall.points[(i + 1) % 4].x,wall.z,wall.points[(i + 1) % 4].y };
+            p3 = { wall.points[(i + 1) % 4].x,wall.z + wall.height,wall.points[(i + 1) % 4].y };
+            p4 = { wall.points[i].x,wall.z + wall.height,wall.points[i].y };
+            if (ClosestRayCollision(player.target, GetRayCollisionQuad(playerTargetRay, p1, p2, p3, p4))) {
+                player.targetWall = &wall;
+                wallHit = true;
+            }
+        }
+        wall.tickFunction(&wall);
+    }
+    if (!wallHit) {
+        player.targetWall = nullptr;
+    }
 }
-void AddDebugLine(const char* text, Vector2 vec2, bool reset = false) {
-	AddDebugLine(TextFormat(text, vec2.x, vec2.y), reset);
-}
-void AddDebugLine(const char* text, float val, bool reset = false) {
-	AddDebugLine(TextFormat(text, val), reset);
-}
-void AddDebugLine(const char* text, int val, bool reset = false) {
-	AddDebugLine(TextFormat(text, val), reset);
-}
-void AddDebugLine(const char* text, size_t val, bool reset = false) {
-	AddDebugLine(TextFormat(text, val), reset);
-}
-void AddDebugLine(const char* text, std::string string, bool reset = false) {
-	AddDebugLine(TextFormat(text, string.c_str()), reset);
+
+// Draw game level
+static void DrawEntities(Camera camera) {
+    const int floorExtent = 25;
+    const float tileSize = 5.0f;
+    const Color tileColor1 = { 150, 200, 200, 255 };
+
+    // Floor tiles
+    /*for (int y = -floorExtent; y < floorExtent; y++) {
+        for (int x = -floorExtent; x < floorExtent; x++) {
+            if ((y & 1) && (x & 1)) {
+                DrawPlane({ x* tileSize, 0.0f, y* tileSize },{ tileSize, tileSize }, tileColor1);
+            }
+            else if (!(y & 1) && !(x & 1)) {
+                DrawPlane({ x* tileSize, 0.0f, y* tileSize }, { tileSize, tileSize }, LIGHTGRAY);
+            }
+        }
+    }*/
+
+    /*if (player.target.hit) {
+        DrawSphere(player.target.point, .5f, RED);
+    }*/
+
+    for (Projectile& ball : projectiles) {
+        ball.draw();
+    }
+
+    for (Enemy& enemy : enemies) {
+        //float midHeight = (enemy.body.getBoundingBox().max.y + enemy.body.getBoundingBox().min.y) / 2.0f;
+        //if (!IsSoundPlaying(snd_step)) {
+        //    SetSoundPosition(camera, snd_step, enemy.body.position, 20.0f);
+        //    PlaySound(snd_step);
+        //}
+        //DrawRay(enemy.getDownRay(), RED);
+        //DrawSphere(enemy.downRayCollision.point, 0.5f, RED);
+        //enemy.drawBoundingBox();
+        //DrawSphere(enemy.currentNode->point, 0.5f, GREEN);
+        //DrawSphere(enemy.targetNode->point, 0.5f, RED);
+        if (enemy.reachedTarget) {
+            DrawBillboard(camera, TEX_JOHN_VICTORY, enemy.body.position + Vector3{ 0.0f,enemy.body.standingHeight / 2.0f,0.0f }, enemy.body.standingHeight, WHITE);
+        }
+        else if (enemy.body.getCrouchState()) {
+            DrawBillboard(camera, TEX_NPC_JOHN_CROUCH, enemy.body.position + Vector3{ 0.0f,enemy.body.standingHeight / 2.0f,0.0f }, enemy.body.standingHeight, WHITE);
+        }
+        else {
+            DrawBillboard(camera, TEX_NPC_JOHN, enemy.body.position + Vector3{ 0.0f,enemy.body.standingHeight / 2.0f,0.0f }, enemy.body.standingHeight, WHITE);
+        }
+    }
+
+    /*const Vector3 towerSize = { 16.0f, 32.0f, 16.0f };
+    const Color towerColor = { 150, 200, 200, 255 };
+
+    Vector3 towerPos ={ 16.0f, 16.0f, 16.0f };
+    DrawCubeV(towerPos, towerSize, towerColor);
+    DrawCubeWiresV(towerPos, towerSize, DARKBLUE);
+
+    towerPos.x *= -1;
+    DrawCubeV(towerPos, towerSize, towerColor);
+    DrawCubeWiresV(towerPos, towerSize, DARKBLUE);
+
+    towerPos.z *= -1;
+    DrawCubeV(towerPos, towerSize, towerColor);
+    DrawCubeWiresV(towerPos, towerSize, DARKBLUE);
+
+    towerPos.x *= -1;
+    DrawCubeV(towerPos, towerSize, towerColor);
+    DrawCubeWiresV(towerPos, towerSize, DARKBLUE);*/
 }
 
 int main() {

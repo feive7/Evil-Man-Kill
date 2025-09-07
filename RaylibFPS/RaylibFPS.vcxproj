@@ -138,16 +138,19 @@
     <ClCompile Include="RaylibFPS.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="body.h" />
     <ClInclude Include="collisions.h" />
     <ClInclude Include="customdebug.h" />
     <ClInclude Include="GameMap.h" />
     <ClInclude Include="glob.h" />
     <ClInclude Include="items.h" />
     <ClInclude Include="node_tree.h" />
+    <ClInclude Include="NPC.h" />
     <ClInclude Include="pathfinding.h" />
     <ClInclude Include="load_glob_debug.h" />
     <ClInclude Include="load_glob_release.h" />
     <ClInclude Include="player.h" />
+    <ClInclude Include="projectile.h" />
     <ClInclude Include="testmap.h" />
     <ClInclude Include="thing.h" />
   </ItemGroup>
