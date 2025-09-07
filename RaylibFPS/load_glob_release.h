@@ -92,13 +92,13 @@ void ConvertWaveToCode(const char* filename) {
 	std::string outfilename = filepath + "/" + truefilename + ".h";
 	ExportWaveAsCode(wav, outfilename.c_str());
 }
-Texture LoadTextureFromCode(void* data, int width, int height) {
+Texture LoadTextureFromCode(void* data, int width, int height, int format = 4) {
 	Image img = {
 		.data = data,
 		.width = width,
 		.height = height,
 		.mipmaps = 1,
-		.format = 4,
+		.format = format,
 	};
 	Texture texture = LoadTextureFromImage(img);
 	return texture;
