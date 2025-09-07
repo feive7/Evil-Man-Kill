@@ -20,6 +20,8 @@
 
 #define NORMALIZE_INPUT  0
 
+static GameMap* loadedMap;
+
 static Vector2 sensitivity = { 0.005f, 0.005f };
 class Body {
 public:
@@ -119,7 +121,7 @@ public:
         isTouchingWall = false;
         isTouchingCeiling = false;
 
-        for (Wall& wall : testmap.walls) {
+        for (Wall& wall : loadedMap->walls) {
             if (wall.ignoreCollisions) continue; // Skip wall if no collisions
             for (int i = 0; i < 4; i++) {
                 Sector sect = { wall.points[i],wall.points[(i + 1) % 4] };

@@ -7,14 +7,17 @@
 #include <glob.h>
 #include <pathfinding.h>
 #include <GameMap.h>
-#include <testmap.h>
+
+#include <maps/MAP_COSTCO.h>
+#include <maps/MAP_ABSTRACTIONS.h>
+
 #include <projectile.h>
 #include <body.h>
 #include <player.h>
 #include <NPC.h>
 #include <customdebug.h>
 
-#define ENABLE_JOHNS
+//#define ENABLE_JOHNS
 // Debug toggle
 #ifdef _DEBUG
 bool debugEnabled = true;
@@ -117,7 +120,7 @@ static void UpdateLevel(void) {
     player.target = { 0 };
     Ray playerTargetRay = player.getForwardRay();
     bool wallHit = false;
-    for (Wall& wall : testmap.walls) {
+    for (Wall& wall : loadedMap->walls) {
         for (Enemy& enemy : enemies) {
             Ray downRay = enemy.getDownRay();
             Ray targetRay = enemy.getTargetRay();
@@ -249,8 +252,6 @@ static void DrawEntities(Camera camera) {
 }
 
 int main() {
-	InitNodes();
-
 	// Init Window
 	const int screenWidth = 1600;
 	const int screenHeight = 900;
@@ -280,7 +281,7 @@ int main() {
 #ifdef ENABLE_JOHNS
 	for (int i = 0; i < 10; i++) {
 		Enemy enemy;
-		enemy.body.position = testmap.getRandomSpawnPoint();
+		enemy.body.position = loadedMap->getRandomSpawnPoint();
 		enemy.body.radius = 0.25f;
 		enemy.body.dir = { 0 };
 		enemy.body.movementSpeed = 15.0f;
@@ -291,6 +292,12 @@ int main() {
 	
 	// Load assets
 	LoadGlob();
+
+    // Load Map
+    loadedMap = &MAP_ABSTRACTIONS;
+
+    // Init Map Nodes
+    InitNodes();
 
 	// Music toggle
 	bool musicToggle = true;
@@ -321,7 +328,7 @@ int main() {
 
 		BeginDrawing();
 
-		ClearBackground(testmap.skyColor);
+		ClearBackground(loadedMap->skyColor);
 
 		BeginMode3D(camera);
 
@@ -329,7 +336,7 @@ int main() {
 		SetShaderValue(shader_main, shader_main_viewtarget_loc, &camera.target, RL_SHADER_UNIFORM_VEC3);
 		BeginShaderMode(shader_main);
 
-		testmap.draw();
+        loadedMap->draw();
 		DrawEntities(camera);
 
 		EndShaderMode();
