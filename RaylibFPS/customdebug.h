@@ -24,3 +24,7 @@ void AddDebugLine(const char* text, size_t val, bool reset = false) {
 void AddDebugLine(const char* text, std::string string, bool reset = false) {
 	AddDebugLine(TextFormat(text, string.c_str()), reset);
 }
+
+void printTime() {
+	printf("%f\n", GetTime());
+}
