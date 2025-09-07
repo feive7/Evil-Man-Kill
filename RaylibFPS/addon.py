@@ -77,6 +77,7 @@ class Wall:
         self.canSpawn = False
         self.hide = False
         self.ignoreCollisions = False
+        self.stretchTexture = False
         self.tickFunction = ""
         self.attributes = {}
 
@@ -103,6 +104,7 @@ class Wall:
         self.surfaceMaterial = obj.game_props.surface_material
         self.hide = obj.display_type == 'WIRE'
         self.ignoreCollisions = obj.game_props.ignore_collisions
+        self.stretchTexture = obj.game_props.stretch_texture
         
         if obj.game_props.script_file: self.tickFunction = bpy.data.texts[obj.game_props.script_file].as_string()
 
@@ -125,6 +127,7 @@ class Wall:
         if self.canSpawn: cpp += "\t\t\t.canSpawn = true,\n"
         if self.hide: cpp += "\t\t\t.hide = true,\n"
         if self.ignoreCollisions: cpp += "\t\t\t.ignoreCollisions = true,\n"
+        if self.stretchTexture: cpp += "\t\t\t.stretchTexture = true,\n"
         
         if self.tickFunction: 
             cpp += "\t\t\t.tickFunction = [](Wall* self) {\n"
@@ -193,6 +196,9 @@ class GameProps(bpy.types.PropertyGroup):
     ignore_collisions: bpy.props.BoolProperty(
         name="Ignore Collisions"
     )
+    stretch_texture: bpy.props.BoolProperty(
+        name="Stretch Texture"
+    )
 
 # Define a panel so it shows up in the UI
 class OBJECT_PT_GamePropsPanel(bpy.types.Panel):
@@ -211,6 +217,7 @@ class OBJECT_PT_GamePropsPanel(bpy.types.Panel):
         layout.prop(props, "script_file")
         layout.prop(props, "can_spawn")
         layout.prop(props, "ignore_collisions")
+        layout.prop(props, "stretch_texture")
         
 class EXPORT_OT_walls_to_cpp(bpy.types.Operator):
     """Export Walls to C++ Map"""

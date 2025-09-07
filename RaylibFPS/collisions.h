@@ -1,4 +1,3 @@
-#define TILEABLE_TEXTURE
 enum SURFACE_MATERIAL {
     SURFACE_REGULAR, // No effects
     SURFACE_BOUNCY, // Reverses velocity
@@ -101,6 +100,7 @@ struct Wall {
     bool canSpawn = false;
     bool hide = false;
     bool ignoreCollisions = false;
+    bool stretchTexture = false;
     std::function<void(Wall*)> tickFunction = [](Wall* self) {
 
     };
@@ -132,70 +132,7 @@ struct Wall {
         else {
             rlColor4ub(tint.r, tint.g, tint.b, tint.a);
         }
-        for (int i = 0; i < 4; i++) {
-            Sector sect = { points[i],points[(i + 1) % 4] };
-            Vector2 hDir = sect.getDirection();
-            #ifdef MULTI_TILEABLE_TEXTURE
-            // Bottom Left Corner
-            rlTexCoord2f(1, 1); rlVertex3f(sect.p1.x, z, sect.p1.y);
-            rlTexCoord2f(1, 0.75); rlVertex3f(sect.p1.x, z + 1, sect.p1.y);
-            rlTexCoord2f(0.75, 0.75); rlVertex3f(sect.p1.x + hDir.x, z + 1, sect.p1.y + hDir.y);
-            rlTexCoord2f(0.75, 1); rlVertex3f(sect.p1.x + hDir.x, z, sect.p1.y + hDir.y);
-
-            // Bottom Right Corner
-            rlTexCoord2f(0, 1); rlVertex3f(sect.p2.x, z, sect.p2.y);
-            rlTexCoord2f(0.25, 1); rlVertex3f(sect.p2.x - hDir.x, z, sect.p2.y - hDir.y);
-            rlTexCoord2f(0.25, 0.75); rlVertex3f(sect.p2.x - hDir.x, z + 1, sect.p2.y - hDir.y);
-            rlTexCoord2f(0, 0.75); rlVertex3f(sect.p2.x, z + 1, sect.p2.y);
-
-            // Top Left Corner
-            rlTexCoord2f(1, 0.25); rlVertex3f(sect.p1.x, z + height - 1, sect.p1.y);
-            rlTexCoord2f(1, 0); rlVertex3f(sect.p1.x, z + height, sect.p1.y);
-            rlTexCoord2f(0.75, 0); rlVertex3f(sect.p1.x + hDir.x, z + height, sect.p1.y + hDir.y);
-            rlTexCoord2f(0.75, 0.25); rlVertex3f(sect.p1.x + hDir.x, z + height - 1, sect.p1.y + hDir.y);
-
-            // Top Right Corner
-            rlTexCoord2f(0, 0.25); rlVertex3f(sect.p2.x, z + height - 1, sect.p2.y);
-            rlTexCoord2f(0.25, 0.25); rlVertex3f(sect.p2.x - hDir.x, z + height - 1, sect.p2.y - hDir.y);
-            rlTexCoord2f(0.25, 0); rlVertex3f(sect.p2.x - hDir.x, z + height, sect.p2.y - hDir.y);
-            rlTexCoord2f(0, 0); rlVertex3f(sect.p2.x, z + height, sect.p2.y);
-
-            // Bottom Side
-            rlTexCoord2f(0.75, 1); rlVertex3f(sect.p1.x + hDir.x, z, sect.p1.y + hDir.y);
-            rlTexCoord2f(0.75, 0.75); rlVertex3f(sect.p1.x + hDir.x, z + 1, sect.p1.y + hDir.y);
-            rlTexCoord2f(0.25, 0.75); rlVertex3f(sect.p2.x - hDir.x, z + 1, sect.p2.y - hDir.y);
-            rlTexCoord2f(0.25, 1); rlVertex3f(sect.p2.x - hDir.x, z, sect.p2.y - hDir.y);
-
-            // Top Side
-            rlTexCoord2f(0.75, 0.25); rlVertex3f(sect.p1.x + hDir.x, z + height - 1, sect.p1.y + hDir.y);
-            rlTexCoord2f(0.75, 0); rlVertex3f(sect.p1.x + hDir.x, z + height, sect.p1.y + hDir.y);
-            rlTexCoord2f(0.25, 0); rlVertex3f(sect.p2.x - hDir.x, z + height, sect.p2.y - hDir.y);
-            rlTexCoord2f(0.25, 0.25); rlVertex3f(sect.p2.x - hDir.x, z + height - 1, sect.p2.y - hDir.y);
-
-            // Right Side
-            rlTexCoord2f(1, 0.75); rlVertex3f(sect.p1.x, z + 1, sect.p1.y);
-            rlTexCoord2f(1, 0.25); rlVertex3f(sect.p1.x, z + height - 1, sect.p1.y);
-            rlTexCoord2f(0.75, 0.25); rlVertex3f(sect.p1.x + hDir.x, z + height - 1, sect.p1.y + hDir.y);
-            rlTexCoord2f(0.75, 0.75); rlVertex3f(sect.p1.x + hDir.x, z + 1, sect.p1.y + hDir.y);
-
-            // Left Side
-            rlTexCoord2f(0.25, 0.25); rlVertex3f(sect.p2.x - hDir.x, z + height - 1, sect.p2.y - hDir.y);
-            rlTexCoord2f(0, 0.25); rlVertex3f(sect.p2.x, z + height - 1, sect.p2.y);
-            rlTexCoord2f(0, 0.75); rlVertex3f(sect.p2.x, z + 1, sect.p2.y);
-            rlTexCoord2f(0.25, 0.75); rlVertex3f(sect.p2.x - hDir.x, z + 1, sect.p2.y - hDir.y);
-
-            // Center
-            rlTexCoord2f(0.25, 0.25); rlVertex3f(sect.p2.x - hDir.x, z + height - 1, sect.p2.y - hDir.y);
-            rlTexCoord2f(0.25, 0.75); rlVertex3f(sect.p2.x - hDir.x, z + 1, sect.p2.y - hDir.y);
-            rlTexCoord2f(0.75, 0.75); rlVertex3f(sect.p1.x + hDir.x, z + 1, sect.p1.y + hDir.y);
-            rlTexCoord2f(0.75, 0.25); rlVertex3f(sect.p1.x + hDir.x, z + height - 1, sect.p1.y + hDir.y);
-            #elifdef REGULAR_TEXTURE
-            rlTexCoord2f(0, 1); rlVertex3f(sect.p1.x, z, sect.p1.y);
-            rlTexCoord2f(0, 0); rlVertex3f(sect.p1.x, z + height, sect.p1.y);
-            rlTexCoord2f(1, 0); rlVertex3f(sect.p2.x, z + height, sect.p2.y);
-            rlTexCoord2f(1, 1); rlVertex3f(sect.p2.x, z, sect.p2.y);
-            #else
-            const float SIZE = 2.0f;
+        if (stretchTexture) { // Do not tile the texture
             for (int i = 0; i < 4; i++) {
                 int j = (i + 1) % 4;
 
@@ -204,7 +141,41 @@ struct Wall {
                 Vector3 v2 = { points[j].x,     z,         points[j].y };
                 Vector3 v3 = { points[j].x,     z + height, points[j].y };
                 Vector3 v4 = { points[i].x,     z + height, points[i].y };
-                
+
+                Sector sect = { points[i],points[j] };
+                Vector2 normal = sect.getNormal();
+
+                rlNormal3f(normal.x, 0.0f, normal.y);
+                rlTexCoord2f(0, 1); rlVertex3f(sect.p1.x, z, sect.p1.y);
+                rlTexCoord2f(0, 0); rlVertex3f(sect.p1.x, z + height, sect.p1.y);
+                rlTexCoord2f(1, 0); rlVertex3f(sect.p2.x, z + height, sect.p2.y);
+                rlTexCoord2f(1, 1); rlVertex3f(sect.p2.x, z, sect.p2.y);
+            }
+            
+            rlNormal3f(0.0f, -1.0f, 0.0f);
+            rlTexCoord2f(0, 0); rlVertex3f(points[0].x, z, points[0].y);
+            rlTexCoord2f(0, 1); rlVertex3f(points[1].x, z, points[1].y);
+            rlTexCoord2f(1, 1); rlVertex3f(points[2].x, z, points[2].y);
+            rlTexCoord2f(1, 0); rlVertex3f(points[3].x, z, points[3].y);
+
+            rlNormal3f(0.0f, 1.0f, 0.0f);
+            rlTexCoord2f(1, 0); rlVertex3f(points[3].x, z + height, points[3].y);
+            rlTexCoord2f(1, 1); rlVertex3f(points[2].x, z + height, points[2].y);
+            rlTexCoord2f(0, 1); rlVertex3f(points[1].x, z + height, points[1].y);
+            rlTexCoord2f(0, 0); rlVertex3f(points[0].x, z + height, points[0].y);
+        }
+        else { // Do tile the texture
+            const float SIZE = 2.0f;
+            // --- Sides ---
+            for (int i = 0; i < 4; i++) {
+                int j = (i + 1) % 4;
+
+                // Bottom and top vertices
+                Vector3 v1 = { points[i].x,     z,         points[i].y };
+                Vector3 v2 = { points[j].x,     z,         points[j].y };
+                Vector3 v3 = { points[j].x,     z + height, points[j].y };
+                Vector3 v4 = { points[i].x,     z + height, points[i].y };
+
                 Sector sector = { points[i],points[j] };
                 Vector2 normal = sector.getNormal();
 
@@ -261,18 +232,7 @@ struct Wall {
                 rlTexCoord2f(tileW, 0);   rlVertex3f(v2.x, v2.y, v2.z);
                 rlTexCoord2f(0, 0);       rlVertex3f(v1.x, v1.y, v1.z);
             }
-            #endif
         }
-
-        /*rlTexCoord2f(0, 0); rlVertex3f(points[0].x, z, points[0].y);
-        rlTexCoord2f(0, 1); rlVertex3f(points[1].x, z, points[1].y);
-        rlTexCoord2f(1, 1); rlVertex3f(points[2].x, z, points[2].y);
-        rlTexCoord2f(1, 0); rlVertex3f(points[3].x, z, points[3].y);
-
-        rlTexCoord2f(1, 0); rlVertex3f(points[3].x, z + height, points[3].y);
-        rlTexCoord2f(1, 1); rlVertex3f(points[2].x, z + height, points[2].y);
-        rlTexCoord2f(0, 1); rlVertex3f(points[1].x, z + height, points[1].y);
-        rlTexCoord2f(0, 0); rlVertex3f(points[0].x, z + height, points[0].y);*/
     }
     void rotate(float angle) {
         Vector2 mid = center();
