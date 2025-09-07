@@ -76,6 +76,7 @@ class Wall:
         self.surfaceMaterial = "regular" 
         self.canSpawn = False
         self.hide = False
+        self.ignoreCollisions = False
         self.tickFunction = ""
         self.attributes = {}
 
@@ -101,6 +102,7 @@ class Wall:
         self.canSpawn = obj.game_props.can_spawn
         self.surfaceMaterial = obj.game_props.surface_material
         self.hide = obj.display_type == 'WIRE'
+        self.ignoreCollisions = obj.game_props.ignore_collisions
         
         if obj.game_props.script_file: self.tickFunction = bpy.data.texts[obj.game_props.script_file].as_string()
 
@@ -122,7 +124,8 @@ class Wall:
 
         if self.canSpawn: cpp += "\t\t\t.canSpawn = true,\n"
         if self.hide: cpp += "\t\t\t.hide = true,\n"
-
+        if self.ignoreCollisions: cpp += "\t\t\t.ignoreCollisions = true,\n"
+        
         if self.tickFunction: 
             cpp += "\t\t\t.tickFunction = [](Wall* self) {\n"
             cpp += "\t\t\t\t" + self.tickFunction.replace("\n","\n\t\t\t\t") + "\n"
@@ -187,6 +190,9 @@ class GameProps(bpy.types.PropertyGroup):
     can_spawn: bpy.props.BoolProperty(
         name="Can Spawn"
     )
+    ignore_collisions: bpy.props.BoolProperty(
+        name="Ignore Collisions"
+    )
 
 # Define a panel so it shows up in the UI
 class OBJECT_PT_GamePropsPanel(bpy.types.Panel):
@@ -204,6 +210,7 @@ class OBJECT_PT_GamePropsPanel(bpy.types.Panel):
         layout.prop(props, "texture")
         layout.prop(props, "script_file")
         layout.prop(props, "can_spawn")
+        layout.prop(props, "ignore_collisions")
         
 class EXPORT_OT_walls_to_cpp(bpy.types.Operator):
     """Export Walls to C++ Map"""
