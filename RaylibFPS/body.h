@@ -120,6 +120,7 @@ public:
         isTouchingCeiling = false;
 
         for (Wall& wall : testmap.walls) {
+            if (wall.ignoreCollisions) continue; // Skip wall if no collisions
             for (int i = 0; i < 4; i++) {
                 Sector sect = { wall.points[i],wall.points[(i + 1) % 4] };
                 float lineDist = sect.distanceToPoint({ newpos.x,newpos.z });

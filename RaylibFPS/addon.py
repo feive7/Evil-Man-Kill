@@ -235,21 +235,40 @@ class EXPORT_OT_walls_to_cpp(bpy.types.Operator):
         export_to_file(self.filepath, self.map_name, walls, things)
         self.report({'INFO'}, f"Exported {len(walls)} walls and {len(things)} things to {self.filepath}")
         return {"FINISHED"}
+# ---------------- Misc Tools ------------------
+class MatchMaterials(bpy.types.Operator):
+    bl_idname = "object.match_material"
+    bl_label = "Match Game Material"
+    bl_options = {'REGISTER','UNDO'}
+    
+    def execute(self,context):
+        active_object = context.active_object
+        for obj in context.selected_objects:
+            obj.game_props.texture = active_object.game_props.texture
+            obj.color = active_object.color
+        return {'FINISHED'}
+
 
 # ---------------- Registration ----------------
 def menu_func_export(self, context):
     self.layout.operator(EXPORT_OT_walls_to_cpp.bl_idname, text="Walls to C++ Map (.h)")
+def menu_func_match_material(self,context):
+    self.layout.operator(MatchMaterials.bl_idname)
 
 def register():
     bpy.utils.register_class(EXPORT_OT_walls_to_cpp)
     bpy.utils.register_class(OBJECT_PT_GamePropsPanel)
     bpy.utils.register_class(GameProps)
+    bpy.utils.register_class(MatchMaterials)
     bpy.types.TOPBAR_MT_file_export.append(menu_func_export)
+    bpy.types.VIEW3D_MT_object.append(menu_func_match_material)
     bpy.types.Object.game_props = bpy.props.PointerProperty(type=GameProps)
 
 def unregister():
     bpy.types.TOPBAR_MT_file_export.remove(menu_func_export)
+    bpy.types.VIEW3D_MT_objects.remove(menu_func_match_material)
     bpy.utils.unregister_class(EXPORT_OT_walls_to_cpp)
+    bpy.utils.unregister_class(MatchMaterials)
     del bpy.types.Object.game_props  # clean up property on unregister
 
 if __name__ == "__main__":

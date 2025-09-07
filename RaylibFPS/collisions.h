@@ -100,6 +100,7 @@ struct Wall {
     int surfaceMaterial = SURFACE_REGULAR;
     bool canSpawn = false;
     bool hide = false;
+    bool ignoreCollisions = false;
     std::function<void(Wall*)> tickFunction = [](Wall* self) {
 
     };
