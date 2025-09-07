@@ -17,6 +17,7 @@
 #include <assets/textures/WOOD_floor.h>
 #include <assets/textures/FABRIC.h>
 #include <assets/textures/GRASS.h>
+#include <assets/textures/item_drumstick.h>
 #include <assets/audio/bitgunshot.h>
 #include <assets/audio/hit01.h>
 #include <assets/audio/step.h>
@@ -135,6 +136,7 @@ void LoadGlob() {
 	TEX_WOOD_FLOOR = LoadTextureFromCode(WOOD_FLOOR_DATA, WOOD_FLOOR_WIDTH, WOOD_FLOOR_HEIGHT);
 	TEX_FABRIC = LoadTextureFromCode(FABRIC_DATA, FABRIC_WIDTH, FABRIC_HEIGHT);
 	TEX_GRASS = LoadTextureFromCode(GRASS_DATA, GRASS_WIDTH, GRASS_HEIGHT);
+	TEX_ITEM_DRUMSTICK = LoadTextureFromCode(ITEM_DRUMSTICK_DATA, ITEM_DRUMSTICK_WIDTH, ITEM_DRUMSTICK_HEIGHT, ITEM_DRUMSTICK_FORMAT);
 
 	GenTextureMipmaps(&TEX_BRICK);
 	GenTextureMipmaps(&TEX_METAL);
