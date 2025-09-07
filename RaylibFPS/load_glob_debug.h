@@ -33,6 +33,7 @@ void LoadGlob() {
 	TEX_NOISE_1 = LoadTexture("assets/textures/noise_1.png");
 	TEX_GRAVEL = LoadTexture("assets/textures/gravel.png");
 	TEX_CONCRETE = LoadTexture("assets/textures/concrete.png");
+	TEX_PLASTIC = LoadTexture("assets/textures/plastic.png");
 
 	// Object Textures
 	TEX_OBJ_BARREL = LoadTexture("assets/textures/obj_barrel.png");

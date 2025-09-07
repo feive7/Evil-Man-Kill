@@ -34,6 +34,7 @@ static Texture TEX_BRICK;
 static Texture TEX_NOISE_1;
 static Texture TEX_GRAVEL;
 static Texture TEX_CONCRETE;
+static Texture TEX_PLASTIC;
 
 // Object Textures
 static Texture TEX_OBJ_BARREL;
@@ -93,6 +94,7 @@ void UnloadGlob() {
 	UnloadTexture(TEX_CONCRETE);
 	UnloadTexture(TEX_NOISE_1);
 	UnloadTexture(TEX_GRAVEL);
+	UnloadTexture(TEX_PLASTIC);
 	UnloadTexture(TEX_OBJ_BARREL);
 	UnloadTexture(TEX_OBJ_TREE);
 	UnloadTexture(TEX_OBJ_TREE_1);
