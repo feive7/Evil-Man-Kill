@@ -1,5 +1,4 @@
 #pragma once
-static int score = 0;
 
 class Player {
 public:

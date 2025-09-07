@@ -158,4 +158,5 @@ inline bool FeatherEqual(float a, float b, float thresh = 1.0f) {
 	return FuzzyLess(a, b, thresh) && FuzzyGreater(a, b, thresh);
 }
 
+static int score = 0;
 static Camera camera = { 0 };
