@@ -157,6 +157,7 @@ def EmptyToStruct(empty):
     return cpp_struct
 
 def export_to_file(filepath, map_name, walls, things):
+    walls = sorted(walls, key=lambda wall: 255 - wall.color[3])
     with open(filepath, "w") as f:
         f.write(f"static GameMap {map_name} = {{\n")
         f.write("\t{ // Sky Color\n" + FormatText("\t\t%,%,%,255,\n", FormatColor(bpy.context.scene.world.color)) + "\t},\n")
