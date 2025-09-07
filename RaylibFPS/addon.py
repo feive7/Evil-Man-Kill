@@ -63,7 +63,7 @@ def rotational_sort(list_of_xy_coords, clockwise=True):
         return [list_of_xy_coords[i] for i in indices]
     else:
         return [list_of_xy_coords[i] for i in indices[::-1]]
-    
+
 # ---------------- Wall Class ----------------
 class Wall:
     def __init__(self):
@@ -222,15 +222,19 @@ class EXPORT_OT_walls_to_cpp(bpy.types.Operator):
         name="File Path",
         description="Where to export the C++ header",
         subtype="FILE_PATH",
-        default="C:/Users/rolan/OneDrive/Documents/Roland C++/RaylibFPS/RaylibFPS/testmap.h"
+        default="C:/Users/rolan/OneDrive/Documents/Roland C++/RaylibFPS/RaylibFPS/maps/"
     )
 
     map_name: bpy.props.StringProperty(
         name="Map Name",
         description="Name of the exported GameMap",
-        default="testmap"
+        default="placeholder"
     )
-
+    def getMapVariableName(self, context):
+        collectionname = context.scene.collection.children[0].name
+        underscored = collectionname.replace(" ","_")
+        variablename = "MAP_" + underscored.upper()
+        return variablename
     def execute(self, context):
         walls = []
         things = []
@@ -240,7 +244,7 @@ class EXPORT_OT_walls_to_cpp(bpy.types.Operator):
                     walls.extend(ObjectToStructs(obj))
                 elif obj.type == 'EMPTY' and obj.data:
                     things.append(EmptyToStruct(obj))
-        export_to_file(self.filepath, self.map_name, walls, things)
+        export_to_file(self.filepath + self.getMapVariableName(context) + ".h", self.getMapVariableName(context), walls, things)
         self.report({'INFO'}, f"Exported {len(walls)} walls and {len(things)} things to {self.filepath}")
         return {"FINISHED"}
 # ---------------- Misc Tools ------------------
@@ -274,8 +278,10 @@ def register():
 
 def unregister():
     bpy.types.TOPBAR_MT_file_export.remove(menu_func_export)
-    bpy.types.VIEW3D_MT_objects.remove(menu_func_match_material)
+    bpy.types.VIEW3D_MT_object.remove(menu_func_match_material)
     bpy.utils.unregister_class(EXPORT_OT_walls_to_cpp)
+    bpy.utils.unregister_class(OBJECT_PT_GamePropsPanel)
+    bpy.utils.unregister_class(GameProps)
     bpy.utils.unregister_class(MatchMaterials)
     del bpy.types.Object.game_props  # clean up property on unregister
 
