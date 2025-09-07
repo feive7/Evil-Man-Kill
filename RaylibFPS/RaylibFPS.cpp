@@ -10,6 +10,8 @@
 
 #include <maps/MAP_COSTCO.h>
 #include <maps/MAP_ABSTRACTIONS.h>
+#include <maps/MAP_EXAMPLE.h>
+#include <maps/MAP_NOSTALGIA.h>
 
 #include <projectile.h>
 #include <body.h>
@@ -20,7 +22,7 @@
 //#define ENABLE_JOHNS
 // Debug toggle
 #ifdef _DEBUG
-bool debugEnabled = true;
+bool debugEnabled = false;
 #else
 bool debugEnabled = false;
 #endif
@@ -294,7 +296,7 @@ int main() {
 	LoadGlob();
 
     // Load Map
-    loadedMap = &MAP_ABSTRACTIONS;
+    loadedMap = &MAP_NOSTALGIA;
 
     // Init Map Nodes
     InitNodes();
@@ -321,6 +323,21 @@ int main() {
 
 		if (IsKeyPressed(KEY_F3)) debugEnabled = !debugEnabled;
 		if (IsKeyPressed(KEY_R)) player = { 0 };
+        if (IsKeyPressed(KEY_ONE)) {
+            loadedMap = &MAP_NOSTALGIA;
+            player = { 0 };
+            UpdateCameraAngle(&camera, player);
+        }
+        if (IsKeyPressed(KEY_TWO)) {
+            loadedMap = &MAP_EXAMPLE;
+            player = { 0 };
+            UpdateCameraAngle(&camera, player);
+        }
+        if (IsKeyPressed(KEY_THREE)) {
+            loadedMap = &MAP_ABSTRACTIONS;
+            player = { 0 };
+            UpdateCameraAngle(&camera, player);
+        }
 
 		UpdateCameraAngle(&camera, player);
 
@@ -346,37 +363,54 @@ int main() {
 		DrawCircle(screenWidth / 2, screenHeight / 2, 3.0f, GRAY);
 		player.drawScreen();
 
-		if (debugEnabled) {
-			AddDebugLine("FPS: %i", GetFPS(), true);
-			AddDebugLine("Player Position: %f, %f, %f", player.body.position);
-			AddDebugLine("Player Velocity: %f, %f, %f", player.body.velocity);
-			AddDebugLine("Player Speed: %.2f", Vector3Length(player.body.velocity));
-			AddDebugLine("Player Look Rotation: %.2f, %.2f", player.body.lookRotation);
-			AddDebugLine(TextFormat("Player Touching Ceiling: %i", player.body.isTouchingCeiling));
-			AddDebugLine(TextFormat("Player OnGround: %i", player.body.isGrounded));
-			AddDebugLine("Player Height: %.2f", player.body.getHeight());
-			AddDebugLine("Player Equipped: %s", player.equipped.name);
-		}
+        if (score < 8) {
+            if (debugEnabled) {
+                AddDebugLine("FPS: %i", GetFPS(), true);
+                AddDebugLine("Player Position: %f, %f, %f", player.body.position);
+                AddDebugLine("Player Velocity: %f, %f, %f", player.body.velocity);
+                AddDebugLine("Player Speed: %.2f", Vector3Length(player.body.velocity));
+                AddDebugLine("Player Look Rotation: %.2f, %.2f", player.body.lookRotation);
+                AddDebugLine(TextFormat("Player Touching Ceiling: %i", player.body.isTouchingCeiling));
+                AddDebugLine(TextFormat("Player OnGround: %i", player.body.isGrounded));
+                AddDebugLine("Player Height: %.2f", player.body.getHeight());
+                AddDebugLine("Player Equipped: %s", player.equipped.name);
+            }
 
-		if (!player.body.alive) {
-			DrawRectangle(0, 0, screenWidth, screenHeight, { 255,0,0,120 });
-			const char* text = "You're Dead!!!!!!!!";
-			int textWidth = MeasureText(text, 40);
-			DrawText(text, screenWidth / 2 - textWidth / 2, screenHeight / 2 - 30, 40, WHITE);
+            if (!player.body.alive) {
+                DrawRectangle(0, 0, screenWidth, screenHeight, { 255,0,0,120 });
+                const char* text = "You're Dead!!!!!!!!";
+                int textWidth = MeasureText(text, 40);
+                DrawText(text, screenWidth / 2 - textWidth / 2, screenHeight / 2 - 30, 40, WHITE);
 
-			const char* scoreText = TextFormat("Score: %i", score);
-			int scoreWidth = MeasureText(scoreText, 20);
-			DrawText(scoreText, screenWidth / 2 - scoreWidth / 2, screenHeight / 2 + 20, 20, WHITE);
+                const char* scoreText = TextFormat("Score: %i", score);
+                int scoreWidth = MeasureText(scoreText, 20);
+                DrawText(scoreText, screenWidth / 2 - scoreWidth / 2, screenHeight / 2 + 20, 20, WHITE);
 
-			const char* respawn = TextFormat("Press 'r' to respawn", score);
-			int respawnWidth = MeasureText(respawn, 20);
-			DrawText(respawn, screenWidth / 2 - respawnWidth / 2, screenHeight / 2 + 60, 20, WHITE);
-		}
-		else {
-			if (!debugEnabled) {
-				DrawText(TextFormat("Score: %i", score), 5, 5, 20, BLACK);
-			}
-		}
+                const char* respawn = TextFormat("Press 'r' to respawn", score);
+                int respawnWidth = MeasureText(respawn, 20);
+                DrawText(respawn, screenWidth / 2 - respawnWidth / 2, screenHeight / 2 + 60, 20, WHITE);
+            }
+            else {
+                if (!debugEnabled) {
+                    DrawText(TextFormat("Tokens collected: %i / 8", score), 5, 5, 20, BLACK);
+                    int numOfTokens;
+                    if (loadedMap == &MAP_ABSTRACTIONS) numOfTokens = 1;
+                    if (loadedMap == &MAP_EXAMPLE) numOfTokens = 4;
+                    if (loadedMap == &MAP_NOSTALGIA) numOfTokens = 3;
+                    DrawText(TextFormat("Tokens on this map: %i", numOfTokens), 5, 25, 20, BLACK);
+                }
+            }
+        }
+        else {
+            DrawRectangle(0, 0, screenWidth, screenHeight, { 0,255,0,120 });
+            const char* text = "You have collected all tokens!";
+            int textWidth = MeasureText(text, 40);
+            DrawText(text, screenWidth / 2 - textWidth / 2, screenHeight / 2 - 30, 40, GREEN);
+
+            const char* subtext = "That's all there is to this demo";
+            int subtextWidth = MeasureText(subtext, 20);
+            DrawText(subtext, screenWidth / 2 - subtextWidth / 2, screenHeight / 2 + 20, 20, GREEN);
+        }
 
 		EndDrawing();
 	}

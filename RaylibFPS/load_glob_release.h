@@ -17,6 +17,8 @@
 #include <assets/textures/WOOD_floor.h>
 #include <assets/textures/FABRIC.h>
 #include <assets/textures/GRASS.h>
+#include <assets/textures/gravel.h>
+#include <assets/textures/stone.h>
 #include <assets/textures/item_drumstick.h>
 #include <assets/audio/bitgunshot.h>
 #include <assets/audio/hit01.h>
@@ -136,12 +138,16 @@ void LoadGlob() {
 	TEX_WOOD_FLOOR = LoadTextureFromCode(WOOD_FLOOR_DATA, WOOD_FLOOR_WIDTH, WOOD_FLOOR_HEIGHT);
 	TEX_FABRIC = LoadTextureFromCode(FABRIC_DATA, FABRIC_WIDTH, FABRIC_HEIGHT);
 	TEX_GRASS = LoadTextureFromCode(GRASS_DATA, GRASS_WIDTH, GRASS_HEIGHT);
+	TEX_GRAVEL = LoadTextureFromCode(GRAVEL_DATA, GRAVEL_WIDTH, GRAVEL_HEIGHT, GRAVEL_FORMAT);
+	TEX_STONE = LoadTextureFromCode(STONE_DATA, STONE_WIDTH, STONE_HEIGHT, STONE_FORMAT);
 	TEX_ITEM_DRUMSTICK = LoadTextureFromCode(ITEM_DRUMSTICK_DATA, ITEM_DRUMSTICK_WIDTH, ITEM_DRUMSTICK_HEIGHT, ITEM_DRUMSTICK_FORMAT);
 
 	GenTextureMipmaps(&TEX_BRICK);
 	GenTextureMipmaps(&TEX_METAL);
+	GenTextureMipmaps(&TEX_GRAVEL);
 	SetTextureFilter(TEX_BRICK, RL_TEXTURE_FILTER_TRILINEAR);
 	SetTextureFilter(TEX_METAL, RL_TEXTURE_FILTER_TRILINEAR);
+	SetTextureFilter(TEX_GRAVEL, RL_TEXTURE_FILTER_TRILINEAR);
 
 	// Shaders
 	shader_main = LoadShaderFromMemory(MAIN_VERTEX_SHADER, MAIN_FRAGMENT_SHADER);
