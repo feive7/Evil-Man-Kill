@@ -111,19 +111,6 @@ static GameMap MAP_ABSTRACTIONS = {
 			.surfaceMaterial = SURFACE_REGULAR,
 		},
 
-		{ // Cube.013
-			.points = {{23.53f,11.65f},{23.53f,12.65f},{22.53f,12.65f},{22.53f,11.65f}},
-			.z = 11.5f,
-			.height = 1.0f,
-			.texture = &TEX_TILE_6,
-			.tint = {255,0,0,255},
-			.surfaceMaterial = SURFACE_REGULAR,
-			.stretchTexture = true,
-			.tickFunction = [](Wall* self) {
-				self->rotate(GetFrameTime());
-			},
-		},
-
 		{ // Floor
 			.points = {{100.0f,-100.0f},{100.0f,100.0f},{-100.0f,100.0f},{-100.0f,-100.0f}},
 			.z = -2.0f,
@@ -179,6 +166,30 @@ static GameMap MAP_ABSTRACTIONS = {
 			.height = 11.0f,
 			.tint = {0,0,0,255},
 			.surfaceMaterial = SURFACE_REGULAR,
+		},
+
+		{ // Token
+			.points = {{23.53f,11.65f},{23.53f,12.65f},{22.53f,12.65f},{22.53f,11.65f}},
+			.z = 11.5f,
+			.height = 1.0f,
+			.texture = &TEX_TILE_6,
+			.tint = {255,0,0,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+			.stretchTexture = true,
+			.tickFunction = [](Wall* self) {
+				self->rotate(GetFrameTime());
+				if (self->touching) {
+				    // "Collect" token
+				    self->hide = true;
+				    self->ignoreCollisions = true;
+				
+				    // add 1 to score
+				    score++;
+				
+				    // Turn off script
+				    self->touching = false;
+				}
+			},
 		},
 
 	},

@@ -4,21 +4,22 @@ static GameMap MAP_EXAMPLE = {
 	},
 	{ // Walls
 		{ // Cube
-			.points = {{59.18f,-106.64f},{59.18f,-103.04f},{57.18f,-103.04f},{57.18f,-106.64f}},
-			.z = 0.0f,
-			.height = 2.0f,
+			.points = {{58.93f,-107.38f},{58.93f,-107.18f},{57.33f,-107.18f},{57.33f,-107.38f}},
+			.z = 0.201f,
+			.height = 1.3f,
 			.texture = &TEX_WOOD,
-			.tint = {58,34,7,255},
+			.tint = {34,16,2,255},
 			.surfaceMaterial = SURFACE_REGULAR,
 		},
 
 		{ // Cube.001
-			.points = {{59.28f,-103.59f},{59.28f,-103.09f},{57.08f,-103.09f},{57.08f,-103.59f}},
-			.z = -0.1f,
-			.height = 2.2f,
-			.texture = &TEX_MARBLE,
-			.tint = {255,255,0,255},
+			.points = {{59.13f,-107.38f},{59.13f,-103.38f},{57.13f,-103.38f},{57.13f,-107.38f}},
+			.z = -0.0f,
+			.height = 0.2f,
+			.texture = &TEX_NOISE_1,
+			.tint = {15,15,15,255},
 			.surfaceMaterial = SURFACE_REGULAR,
+			.ignoreCollisions = true,
 		},
 
 		{ // Cube.002
@@ -211,47 +212,47 @@ static GameMap MAP_EXAMPLE = {
 		},
 
 		{ // Cube.023
-			.points = {{59.28f,-106.59f},{59.28f,-106.09f},{57.08f,-106.09f},{57.08f,-106.59f}},
-			.z = -0.1f,
-			.height = 2.2f,
-			.texture = &TEX_MARBLE,
-			.tint = {255,255,0,255},
+			.points = {{58.93f,-103.58f},{58.93f,-103.38f},{57.33f,-103.38f},{57.33f,-103.58f}},
+			.z = 0.201f,
+			.height = 1.3f,
+			.texture = &TEX_WOOD,
+			.tint = {34,16,2,255},
 			.surfaceMaterial = SURFACE_REGULAR,
 		},
 
 		{ // Cube.024
-			.points = {{59.28f,-105.09f},{59.28f,-104.59f},{58.18f,-104.59f},{58.18f,-105.09f}},
-			.z = -0.1f,
-			.height = 2.2f,
-			.texture = &TEX_MARBLE,
-			.tint = {255,255,0,255},
+			.points = {{57.31f,-107.18f},{57.31f,-103.58f},{57.13f,-103.58f},{57.13f,-107.18f}},
+			.z = 0.201f,
+			.height = 1.3f,
+			.texture = &TEX_WOOD,
+			.tint = {34,16,2,255},
 			.surfaceMaterial = SURFACE_REGULAR,
 		},
 
 		{ // Cube.025
-			.points = {{58.18f,-105.09f},{58.18f,-104.59f},{57.08f,-104.59f},{57.08f,-105.09f}},
-			.z = 1.55f,
-			.height = 0.55f,
-			.texture = &TEX_MARBLE,
-			.tint = {255,255,0,255},
+			.points = {{59.13f,-107.18f},{59.13f,-103.58f},{58.93f,-103.58f},{58.93f,-107.18f}},
+			.z = 0.205f,
+			.height = 1.3f,
+			.texture = &TEX_WOOD,
+			.tint = {34,16,2,255},
 			.surfaceMaterial = SURFACE_REGULAR,
 		},
 
 		{ // Cube.026
-			.points = {{58.18f,-106.09f},{58.18f,-103.59f},{57.08f,-103.59f},{57.08f,-106.09f}},
-			.z = 1.0f,
-			.height = 0.55f,
-			.texture = &TEX_MARBLE,
+			.points = {{58.93f,-107.18f},{58.93f,-103.58f},{57.33f,-103.58f},{57.33f,-107.18f}},
+			.z = 0.201f,
+			.height = 0.7f,
+			.texture = &TEX_GRAVEL,
 			.tint = {255,255,0,255},
 			.surfaceMaterial = SURFACE_REGULAR,
 		},
 
 		{ // Cube.027
-			.points = {{57.23f,-104.94f},{57.23f,-104.74f},{57.03f,-104.74f},{57.03f,-104.94f}},
-			.z = 1.075f,
-			.height = 0.4f,
-			.texture = &TEX_NOISE_1,
-			.tint = {0,0,0,255},
+			.points = {{60.13f,-107.18f},{60.13f,-103.58f},{59.33f,-103.58f},{59.33f,-107.18f}},
+			.z = 1.74f,
+			.height = 0.16f,
+			.texture = &TEX_WOOD,
+			.tint = {34,16,2,255},
 			.surfaceMaterial = SURFACE_REGULAR,
 		},
 
@@ -372,15 +373,6 @@ static GameMap MAP_EXAMPLE = {
 			.surfaceMaterial = SURFACE_REGULAR,
 		},
 
-		{ // Cube.041
-			.points = {{68.19f,23.87f},{64.64f,34.8f},{53.7f,31.25f},{57.26f,20.31f}},
-			.z = 7.8f,
-			.height = 0.4f,
-			.texture = &TEX_WOOD,
-			.tint = {12,12,12,255},
-			.surfaceMaterial = SURFACE_REGULAR,
-		},
-
 		{ // Cube.042
 			.points = {{-42.52f,4.52f},{-42.52f,4.68f},{-42.68f,4.68f},{-42.68f,4.52f}},
 			.z = 0.0f,
@@ -478,6 +470,195 @@ static GameMap MAP_EXAMPLE = {
 			.tint = {0,0,255,255},
 			.surfaceMaterial = SURFACE_REGULAR,
 			.canSpawn = true,
+		},
+
+		{ // Cube.053
+			.points = {{60.13f,-103.58f},{60.13f,-103.38f},{59.33f,-103.38f},{59.33f,-103.58f}},
+			.z = 1.9f,
+			.height = 1.6f,
+			.texture = &TEX_WOOD,
+			.tint = {34,16,2,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+		},
+
+		{ // Cube.054
+			.points = {{60.13f,-107.38f},{60.13f,-107.18f},{59.33f,-107.18f},{59.33f,-107.38f}},
+			.z = 1.9f,
+			.height = 1.6f,
+			.texture = &TEX_WOOD,
+			.tint = {34,16,2,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+		},
+
+		{ // Cube.055
+			.points = {{60.13f,-107.18f},{60.13f,-103.58f},{59.33f,-103.58f},{59.33f,-107.18f}},
+			.z = 3.5f,
+			.height = 0.2f,
+			.texture = &TEX_WOOD,
+			.tint = {34,16,2,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+		},
+
+		{ // Cube.056
+			.points = {{60.33f,-107.38f},{60.33f,-103.38f},{60.13f,-103.38f},{60.13f,-107.38f}},
+			.z = 1.7f,
+			.height = 2.0f,
+			.texture = &TEX_NOISE_1,
+			.tint = {15,15,15,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+		},
+
+		{ // Cube.057
+			.points = {{60.13f,-107.38f},{60.13f,-107.18f},{59.13f,-107.18f},{59.13f,-107.38f}},
+			.z = 1.7f,
+			.height = 0.2f,
+			.texture = &TEX_NOISE_1,
+			.tint = {15,15,15,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+		},
+
+		{ // Cube.058
+			.points = {{60.13f,-107.38f},{60.13f,-107.18f},{59.13f,-107.18f},{59.13f,-107.38f}},
+			.z = 3.5f,
+			.height = 0.2f,
+			.texture = &TEX_NOISE_1,
+			.tint = {15,15,15,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+		},
+
+		{ // Cube.059
+			.points = {{60.13f,-103.58f},{60.13f,-103.38f},{59.13f,-103.38f},{59.13f,-103.58f}},
+			.z = 3.5f,
+			.height = 0.2f,
+			.texture = &TEX_NOISE_1,
+			.tint = {15,15,15,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+		},
+
+		{ // Cube.060
+			.points = {{60.13f,-103.58f},{60.13f,-103.38f},{59.13f,-103.38f},{59.13f,-103.58f}},
+			.z = 1.7f,
+			.height = 0.2f,
+			.texture = &TEX_NOISE_1,
+			.tint = {15,15,15,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+		},
+
+		{ // Cube.061
+			.points = {{59.13f,-103.58f},{59.13f,-103.38f},{58.93f,-103.38f},{58.93f,-103.58f}},
+			.z = 0.2f,
+			.height = 1.5f,
+			.texture = &TEX_NOISE_1,
+			.tint = {15,15,15,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+		},
+
+		{ // Cube.062
+			.points = {{57.33f,-103.58f},{57.33f,-103.38f},{57.13f,-103.38f},{57.13f,-103.58f}},
+			.z = 0.2f,
+			.height = 1.5f,
+			.texture = &TEX_NOISE_1,
+			.tint = {15,15,15,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+		},
+
+		{ // Cube.063
+			.points = {{57.33f,-107.38f},{57.33f,-107.18f},{57.13f,-107.18f},{57.13f,-107.38f}},
+			.z = 0.2f,
+			.height = 1.5f,
+			.texture = &TEX_NOISE_1,
+			.tint = {15,15,15,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+		},
+
+		{ // Cube.064
+			.points = {{59.13f,-107.38f},{59.13f,-107.18f},{58.93f,-107.18f},{58.93f,-107.38f}},
+			.z = 0.2f,
+			.height = 1.5f,
+			.texture = &TEX_NOISE_1,
+			.tint = {15,15,15,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+		},
+
+		{ // Cube.065
+			.points = {{59.33f,-107.18f},{59.33f,-103.58f},{59.13f,-103.58f},{59.13f,-107.18f}},
+			.z = 3.5f,
+			.height = 0.2f,
+			.texture = &TEX_NOISE_1,
+			.tint = {15,15,15,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+		},
+
+		{ // Cube.066
+			.points = {{59.33f,-107.18f},{59.33f,-103.58f},{59.13f,-103.58f},{59.13f,-107.18f}},
+			.z = 1.7f,
+			.height = 0.2f,
+			.texture = &TEX_NOISE_1,
+			.tint = {15,15,15,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+		},
+
+		{ // Cube.067
+			.points = {{59.33f,-107.38f},{59.33f,-107.18f},{59.13f,-107.18f},{59.13f,-107.38f}},
+			.z = 1.9f,
+			.height = 1.6f,
+			.texture = &TEX_NOISE_1,
+			.tint = {15,15,15,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+		},
+
+		{ // Cube.068
+			.points = {{59.33f,-103.58f},{59.33f,-103.38f},{59.13f,-103.38f},{59.13f,-103.58f}},
+			.z = 1.9f,
+			.height = 1.6f,
+			.texture = &TEX_NOISE_1,
+			.tint = {15,15,15,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+		},
+
+		{ // Cube.069
+			.points = {{59.13f,-107.18f},{59.13f,-103.58f},{58.93f,-103.58f},{58.93f,-107.18f}},
+			.z = 1.5f,
+			.height = 0.2f,
+			.texture = &TEX_NOISE_1,
+			.tint = {15,15,15,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+		},
+
+		{ // Cube.070
+			.points = {{57.33f,-107.18f},{57.33f,-103.58f},{57.13f,-103.58f},{57.13f,-107.18f}},
+			.z = 1.5f,
+			.height = 0.2f,
+			.texture = &TEX_NOISE_1,
+			.tint = {15,15,15,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+		},
+
+		{ // Cube.071
+			.points = {{58.93f,-107.38f},{58.93f,-107.18f},{57.33f,-107.18f},{57.33f,-107.38f}},
+			.z = 1.5f,
+			.height = 0.2f,
+			.texture = &TEX_NOISE_1,
+			.tint = {15,15,15,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+		},
+
+		{ // Cube.072
+			.points = {{58.93f,-103.58f},{58.93f,-103.38f},{57.33f,-103.38f},{57.33f,-103.58f}},
+			.z = 1.5f,
+			.height = 0.2f,
+			.texture = &TEX_NOISE_1,
+			.tint = {15,15,15,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+		},
+
+		{ // Cube.073
+			.points = {{59.63f,-105.53f},{59.63f,-105.23f},{59.03f,-105.23f},{59.03f,-105.53f}},
+			.z = 3.7f,
+			.height = 0.2f,
+			.texture = &TEX_NOISE_1,
+			.tint = {15,15,15,255},
+			.surfaceMaterial = SURFACE_REGULAR,
 		},
 
 		{ // door
@@ -2919,6 +3100,111 @@ static GameMap MAP_EXAMPLE = {
 			.texture = &TEX_GRASS,
 			.tint = {25,25,25,255},
 			.surfaceMaterial = SURFACE_REGULAR,
+		},
+
+		{ // roof
+			.points = {{68.19f,23.87f},{64.64f,34.8f},{53.7f,31.25f},{57.26f,20.31f}},
+			.z = 7.8f,
+			.height = 0.4f,
+			.texture = &TEX_WOOD,
+			.tint = {12,12,12,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+		},
+
+		{ // token
+			.points = {{61.45f,27.06f},{61.45f,28.06f},{60.45f,28.06f},{60.45f,27.06f}},
+			.z = 1.0f,
+			.height = 1.0f,
+			.texture = &TEX_TILE_6,
+			.tint = {255,255,0,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+			.stretchTexture = true,
+			.tickFunction = [](Wall* self) {
+				self->rotate(GetFrameTime());
+				if (self->touching) {
+				    // "Collect" token
+				    self->hide = true;
+				    self->ignoreCollisions = true;
+				
+				    // add 1 to score
+				    score++;
+				
+				    // Turn off script
+				    self->touching = false;
+				}
+			},
+		},
+
+		{ // token.001
+			.points = {{58.63f,-105.88f},{58.63f,-104.88f},{57.63f,-104.88f},{57.63f,-105.88f}},
+			.z = 2.301f,
+			.height = 1.0f,
+			.texture = &TEX_TILE_6,
+			.tint = {255,255,0,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+			.stretchTexture = true,
+			.tickFunction = [](Wall* self) {
+				self->rotate(GetFrameTime());
+				if (self->touching) {
+				    // "Collect" token
+				    self->hide = true;
+				    self->ignoreCollisions = true;
+				
+				    // add 1 to score
+				    score++;
+				
+				    // Turn off script
+				    self->touching = false;
+				}
+			},
+		},
+
+		{ // token.002
+			.points = {{-29.53f,-54.29f},{-29.53f,-53.29f},{-30.53f,-53.29f},{-30.53f,-54.29f}},
+			.z = 6.7f,
+			.height = 1.0f,
+			.texture = &TEX_TILE_6,
+			.tint = {255,255,0,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+			.stretchTexture = true,
+			.tickFunction = [](Wall* self) {
+				self->rotate(GetFrameTime());
+				if (self->touching) {
+				    // "Collect" token
+				    self->hide = true;
+				    self->ignoreCollisions = true;
+				
+				    // add 1 to score
+				    score++;
+				
+				    // Turn off script
+				    self->touching = false;
+				}
+			},
+		},
+
+		{ // token.003
+			.points = {{-39.5f,-3.05f},{-39.5f,-2.05f},{-40.5f,-2.05f},{-40.5f,-3.05f}},
+			.z = 20.45f,
+			.height = 1.0f,
+			.texture = &TEX_TILE_6,
+			.tint = {255,255,0,255},
+			.surfaceMaterial = SURFACE_REGULAR,
+			.stretchTexture = true,
+			.tickFunction = [](Wall* self) {
+				self->rotate(GetFrameTime());
+				if (self->touching) {
+				    // "Collect" token
+				    self->hide = true;
+				    self->ignoreCollisions = true;
+				
+				    // add 1 to score
+				    score++;
+				
+				    // Turn off script
+				    self->touching = false;
+				}
+			},
 		},
 
 	},
