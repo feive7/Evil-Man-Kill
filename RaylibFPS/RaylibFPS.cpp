@@ -55,7 +55,7 @@ int main() {
 	
 	SetConfigFlags(FLAG_MSAA_4X_HINT);
 
-	InitWindow(screenWidth, screenHeight, "FPS");
+	InitWindow(screenWidth, screenHeight, "Evil Man Kill - Engine Demo");
 
 	InitAudioDevice();
 
