@@ -466,6 +466,9 @@ static GameMap MAP_NOSTALGIA = {
 				    // add 1 to score
 				    score++;
 				
+				    // Play collect sound
+				    PlaySound(snd_collect);
+				
 				    // Turn off script
 				    self->touching = false;
 				}
@@ -490,6 +493,9 @@ static GameMap MAP_NOSTALGIA = {
 				    // add 1 to score
 				    score++;
 				
+				    // Play collect sound
+				    PlaySound(snd_collect);
+				
 				    // Turn off script
 				    self->touching = false;
 				}
@@ -513,6 +519,9 @@ static GameMap MAP_NOSTALGIA = {
 				
 				    // add 1 to score
 				    score++;
+				
+				    // Play collect sound
+				    PlaySound(snd_collect);
 				
 				    // Turn off script
 				    self->touching = false;
