@@ -54,6 +54,7 @@ static Sound snd_hit;
 static Sound snd_step;
 static Sound snd_land;
 static Sound snd_collect;
+static Sound snd_victory;
 
 static Music music_main;
 static Music music_lose;
@@ -111,6 +112,7 @@ void UnloadGlob() {
 	UnloadSound(snd_step);
 	UnloadSound(snd_land);
 	UnloadSound(snd_collect);
+	UnloadSound(snd_victory);
 
 	// Music
 	UnloadMusicStream(music_main);

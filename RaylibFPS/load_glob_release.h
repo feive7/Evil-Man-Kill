@@ -24,6 +24,7 @@
 #include <assets/audio/hit01.h>
 #include <assets/audio/step.h>
 #include <assets/audio/coin.h>
+#include <assets/audio/Victory.h>
 #define MAIN_VERTEX_SHADER R"(#version 330
 
 in vec3 vertexPosition;
@@ -161,6 +162,7 @@ void LoadGlob() {
 	snd_step = LoadSoundFromCode(STEP_DATA, STEP_FRAME_COUNT, STEP_SAMPLE_RATE, STEP_SAMPLE_SIZE, STEP_CHANNELS);
 	snd_land = LoadSound("assets/audio/jumpland.wav");
 	snd_collect = LoadSoundFromCode(COIN_DATA, COIN_FRAME_COUNT, COIN_SAMPLE_RATE, COIN_SAMPLE_SIZE, COIN_CHANNELS);
+	snd_victory = LoadSoundFromCode(VICTORY_DATA, VICTORY_FRAME_COUNT, VICTORY_SAMPLE_RATE, VICTORY_SAMPLE_SIZE, VICTORY_CHANNELS);
 	//snd_land = LoadSoundFromCode(STEP_DATA, STEP_FRAME_COUNT, STEP_SAMPLE_RATE, STEP_SAMPLE_SIZE, STEP_CHANNELS);
 
 	// Music
