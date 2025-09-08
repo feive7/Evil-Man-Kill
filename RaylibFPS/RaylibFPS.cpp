@@ -438,6 +438,12 @@ int main() {
             const char* subtext = "That's all there is to this demo";
             int subtextWidth = MeasureText(subtext, 20);
             DrawText(subtext, screenWidth / 2 - subtextWidth / 2, screenHeight / 2 + 20, 20, GREEN);
+
+            static bool playonce = true;
+            if (!IsSoundPlaying(snd_victory) && playonce) {
+                PlaySound(snd_victory);
+                playonce = false;
+            }
         }
 
 		EndDrawing();
