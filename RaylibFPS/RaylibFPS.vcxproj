@@ -151,7 +151,6 @@
     <ClInclude Include="load_glob_release.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="projectile.h" />
-    <ClInclude Include="testmap.h" />
     <ClInclude Include="thing.h" />
   </ItemGroup>
   <ItemGroup>

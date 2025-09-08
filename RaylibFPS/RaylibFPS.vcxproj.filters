@@ -26,9 +26,6 @@
     <ClInclude Include="collisions.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="testmap.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="customdebug.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -55,6 +52,15 @@
     </ClInclude>
     <ClInclude Include="node_tree.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="body.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NPC.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="projectile.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
