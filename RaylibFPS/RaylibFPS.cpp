@@ -4,6 +4,7 @@
 #include <raylib.h>
 #include <raymath.h>
 #include <rlgl.h>
+#include <screens.h>
 #include <glob.h>
 #include <pathfinding.h>
 #include <GameMap.h>
@@ -26,8 +27,6 @@ bool debugEnabled = false;
 #else
 bool debugEnabled = false;
 #endif
-
-bool startscreen = true;
 
 // Update camera
 static void UpdateCameraAngle(Camera* camera, Player player) {
@@ -325,6 +324,7 @@ int main() {
 
 		if (IsKeyPressed(KEY_F3)) debugEnabled = !debugEnabled;
 		if (IsKeyPressed(KEY_R)) player = { 0 };
+        if (IsKeyPressed(KEY_C)) score++;
         if (IsKeyPressed(KEY_ONE)) {
             loadedMap = &MAP_NOSTALGIA;
             player = { 0 };
@@ -365,30 +365,10 @@ int main() {
 		DrawCircle(screenWidth / 2, screenHeight / 2, 3.0f, GRAY);
 		player.drawScreen();
 
-        if (startscreen) {
-            DrawRectangle(0, 0, screenWidth, screenHeight, { 255,255,255,255 });
-            const char* text1 = "Token Collector Demo";
-            int text1Width = MeasureText(text1, 40);
-            DrawText(text1, screenWidth / 2 - text1Width / 2, screenHeight / 2 - 30, 40, BLACK);
-
-            const char* text2 = "Find 8 tokens through out the 3 maps currently in the game.\n";
-            int text2Width = MeasureText(text2, 20);
-            DrawText(text2, screenWidth / 2 - text2Width / 2, screenHeight / 2 + 20, 20, BLACK);
-
-            const char* text3 = "Press 1,2,3 to change maps\n";
-            int text3Width = MeasureText(text3, 20);
-            DrawText(text3, screenWidth / 2 - text3Width / 2, screenHeight / 2 + 40, 20, BLACK);
-
-            const char* text4 = "There is a token hidden behind a door in one of the maps, press 'e' to open the door\n";
-            int text4Width = MeasureText(text4, 20);
-            DrawText(text4, screenWidth / 2 - text4Width / 2, screenHeight / 2 + 60, 20, BLACK);
-
-            const char* text5 = "Press 'enter' to continue\n";
-            int text5Width = MeasureText(text5, 20);
-            DrawText(text5, screenWidth / 2 - text5Width / 2, screenHeight / 2 + 100, 20, BLACK);
-
+        if (startscreen.enabled) {
+            startscreen.draw();
             if (IsKeyPressed(KEY_ENTER)) {
-                startscreen = false;
+                startscreen.enabled = false;
             }
         }
         else if (score < 8) {
@@ -430,14 +410,7 @@ int main() {
             }
         }
         else {
-            DrawRectangle(0, 0, screenWidth, screenHeight, { 0,255,0,120 });
-            const char* text = "You have collected all tokens!";
-            int textWidth = MeasureText(text, 40);
-            DrawText(text, screenWidth / 2 - textWidth / 2, screenHeight / 2 - 30, 40, GREEN);
-
-            const char* subtext = "That's all there is to this demo";
-            int subtextWidth = MeasureText(subtext, 20);
-            DrawText(subtext, screenWidth / 2 - subtextWidth / 2, screenHeight / 2 + 20, 20, GREEN);
+            victoryscreen.draw();
 
             static bool playonce = true;
             if (!IsSoundPlaying(snd_victory) && playonce) {

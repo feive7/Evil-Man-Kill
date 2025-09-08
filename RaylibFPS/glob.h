@@ -164,3 +164,15 @@ inline bool FeatherEqual(float a, float b, float thresh = 1.0f) {
 
 static int score = 0;
 static Camera camera = { 0 };
+Screen startscreen = {
+	WHITE,
+	"Token Collector Demo",
+	"Find 8 tokens through out the 3 maps currently in the game.",
+	BLACK,
+};
+Screen victoryscreen = {
+	{0,255,0,120},
+	"You have collected all tokens!",
+	"That's all there is to this demo",
+	GREEN,
+};
