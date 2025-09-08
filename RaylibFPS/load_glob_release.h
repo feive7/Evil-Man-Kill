@@ -23,6 +23,7 @@
 #include <assets/audio/bitgunshot.h>
 #include <assets/audio/hit01.h>
 #include <assets/audio/step.h>
+#include <assets/audio/coin.h>
 #define MAIN_VERTEX_SHADER R"(#version 330
 
 in vec3 vertexPosition;
@@ -159,6 +160,7 @@ void LoadGlob() {
 	snd_hit = LoadSoundFromCode(HIT01_DATA, HIT01_FRAME_COUNT, HIT01_SAMPLE_RATE, HIT01_SAMPLE_SIZE, HIT01_CHANNELS);
 	snd_step = LoadSoundFromCode(STEP_DATA, STEP_FRAME_COUNT, STEP_SAMPLE_RATE, STEP_SAMPLE_SIZE, STEP_CHANNELS);
 	snd_land = LoadSound("assets/audio/jumpland.wav");
+	snd_collect = LoadSoundFromCode(COIN_DATA, COIN_FRAME_COUNT, COIN_SAMPLE_RATE, COIN_SAMPLE_SIZE, COIN_CHANNELS);
 	//snd_land = LoadSoundFromCode(STEP_DATA, STEP_FRAME_COUNT, STEP_SAMPLE_RATE, STEP_SAMPLE_SIZE, STEP_CHANNELS);
 
 	// Music

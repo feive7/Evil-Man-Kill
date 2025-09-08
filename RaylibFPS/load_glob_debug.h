@@ -69,6 +69,7 @@ void LoadGlob() {
 	snd_gunshot = LoadSound("assets/audio/bitgunshot.wav");
 	snd_hit = LoadSound("assets/audio/hit01.wav");
 	snd_step = LoadSound("assets/audio/step.wav");
+	snd_collect = LoadSound("assets/audio/coin.wav");
 
 	// Music
 	music_main = LoadMusicStream("assets/audio/fight_looped.wav");
