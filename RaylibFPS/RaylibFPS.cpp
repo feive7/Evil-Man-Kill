@@ -27,6 +27,8 @@ bool debugEnabled = false;
 bool debugEnabled = false;
 #endif
 
+bool startscreen = true;
+
 // Update camera
 static void UpdateCameraAngle(Camera* camera, Player player) {
     float delta = GetFrameTime();
@@ -363,7 +365,33 @@ int main() {
 		DrawCircle(screenWidth / 2, screenHeight / 2, 3.0f, GRAY);
 		player.drawScreen();
 
-        if (score < 8) {
+        if (startscreen) {
+            DrawRectangle(0, 0, screenWidth, screenHeight, { 255,255,255,255 });
+            const char* text1 = "Token Collector Demo";
+            int text1Width = MeasureText(text1, 40);
+            DrawText(text1, screenWidth / 2 - text1Width / 2, screenHeight / 2 - 30, 40, BLACK);
+
+            const char* text2 = "Find 8 tokens through out the 3 maps currently in the game.\n";
+            int text2Width = MeasureText(text2, 20);
+            DrawText(text2, screenWidth / 2 - text2Width / 2, screenHeight / 2 + 20, 20, BLACK);
+
+            const char* text3 = "Press 1,2,3 to change maps\n";
+            int text3Width = MeasureText(text3, 20);
+            DrawText(text3, screenWidth / 2 - text3Width / 2, screenHeight / 2 + 40, 20, BLACK);
+
+            const char* text4 = "There is a token hidden behind a door in one of the maps, press 'e' to open the door\n";
+            int text4Width = MeasureText(text4, 20);
+            DrawText(text4, screenWidth / 2 - text4Width / 2, screenHeight / 2 + 60, 20, BLACK);
+
+            const char* text5 = "Press 'enter' to continue\n";
+            int text5Width = MeasureText(text5, 20);
+            DrawText(text5, screenWidth / 2 - text5Width / 2, screenHeight / 2 + 100, 20, BLACK);
+
+            if (IsKeyPressed(KEY_ENTER)) {
+                startscreen = false;
+            }
+        }
+        else if (score < 8) {
             if (debugEnabled) {
                 AddDebugLine("FPS: %i", GetFPS(), true);
                 AddDebugLine("Player Position: %f, %f, %f", player.body.position);
@@ -392,12 +420,12 @@ int main() {
             }
             else {
                 if (!debugEnabled) {
-                    DrawText(TextFormat("Tokens collected: %i / 8", score), 5, 5, 20, BLACK);
+                    DrawText(TextFormat("Tokens collected: %i / 8", score), 5, 5, 20, (loadedMap == &MAP_ABSTRACTIONS ? BLACK : WHITE));
                     int numOfTokens;
                     if (loadedMap == &MAP_ABSTRACTIONS) numOfTokens = 1;
                     if (loadedMap == &MAP_EXAMPLE) numOfTokens = 4;
                     if (loadedMap == &MAP_NOSTALGIA) numOfTokens = 3;
-                    DrawText(TextFormat("Tokens on this map: %i", numOfTokens), 5, 25, 20, BLACK);
+                    DrawText(TextFormat("Tokens on this map: %i", numOfTokens), 5, 25, 20, (loadedMap == &MAP_ABSTRACTIONS ? BLACK : WHITE));
                 }
             }
         }
