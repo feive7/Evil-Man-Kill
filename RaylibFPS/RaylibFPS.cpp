@@ -273,6 +273,9 @@ int main() {
 	// Init Player
 	player = { 0 };
 
+    // Load Map
+    loadedMap = &MAP_NOSTALGIA;
+
 	// Init player camera
 	camera.fovy = 60.0f;
 	camera.projection = CAMERA_PERSPECTIVE;
@@ -295,9 +298,6 @@ int main() {
 	
 	// Load assets
 	LoadGlob();
-
-    // Load Map
-    loadedMap = &MAP_NOSTALGIA;
 
     // Init Map Nodes
     InitNodes();
