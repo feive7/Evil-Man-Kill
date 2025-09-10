@@ -38,7 +38,7 @@ public:
     Wall* groundWall; // Wall that the body last stood on
     Wall* wallTouching; // Wall the body last collided with horizontally
 
-    float heightLerp = 1.0f;
+    float heightLerp = 2.0f;
     float standingHeight = 2.0f;
     float crouchingHeight = 1.0f;
     bool crouching = false;

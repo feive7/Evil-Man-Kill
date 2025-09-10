@@ -169,6 +169,9 @@ Screen startscreen = {
 	"Token Collector Demo",
 	"Find 8 tokens through out the 3 maps currently in the game.",
 	BLACK,
+#ifdef _DEBUG
+	false, // If debug, ignore start screen
+#endif
 };
 Screen victoryscreen = {
 	{0,255,0,120},

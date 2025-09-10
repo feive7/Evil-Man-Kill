@@ -182,4 +182,4 @@ private:
     }
 };
 
-static Player player;
+static Player player = { 0 };

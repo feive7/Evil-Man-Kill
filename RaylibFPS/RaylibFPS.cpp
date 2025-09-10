@@ -380,7 +380,7 @@ int main() {
                 AddDebugLine("Player Look Rotation: %.2f, %.2f", player.body.lookRotation);
                 AddDebugLine(TextFormat("Player Touching Ceiling: %i", player.body.isTouchingCeiling));
                 AddDebugLine(TextFormat("Player OnGround: %i", player.body.isGrounded));
-                AddDebugLine("Player Height: %.2f", player.body.getHeight());
+                AddDebugLine(TextFormat("Player Height: %.2f (%.2f)", player.body.getHeight(), player.body.heightLerp));
                 AddDebugLine("Player Equipped: %s", player.equipped.name);
             }
 
