@@ -38,9 +38,9 @@ public:
     Wall* groundWall; // Wall that the body last stood on
     Wall* wallTouching; // Wall the body last collided with horizontally
 
-    float heightLerp = 2.0f;
-    float standingHeight = 2.0f;
-    float crouchingHeight = 1.0f;
+    float heightLerp = 1.0f;
+    float standingHeight = 3.0f;
+    float crouchingHeight = 1.5f;
     bool crouching = false;
 
     bool alive = true;
@@ -111,7 +111,7 @@ public:
         float delta = GetFrameTime();
         Vector3 newpos = position + Vector3Scale(velocity, delta);
         Vector3 newvel = velocity;
-        float newHeightLerp = Lerp(heightLerp, (crouching ? CROUCH_HEIGHT : standingHeight), 20.0f * delta);
+        float newHeightLerp = Lerp(heightLerp, (crouching ? 0.0f : 1.0f), 20.0f * delta);
         float newHeight = Lerp(crouchingHeight, standingHeight, newHeightLerp);
         float height = getHeight();
 
