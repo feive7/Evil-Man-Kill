@@ -67,7 +67,7 @@ public:
     }
     // Get real crouch state (for speed purposes)
     bool getCrouchState() {
-        return getHeight() < standingHeight;
+        return getHeight() < standingHeight - 0.1f; // With error
     }
     // Get Head position (factors in head offset)
     Vector3 getHeadPos() {
