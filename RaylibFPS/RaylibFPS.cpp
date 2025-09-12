@@ -400,12 +400,7 @@ int main() {
             }
             else {
                 if (!debugEnabled) {
-                    DrawText(TextFormat("Tokens collected: %i / 8", score), 5, 5, 20, (loadedMap == &MAP_ABSTRACTIONS ? BLACK : WHITE));
-                    int numOfTokens;
-                    if (loadedMap == &MAP_ABSTRACTIONS) numOfTokens = 1;
-                    if (loadedMap == &MAP_EXAMPLE) numOfTokens = 4;
-                    if (loadedMap == &MAP_NOSTALGIA) numOfTokens = 3;
-                    DrawText(TextFormat("Tokens on this map: %i", numOfTokens), 5, 25, 20, (loadedMap == &MAP_ABSTRACTIONS ? BLACK : WHITE));
+                    DrawText(TextFormat("Damage: %f", DamageLerp()), 5, 5, 20, WHITE);
                 }
             }
         }
