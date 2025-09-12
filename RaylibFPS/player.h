@@ -11,6 +11,7 @@ public:
     RayCollision target = { 0 };
     Wall* targetWall = nullptr;
     Vector2 screenLean = { 0.0f,0.0f };
+    bool attacking = false;
 
     int deathTick = 0;
     // Get ray from player head through player direction vector
@@ -40,8 +41,7 @@ public:
                 body.update();
             }
             if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-                projectiles.push_back({ body.getHeadPos(),body.getForward() });
-                PlaySound(snd_gunshot);
+                attacking = true;
             }
         }
         else {

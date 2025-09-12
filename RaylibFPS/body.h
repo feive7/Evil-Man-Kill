@@ -43,6 +43,7 @@ public:
     float crouchingHeight = 1.0f;
     bool crouching = false;
 
+    float health = 100.0f;
     bool alive = true;
 
     float radius = 1.0f;

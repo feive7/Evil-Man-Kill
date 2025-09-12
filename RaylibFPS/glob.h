@@ -161,6 +161,11 @@ inline bool FuzzyGreater(float a, float b, float thresh = 1.0f) {
 inline bool FeatherEqual(float a, float b, float thresh = 1.0f) {
 	return FuzzyLess(a, b, thresh) && FuzzyGreater(a, b, thresh);
 }
+float DamageLerp() {
+	float t = GetTime();
+	float l = 1-abs(cos(PI * t));
+	return l;
+}
 
 static int score = 0;
 static Camera camera = { 0 };
@@ -169,6 +174,7 @@ Screen startscreen = {
 	"Token Collector Demo",
 	"Find 8 tokens through out the 3 maps currently in the game.",
 	BLACK,
+	false,
 };
 Screen victoryscreen = {
 	{0,255,0,120},
