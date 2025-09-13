@@ -20,6 +20,10 @@ public:
     Ray getForwardRay() {
         return { body.getHeadPos(), body.getForward() };
     }
+    // Get if the player is targeting a body and it's within sufficient distance
+    bool isTargeting() {
+        return targetBody != nullptr && entityTarget.distance < 4.0f;
+    }
     // Handle player inputs and other states
     void update() {
         if (body.alive) {
