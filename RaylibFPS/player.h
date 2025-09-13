@@ -8,8 +8,10 @@ public:
     float walkLerp = 0.0f;
     bool noclipping = false;
     Vector2 lean = { 0 };
-    RayCollision target = { 0 };
+    RayCollision mapTarget = { 0 };
+    RayCollision entityTarget = { 0 };
     Wall* targetWall = nullptr;
+    Body* targetBody = nullptr;
     Vector2 screenLean = { 0.0f,0.0f };
     bool attacking = false;
 
@@ -24,7 +26,7 @@ public:
             if (IsKeyPressed(KEY_V)) noclipping = !noclipping;
             if (IsKeyPressed(KEY_K)) body.alive = false;
             if (IsKeyPressed(KEY_E)) {
-                if (target.hit && targetWall != nullptr && target.distance <= INTERACT_DISTANCE) {
+                if (mapTarget.hit && targetWall != nullptr && mapTarget.distance <= INTERACT_DISTANCE) {
                     targetWall->interact = true;
                 }
             }
