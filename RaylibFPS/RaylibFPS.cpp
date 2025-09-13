@@ -292,6 +292,7 @@ int main() {
 		enemy.body.dir = { 0 };
 		enemy.body.movementSpeed = 15.0f;
 		enemy.target = &player.body.position;
+        enemy.noAI = true;
 		enemies.push_back(enemy);
 	}
 #endif
