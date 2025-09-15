@@ -119,6 +119,8 @@ void UnloadGlob() {
 	UnloadMusicStream(music_lose);
 }
 
+class Body;
+
 bool ClosestRayCollision(RayCollision& source, RayCollision compare) {
 	if (compare.hit && (!source.hit || compare.distance < source.distance)) {
 		source = compare;
@@ -160,6 +162,11 @@ inline bool FuzzyGreater(float a, float b, float thresh = 1.0f) {
 }
 inline bool FeatherEqual(float a, float b, float thresh = 1.0f) {
 	return FuzzyLess(a, b, thresh) && FuzzyGreater(a, b, thresh);
+}
+float DamageLerp() {
+	float t = GetTime();
+	float l = 1-abs(cos(PI * t));
+	return l;
 }
 
 static int score = 0;

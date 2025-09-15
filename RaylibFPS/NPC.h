@@ -16,6 +16,8 @@ public:
     std::vector<Node*> path;
     int currentPath = 0;
 
+    bool noAI = false;
+
     // Get ray from head down
     Ray getDownRay() {
         return { body.getHeadPos(), {0.0f,-1.0f,0.0f} };
@@ -64,6 +66,7 @@ public:
     }
     // Enemy tick function
     void update() {
+        if (!noAI) {
         if (currentNode == nullptr) {
             currentNode = FindClosestNode(body.position);
             targetNode = FindClosestNode(*target);
@@ -85,6 +88,7 @@ public:
         else {
             body.velocity.x = 0.0f;
             body.velocity.z = 0.0f;
+        }
         }
 
         body.update();

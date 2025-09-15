@@ -76,6 +76,9 @@ static void UpdateCameraAngle(Camera* camera, Player player) {
 // Update game level
 static void UpdateLevel(void) {
     BoundingBox p = player.body.getBoundingBox();
+    Ray forwardRay = player.getForwardRay();
+    player.entityTarget = { 0 };
+    player.targetBody = nullptr;
     for (auto itA = enemies.begin(); itA != enemies.end(); itA++) {
         Enemy& enemyA = *itA;
         BoundingBox a = enemyA.body.getBoundingBox();
@@ -91,11 +94,19 @@ static void UpdateLevel(void) {
         if (CheckCollisionBoxes(a, p)) {
             //player.body.alive = false;
         }
+        if (ClosestRayCollision(player.entityTarget, GetRayCollisionBox(forwardRay, enemyA.body.getBoundingBox()))) {
+            player.targetBody = &enemyA.body;
+    }
     }
     for (Projectile& projectile : projectiles) {
         projectile.update();
     }
 
+    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+        if (player.entityTarget.hit) {
+            player.targetBody->alive = false;
+        }
+    }
 
     // Remove dead projectiles in one pass
     projectiles.erase(std::remove_if(projectiles.begin(), projectiles.end(),
@@ -118,9 +129,7 @@ static void UpdateLevel(void) {
         enemyA.update();
     }
 
-
-
-    player.target = { 0 };
+    player.mapTarget = { 0 };
     Ray playerTargetRay = player.getForwardRay();
     bool wallHit = false;
     for (Wall& wall : loadedMap->walls) {
@@ -155,7 +164,7 @@ static void UpdateLevel(void) {
         Vector3 p2 = { wall.points[1].x,wall.z,wall.points[1].y };
         Vector3 p3 = { wall.points[2].x,wall.z,wall.points[2].y };
         Vector3 p4 = { wall.points[3].x,wall.z,wall.points[3].y };
-        if (ClosestRayCollision(player.target, GetRayCollisionQuad(playerTargetRay, p1, p2, p3, p4))) {
+        if (ClosestRayCollision(player.mapTarget, GetRayCollisionQuad(playerTargetRay, p1, p2, p3, p4))) {
             player.targetWall = &wall;
             wallHit = true;
         }
@@ -164,7 +173,7 @@ static void UpdateLevel(void) {
         p2 = { wall.points[1].x,wall.z + wall.height,wall.points[1].y };
         p3 = { wall.points[2].x,wall.z + wall.height,wall.points[2].y };
         p4 = { wall.points[3].x,wall.z + wall.height,wall.points[3].y };
-        if (ClosestRayCollision(player.target, GetRayCollisionQuad(playerTargetRay, p1, p2, p3, p4))) {
+        if (ClosestRayCollision(player.mapTarget, GetRayCollisionQuad(playerTargetRay, p1, p2, p3, p4))) {
             player.targetWall = &wall;
             wallHit = true;
         }
@@ -174,7 +183,7 @@ static void UpdateLevel(void) {
             p2 = { wall.points[(i + 1) % 4].x,wall.z,wall.points[(i + 1) % 4].y };
             p3 = { wall.points[(i + 1) % 4].x,wall.z + wall.height,wall.points[(i + 1) % 4].y };
             p4 = { wall.points[i].x,wall.z + wall.height,wall.points[i].y };
-            if (ClosestRayCollision(player.target, GetRayCollisionQuad(playerTargetRay, p1, p2, p3, p4))) {
+            if (ClosestRayCollision(player.mapTarget, GetRayCollisionQuad(playerTargetRay, p1, p2, p3, p4))) {
                 player.targetWall = &wall;
                 wallHit = true;
             }
@@ -207,7 +216,9 @@ static void DrawEntities(Camera camera) {
     /*if (player.target.hit) {
         DrawSphere(player.target.point, .5f, RED);
     }*/
-
+    /*if (player.entityTarget.hit) {
+        DrawSphere(player.entityTarget.point, 0.5f, RED);
+    }*/
     for (Projectile& ball : projectiles) {
         ball.draw();
     }
@@ -292,6 +303,7 @@ int main() {
 		enemy.body.dir = { 0 };
 		enemy.body.movementSpeed = 15.0f;
 		enemy.target = &player.body.position;
+        enemy.noAI = true;
 		enemies.push_back(enemy);
 	}
 #endif
@@ -400,12 +412,7 @@ int main() {
             }
             else {
                 if (!debugEnabled) {
-                    DrawText(TextFormat("Tokens collected: %i / 8", score), 5, 5, 20, (loadedMap == &MAP_ABSTRACTIONS ? BLACK : WHITE));
-                    int numOfTokens;
-                    if (loadedMap == &MAP_ABSTRACTIONS) numOfTokens = 1;
-                    if (loadedMap == &MAP_EXAMPLE) numOfTokens = 4;
-                    if (loadedMap == &MAP_NOSTALGIA) numOfTokens = 3;
-                    DrawText(TextFormat("Tokens on this map: %i", numOfTokens), 5, 25, 20, (loadedMap == &MAP_ABSTRACTIONS ? BLACK : WHITE));
+                    DrawText(TextFormat("Damage: %f", DamageLerp()), 5, 5, 20, WHITE);
                 }
             }
         }

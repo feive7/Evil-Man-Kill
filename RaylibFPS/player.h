@@ -8,14 +8,21 @@ public:
     float walkLerp = 0.0f;
     bool noclipping = false;
     Vector2 lean = { 0 };
-    RayCollision target = { 0 };
+    RayCollision mapTarget = { 0 };
+    RayCollision entityTarget = { 0 };
     Wall* targetWall = nullptr;
+    Body* targetBody = nullptr;
     Vector2 screenLean = { 0.0f,0.0f };
+    bool attacking = false;
 
     int deathTick = 0;
     // Get ray from player head through player direction vector
     Ray getForwardRay() {
         return { body.getHeadPos(), body.getForward() };
+    }
+    // Get if the player is targeting a body and it's within sufficient distance
+    bool isTargeting() {
+        return targetBody != nullptr && entityTarget.distance < 4.0f;
     }
     // Handle player inputs and other states
     void update() {
@@ -23,7 +30,7 @@ public:
             if (IsKeyPressed(KEY_V)) noclipping = !noclipping;
             if (IsKeyPressed(KEY_K)) body.alive = false;
             if (IsKeyPressed(KEY_E)) {
-                if (target.hit && targetWall != nullptr && target.distance <= INTERACT_DISTANCE) {
+                if (mapTarget.hit && targetWall != nullptr && mapTarget.distance <= INTERACT_DISTANCE) {
                     targetWall->interact = true;
                 }
             }
@@ -40,8 +47,7 @@ public:
                 body.update();
             }
             if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-                projectiles.push_back({ body.getHeadPos(),body.getForward() });
-                PlaySound(snd_gunshot);
+                attacking = true;
             }
         }
         else {

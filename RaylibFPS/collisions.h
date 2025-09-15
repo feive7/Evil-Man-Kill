@@ -104,6 +104,9 @@ struct Wall {
     std::function<void(Wall*)> tickFunction = [](Wall* self) {
 
     };
+    std::function<void(Wall*, Body*, Vector3)> touchFunction = [](Wall* self, Body* body, Vector3 normal) {
+
+    };
 
     // Wall flags. These will stay on until set false using tickFunction.
     bool touching = false; // Is being touched by body

@@ -43,6 +43,7 @@ public:
     float crouchingHeight = 1.5f;
     bool crouching = false;
 
+    float health = 100.0f;
     bool alive = true;
 
     float radius = 1.0f;
@@ -149,7 +150,7 @@ public:
                         newvel.x = velocityClip.x;
                         newvel.z = velocityClip.y;
                     }
-                    touchWall(wall);
+                    touchWall(wall, { normal.x,0.0f,normal.y });
                     wallTouching = &wall;
                     isTouchingWall = true;
                     wall.touching = true;
@@ -172,7 +173,7 @@ public:
                         friction = FRICTION;
                         newvel.y = 0.0f;
                     }
-                    touchWall(wall);
+                    touchWall(wall, {0.0f,1.0f,0.0f});
                     wall.touching = true;
                 }
                 else if (newpos.y + newHeight > wall.z && newpos.y + newHeight < wall.z + 1.0f) { // Hit bottom of wall
@@ -181,7 +182,7 @@ public:
                         newpos.y = wall.z - height;
                     }
                     isTouchingCeiling = true;
-                    touchWall(wall);
+                    touchWall(wall, {0.0f,-1.0f,0.0f});
                     wall.touching = true;
                 }
             }
@@ -214,10 +215,7 @@ public:
     }
 private:
     // Trigger wall effect
-    void touchWall(Wall& wall) {
-        switch (wall.surfaceMaterial) {
-        case SURFACE_REGULAR: break;
-        case SURFACE_LAVA: alive = false; break;
-        }
+    void touchWall(Wall& wall, Vector3 normal) {
+        wall.touchFunction(&wall, this, normal);
     }
 };
