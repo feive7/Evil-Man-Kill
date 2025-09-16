@@ -16,7 +16,6 @@
 #include <maps/MAP_NOSTALGIA.h>
 
 #include <projectile.h>
-#include <body.h>
 #include <player.h>
 #include <NPC.h>
 #include <customdebug.h>
