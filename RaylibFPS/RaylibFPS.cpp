@@ -8,6 +8,7 @@
 #include <glob.h>
 #include <pathfinding.h>
 #include <GameMap.h>
+#include <body.h>
 
 #include <maps/MAP_COSTCO.h>
 #include <maps/MAP_ABSTRACTIONS.h>

@@ -150,7 +150,7 @@ public:
                         newvel.x = velocityClip.x;
                         newvel.z = velocityClip.y;
                     }
-                    touchWall(wall, { normal.x,0.0f,normal.y });
+                    wall.touchFunction(&wall, this, { normal.x,0.0f,normal.y });
                     wallTouching = &wall;
                     isTouchingWall = true;
                     wall.touching = true;
@@ -173,7 +173,7 @@ public:
                         friction = FRICTION;
                         newvel.y = 0.0f;
                     }
-                    touchWall(wall, {0.0f,1.0f,0.0f});
+                    wall.touchFunction(&wall, this, { 0.0f,1.0f,0.0f });
                     wall.touching = true;
                 }
                 else if (newpos.y + newHeight > wall.z && newpos.y + newHeight < wall.z + 1.0f) { // Hit bottom of wall
@@ -182,7 +182,7 @@ public:
                         newpos.y = wall.z - height;
                     }
                     isTouchingCeiling = true;
-                    touchWall(wall, {0.0f,-1.0f,0.0f});
+                    wall.touchFunction(&wall, this, { 0.0f,-1.0f,0.0f });
                     wall.touching = true;
                 }
             }
@@ -212,10 +212,5 @@ public:
             Vector3Subtract(position,{0.5f,0.0f,0.5f}),
             Vector3Add(getHeadPos(),{0.5f,0.0f,0.5f}),
         };
-    }
-private:
-    // Trigger wall effect
-    void touchWall(Wall& wall, Vector3 normal) {
-        wall.touchFunction(&wall, this, normal);
     }
 };
